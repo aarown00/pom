@@ -41,3 +41,7 @@ class PurchaseOrder(models.Model):
 
     def __str__(self):
         return f"{self.purchase_order}"
+    
+    def customer(self):
+        return f"{self.customer_branch.customer_name} - {self.customer_branch.branch_name}"
+    customer.short_description = 'Customer'
