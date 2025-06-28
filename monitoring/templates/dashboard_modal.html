@@ -1,0 +1,47 @@
+{% load static %}
+
+<div class="modal fade" id="purchaseOrderModal" tabindex="-1" aria-labelledby="purchaseOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="purchaseOrderModalLabel">Purchase Order Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item"><strong>ID:</strong> <span id="po-id"></span></li>
+          <li class="list-group-item"><strong>Date Recorded:</strong> <span id="po-date-recorded"></span></li>
+          <li class="list-group-item"><strong>Purchase Order:</strong> <span id="po-number"></span></li>
+          <li class="list-group-item"><strong>Customer:</strong> <span id="po-customer"></span></li>
+          <li class="list-group-item"><strong>Branch:</strong> <span id="po-branch"></span></li>
+          <li class="list-group-item"><strong>Date in Email:</strong> <span id="po-date-email"></span></li>
+          <li class="list-group-item"><strong>Target Date:</strong> <span id="po-target-date"></span></li>
+          <li class="list-group-item"><strong>Item Model:</strong> <span id="po-item-model"></span></li>
+          <li class="list-group-item"><strong>Description:</strong> <span id="po-description"></span></li>
+          <li class="list-group-item"><strong>Service Report:</strong> <span id="po-service-report"></span></li>
+          <li class="list-group-item"><strong>Total Days:</strong> <span id="po-total-days"></span></li>
+          <li class="list-group-item"><strong>Manpower Total:</strong> <span id="po-manpower-total"></span></li>
+          <li class="list-group-item">
+            <strong>Manpower Assigned:</strong> <span id="po-manpower-string"></span>
+          </li>
+
+          <li class="list-group-item"><strong>Time Total:</strong> <span id="po-time-total"></span></li>
+          <li class="list-group-item"><strong>Total Work Hours:</strong> <span id="po-total-wh"></span></li>
+          <li class="list-group-item"><strong>Date Started:</strong> <span id="po-date-started"></span></li>
+          <li class="list-group-item"><strong>Completion Date:</strong> <span id="po-completion-date"></span></li>
+          <li class="list-group-item"><strong>Completion Code:</strong> <span id="po-completion-code"></span></li>
+          <li class="list-group-item"><strong>Delivery Code:</strong> <span id="po-delivery-code"></span></li>
+          <li class="list-group-item"><strong>Status:</strong> <span id="po-status"></span></li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/dashboard_modal.js' %}"></script>
+
+
+
+
+
