@@ -1,0 +1,35 @@
+  #poTable thead tr.filter-row select {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 0.95em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    appearance: none; /* Remove default arrow in some browsers */
+  }
+
+  #poTable thead tr.filter-row select:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+  }
+
+  #poTable thead tr.filter-row select:hover {
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  #poTable thead tr:first-child th {
+    background-color:rgb(113, 185, 130); /* Bootstrap green */
+    color: white;
+    text-align: center;
+  }
+
+  .status-btn {
+  min-width: 100px;
+  text-align: center;
+  white-space: nowrap;
+}
