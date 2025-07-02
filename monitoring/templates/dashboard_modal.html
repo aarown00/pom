@@ -1,40 +1,178 @@
 {% load static %}
 
-<div class="modal fade" id="purchaseOrderModal" tabindex="-1" aria-labelledby="purchaseOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="purchaseOrderModalLabel">Purchase Order Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <ul class="list-group">
-          <li class="list-group-item"><strong>ID:</strong> <span id="po-id"></span></li>
-          <li class="list-group-item"><strong>Date Recorded:</strong> <span id="po-date-recorded"></span></li>
-          <li class="list-group-item"><strong>Purchase Order:</strong> <span id="po-number"></span></li>
-          <li class="list-group-item"><strong>Customer:</strong> <span id="po-customer"></span></li>
-          <li class="list-group-item"><strong>Branch:</strong> <span id="po-branch"></span></li>
-          <li class="list-group-item"><strong>Date in Email:</strong> <span id="po-date-email"></span></li>
-          <li class="list-group-item"><strong>Target Date:</strong> <span id="po-target-date"></span></li>
-          <li class="list-group-item"><strong>Item Model:</strong> <span id="po-item-model"></span></li>
-          <li class="list-group-item"><strong>Description:</strong> <span id="po-description"></span></li>
-          <li class="list-group-item"><strong>Service Report:</strong> <span id="po-service-report"></span></li>
-          <li class="list-group-item"><strong>Total Days:</strong> <span id="po-total-days"></span></li>
-          <li class="list-group-item"><strong>Manpower Total:</strong> <span id="po-manpower-total"></span></li>
-          <li class="list-group-item">
-            <strong>Manpower Assigned:</strong> <span id="po-manpower-string"></span>
-          </li>
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/dashboard_modal.css' %}">
+{% endblock %}
 
-          <li class="list-group-item"><strong>Time Total:</strong> <span id="po-time-total"></span></li>
-          <li class="list-group-item"><strong>Total Work Hours:</strong> <span id="po-total-wh"></span></li>
-          <li class="list-group-item"><strong>Date Started:</strong> <span id="po-date-started"></span></li>
-          <li class="list-group-item"><strong>Completion Date:</strong> <span id="po-completion-date"></span></li>
-          <li class="list-group-item"><strong>Completion Code:</strong> <span id="po-completion-code"></span></li>
-          <li class="list-group-item"><strong>Delivery Code:</strong> <span id="po-delivery-code"></span></li>
-          <li class="list-group-item"><strong>Status:</strong> <span id="po-status"></span></li>
-        
-        </ul>
+
+<!-- Updated New Modal with Dynamic Data -->
+<div class="modal fade" id="purchaseOrderModal" tabindex="-1" role="dialog" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="invoiceModalLabel">Purchase Order Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
+
+    <div class="modal-body px-0"> <!-- remove Bootstrap default padding -->
+      <div class="container-fluid"> <!-- full-width container -->
+        <div class="px-4"> <!-- horizontal padding here controls all content -->
+
+          <!-- Row 1: Header with P.O number and Logo -->
+          <div class="row">
+            <div class="col-md-8">
+              <h1 class="pageTitle" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                P.O #: <span id="po-number"></span>
+              </h1>
+              <h5 class="text-muted">No: <span id="po-id"></span></h5>
+              <h5 class="text-muted">Date Recorded: <span id="po-date-recorded"></span></h5>
+            </div>
+            {% comment %} <div class="col-md-4 text-right">
+              <img class="logo mb-2" src="https://i.ibb.co/yBfdMKgM/308000126-110010638526632-7616892513278903300-n.jpg" />
+              <h5 class="text">MABUHAY POWER & DIESEL GENERATOR SERVICES CO. LTD</h5>
+            </div> {% endcomment %}
+          </div>
+
+          <!-- Row 2: Two Cards -->
+          <div class="row gx-3 mt-4">
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-header">CUSTOMER DETAILS</div>
+                <div class="card-body">
+                  <ul class="list-unstyled mb-0">
+                    <li class="d-flex">
+                      <div class="w-25"><strong>Customer:</strong></div>
+                      <div class="w-75" id="po-customer"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div class="w-25"><strong>Branch:</strong></div>
+                      <div class="w-75" id="po-branch"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div class="w-25"><strong>P.O Received:</strong></div>
+                      <div class="w-75" id="po-date-received"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div class="w-25"><strong>Target Date:</strong></div>
+                      <div class="w-75" id="po-target-date"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div class="w-25"><strong>Description:</strong></div>
+                      <div class="w-75" id="po-description"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div class="w-25"><strong>Classification:</strong></div>
+                      <div class="w-75" id="po-classification"></div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-header">MONITORING</div>
+                <div class="card-body">
+                  <ul class="list-unstyled mb-0">
+                    <li class="d-flex">
+                      <div style="flex: 0 0 30%;"><strong>Date Started:</strong></div>
+                      <div style="flex: 0 0 70%;" id="po-date-started"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div style="flex: 0 0 30%;"><strong>Completion Date:</strong></div>
+                      <div style="flex: 0 0 70%;" id="po-completion-date"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div style="flex: 0 0 30%;"><strong>COC No:</strong></div>
+                      <div style="flex: 0 0 70%;" id="po-coc-number"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div style="flex: 0 0 30%;"><strong>DR No:</strong></div>
+                      <div style="flex: 0 0 70%;" id="po-dr-number"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div style="flex: 0 0 30%;"><strong>Service Report No:</strong></div>
+                      <div style="flex: 0 0 70%;" id="po-service-report-number"></div>
+                    </li>
+                    <li class="d-flex">
+                      <div style="flex: 0 0 30%;"><strong>Invoice No:</strong></div>
+                      <div style="flex: 0 0 70%;" id="po-invoice-number"></div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Items Table -->
+          <div class="card itemscard mb-4">
+            <div class="card-body p-0">
+              <table class="table table-bordered mb-0">
+                <thead class="thead-light">
+                  <tr>
+                    
+                    <th class="text-center">Total Days</th>
+                    <th class="text-center">Manpower Total</th>
+                    <th class="text-center">Time Total</th>
+                    <th class="text-center">Total Work Hour</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+               
+                    <td class="text-center"><span id="po-total-days"></span></td>
+                    <td class="text-center"><span id="po-manpower-total"></span></td>
+                    <td class="text-center"><span id="po-time-total"></span></td>
+                    <td class="text-center"><span id="po-total-wh"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+         <!-- Row 4: Manpower, Service Report, Status Cards -->
+          <div class="row gx-3 mt-3">
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-header">MANPOWER ASSIGNED</div>
+                <div class="card-body">
+                  <span id="po-manpower-string">Joven, Joel, Jordine</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-header">REMARKS</div>
+                <div class="card-body">
+                  <span id="po-remarks"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <small class="text-muted">STATUS:</small>
+                  <p class="bigfont mb-0" id="po-status"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div> <!-- end .px-4 -->
+      </div> <!-- end .container-fluid -->
+    </div>
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
     </div>
   </div>
 </div>

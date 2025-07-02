@@ -132,7 +132,7 @@
   }
   .formbold-btn:hover {
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
-  }
+  } 
   .formbold-input-flex-4 {
   display: flex;
   flex-wrap: wrap;
@@ -144,7 +144,7 @@
 }
 
 .card-header.add-card-header {
-  background: linear-gradient(to right, #62cff4, #2c67f2) !important;
+  background: linear-gradient(to right, #52C755, #3CA544);
   color: white !important;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
@@ -188,9 +188,6 @@
   background-color: #dc3545 !important;
   color: white !important;
 }
-
-
-
 
 
 

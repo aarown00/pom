@@ -4,23 +4,20 @@ from .models import CustomerDetail, PurchaseOrder, ManpowerDetail
 @admin.register(PurchaseOrder)
 class PurchaseOrderAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
-        'date_recorded',
         'purchase_order',
-        'customer', 
-        'date_in_email',
-        'target_date',
-        'item_model',
+        'customer',
+        'classification',
         'description',
-        'service_report',
-        'total_days',
         'manpower_total',
-        'time_total',
-        'total_work_hour_display',
+        'date_recorded',
+        'purchase_order_received',
         'date_started',
+        'target_date',
         'completion_date',
-        'completion_code',
-        'delivery_code',
+        'coc_number',
+        'service_report_number',
+        'dr_number',
+        'invoice_number',
         'status',
     )
 
@@ -37,7 +34,7 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
 
 @admin.register(ManpowerDetail)
 class ManpowerDetailAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'category')
 
 @admin.register(CustomerDetail)
 class CustomerDetailAdmin(admin.ModelAdmin):

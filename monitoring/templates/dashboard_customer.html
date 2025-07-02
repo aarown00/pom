@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block title %}Customer Details List{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/dashboard_customer.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Customer Details List</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-sm mb-0">
+      <li class="breadcrumb-item">Project Monitoring System</li>
+      <li class="breadcrumb-item active" aria-current="page">Customers List</li>
+      </ol>
+    </nav>
+</div>
+
+  <div class="alert alert-warning" role="alert">
+  View customer details here!
+</div>
+
+<div class="d-flex justify-content-end mt-3 px-4">
+  <a href="{% url 'create_customer' username=request.user.username %}" class="btn add-button">Add Customer</a>
+</div>
+
+
+  <table id="customerTable" class="row-border hover" style="width:100%">
+    <thead>
+      <tr>
+        <th></th>
+        <th>CUSTOMER NAME</th>
+        <th>BRANCH/ADDRESS</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customer in customer_details %}
+      <tr>
+        <td></td>
+        <td>{{ customer.customer_name }}</td>
+        <td>{{ customer.branch_name }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3">No customers found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new DataTable('#customerTable', {
+      searching: false,
+      ordering: false,
+    });
+  });
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block title %}Purchase Order Schedulling and Update{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/edit_purchase_order.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">P.O#: {{ po.purchase_order }}</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-sm mb-0">
+      <li class="breadcrumb-item">Project Monitoring System</li>
+      <li class="breadcrumb-item active" aria-current="page">Purchase Orders</li>
+      </ol>
+    </nav>
+</div>
+
+  <div class="alert alert-warning" role="alert">
+  Update details here to update statuses!
+</div>
+
+<div class="mt-3 px-4">
+  <div class="card shadow rounded w-100" style="border: none;">
+    <div class="card-header add-card-header">
+      <h5 class="mb-0">Edit Purchase Order</h5>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        
+      </br>
+        <!-- Row 1 -->
+        <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
+          <div style="width: 25%;">
+            <label for="{{ form.purchase_order.id_for_label }}" class="formbold-form-label">
+                {{ form.purchase_order.label }}
+              </label>
+              {{ form.purchase_order }}
+              {{ form.purchase_order.errors }}
+          </div>
+          <div style="width: 75%;">
+            <label for="{{ form.customer_branch.id_for_label }}" class="formbold-form-label">
+                {{ form.customer_branch.label }}
+              </label>
+              {{ form.customer_branch }}
+              {{ form.customer_branch.errors }}
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
+          <div style="width: 25%;">
+            <label for="{{ form.classification.id_for_label }}" class="formbold-form-label">
+                {{ form.classification.label }}
+              </label>
+              {{ form.classification }}
+              {{ form.classification.errors }}
+          </div>
+          <div style="width: 75%;">
+            <label for="{{ form.description.id_for_label }}" class="formbold-form-label">
+                {{ form.description.label }}
+              </label>
+              {{ form.description }}
+              {{ form.description.errors }}
+          </div>
+        </div>
+
+
+        <!-- Row 3 -->
+        <div class="formbold-input-flex-4">
+          <div>
+           <label for="{{ form.purchase_order_received.id_for_label }}" class="formbold-form-label">
+                {{ form.purchase_order_received.label }}
+              </label>
+              {{ form.purchase_order_received }}
+              {{ form.purchase_order_received.errors }}
+          </div>
+          <div>
+            <label for="{{ form.target_date.id_for_label }}" class="formbold-form-label">
+                {{ form.target_date.label }}
+              </label>
+              {{ form.target_date }}
+              {{ form.target_date.errors }}
+          </div>
+          <div>
+            <label for="{{ form.date_started.id_for_label }}" class="formbold-form-label">
+                {{ form.date_started.label }}
+              </label>
+              {{ form.date_started }}
+              {{ form.date_started.errors }}
+          </div>
+          <div>
+            <label for="{{ form.completion_date.id_for_label }}" class="formbold-form-label">
+                {{ form.completion_date.label }}
+              </label>
+              {{ form.completion_date }}
+              {{ form.completion_date.errors }}
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
+          <div>
+            <label for="{{ form.total_days.id_for_label }}" class="formbold-form-label">
+                {{ form.total_days.label }}
+              </label>
+              {{ form.total_days }}
+              {{ form.total_days.errors }}
+          </div>
+          <div>
+           <label for="{{ form.service_report_number.id_for_label }}" class="formbold-form-label">
+                {{ form.service_report_number.label }}
+              </label>
+              {{ form.service_report_number }}
+              {{ form.service_report_number.errors }}
+          </div>
+           <div>
+           <label for="{{ form.dr_number.id_for_label }}" class="formbold-form-label">
+                {{ form.dr_number.label }}
+              </label>
+              {{ form.dr_number}}
+              {{ form.dr_number.errors }}
+          </div>
+          <div>
+           <label for="{{ form.coc_number.id_for_label }}" class="formbold-form-label">
+                {{ form.coc_number.label }}
+              </label>
+              {{ form.coc_number }}
+              {{ form.coc_number.errors }}
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
+          <div>
+            <label for="{{ form.time_total.id_for_label }}" class="formbold-form-label">
+                {{ form.time_total.label }}
+              </label>
+              {{ form.time_total }}
+              {{ form.time_total.errors }}
+          </div>
+          <div>
+           <label for="{{ form.manpower.id_for_label }}" class="formbold-form-label">
+                {{ form.manpower.label }}
+              </label>
+              {{ form.manpower }}
+              {{ form.manpower.errors }}
+          </div>
+           <div>
+           <label for="{{ form.invoice_number.id_for_label }}" class="formbold-form-label">
+                {{ form.invoice_number.label }}
+              </label>
+              {{ form.invoice_number}}
+              {{ form.invoice_number.errors }}
+          </div>
+        </div>
+
+        <!-- Row 5 -->
+        <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
+          <div style="width: 100%;">
+            <label for="{{ form.remarks.id_for_label }}" class="formbold-form-label">
+                {{ form.remarks.label }}
+              </label>
+              {{ form.remarks }}
+              {{ form.remarks.errors }}
+          </div>
+        </div>
+
+
+
+        <button type="submit" class="btn add-button mt-3">Update</button>
+        <a href="{% url 'dashboard' username=request.user.username %}" class="btn back-button mt-3">Back</a>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $('.selectpicker').selectpicker();
+  });
+</script>
+
+{% endblock %}

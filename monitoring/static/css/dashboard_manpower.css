@@ -1,0 +1,48 @@
+
+#manpowerTable {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed; /* Optional: makes column widths equal */
+}
+
+/* Apply gradient to the header row itself */
+#manpowerTable thead tr:first-child {
+  background: linear-gradient(to right, #62cff4, #2c67f2);
+}
+
+/* Make the <th> cells transparent and remove borders */
+#manpowerTable thead tr:first-child th {
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: center;
+  padding: 12px;
+}
+
+/* Round only the first and last cells */
+#manpowerTable thead tr:first-child th:first-child {
+  border-top-left-radius: 12px;
+}
+
+#manpowerTable thead tr:first-child th:last-child {
+  border-top-right-radius: 12px;
+}
+
+.add-button {
+  background-color: white;
+  color: #04AA6D;
+  border: 2px solid #04AA6D;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+}
+
+.add-button:hover {
+  background-color: #04AA6D;
+  color: white;
+}
+
+
+
+

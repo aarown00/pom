@@ -3,6 +3,8 @@
   const table = new DataTable('#poTable', {
     ordering: false,
     searching: true,
+
+
     columnDefs: [
       { targets: 7, visible: false, searchable: false } // hide ID column
     ],
@@ -35,14 +37,14 @@
       api.columns().every(function () {
         const column = this;
         const index = column.index();
-       if (index === 7 || index === 0) return; // skip index 0 and 7
+       if (index === 7 || index === 0 || index === 1) return; // skip index 0 and 7 and 1
 
         const headerCell = document.querySelector(
           `#poTable thead tr.filter-row th:nth-child(${index + 1})`
         );
 
         const select = document.createElement('select');
-        select.innerHTML = `<option value="">Select Filter (Default All)</option>`;
+        select.innerHTML = `<option value="">ALL</option>`;
         headerCell.innerHTML = '';
         headerCell.appendChild(select);
 

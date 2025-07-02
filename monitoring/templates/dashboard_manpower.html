@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block title %}Manpower Details List{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/dashboard_manpower.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Manpower Details List</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-sm mb-0">
+      <li class="breadcrumb-item">Project Monitoring System</li>
+      <li class="breadcrumb-item active" aria-current="page">Manpower List</li>
+      </ol>
+    </nav>
+</div>
+
+  <div class="alert alert-warning" role="alert">
+  View manpower details here!
+</div>
+
+<div class="d-flex justify-content-end mt-3 px-4">
+  <a href="{% url 'create_manpower' username=request.user.username %}" class="btn add-button">Add Manpower</a>
+</div>
+
+
+  <table id="manpowerTable" class="row-border hover" style="width:100%">
+    <thead>
+      <tr>
+        <th></th>
+        <th>MANPOWER NAME</th>
+        <th>CATEGORY</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for manpower in manpower_details %}
+      <tr>
+        <td></td>
+        <td>{{ manpower.name }}</td>
+        <td>{{ manpower.category }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3">No manpower found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new DataTable('#manpowerTable', {
+      searching: false,
+      ordering: false,
+    });
+  });
+</script>
+
+
+{% endblock %}

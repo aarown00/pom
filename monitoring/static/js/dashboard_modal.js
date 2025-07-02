@@ -1,20 +1,20 @@
 
   function showPurchaseOrderDetails(
     id, dateRecorded, po, customer, branch,
-    dateEmail, targetDate, itemModel, description, serviceReport,
+    dateReceived, targetDate, classification, description, serviceReportNumber,
     totalDays, manpowerTotal, manpowerStr, timeTotal, totalWorkHour,
-    dateStarted, completionDate, completionCode, deliveryCode, status
+    dateStarted, completionDate, cocNumber, drNumber, invoiceNumber, remarks, status
   ) {
     document.getElementById('po-id').innerText = id;
     document.getElementById('po-date-recorded').innerText = dateRecorded;
     document.getElementById('po-number').innerText = po;
     document.getElementById('po-customer').innerText = customer;
     document.getElementById('po-branch').innerText = branch;
-    document.getElementById('po-date-email').innerText = dateEmail;
+    document.getElementById('po-date-received').innerText = dateReceived;
     document.getElementById('po-target-date').innerText = targetDate;
-    document.getElementById('po-item-model').innerText = itemModel;
+    document.getElementById('po-classification').innerText = classification;
     document.getElementById('po-description').innerText = description;
-    document.getElementById('po-service-report').innerText = serviceReport;
+    document.getElementById('po-service-report-number').innerText = serviceReportNumber;
     document.getElementById('po-total-days').innerText = totalDays;
     document.getElementById('po-manpower-total').innerText = manpowerTotal;
     document.getElementById('po-manpower-string').innerText = manpowerStr;
@@ -23,8 +23,10 @@
     document.getElementById('po-total-wh').innerText = totalWorkHour;
     document.getElementById('po-date-started').innerText = dateStarted;
     document.getElementById('po-completion-date').innerText = completionDate;
-    document.getElementById('po-completion-code').innerText = completionCode;
-    document.getElementById('po-delivery-code').innerText = deliveryCode;
+    document.getElementById('po-coc-number').innerText = cocNumber;
+    document.getElementById('po-dr-number').innerText = drNumber;
+    document.getElementById('po-invoice-number').innerText = invoiceNumber;
+    document.getElementById('po-remarks').innerText = remarks;
     document.getElementById('po-status').innerText = status;
 
     

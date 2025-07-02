@@ -7,7 +7,7 @@
     background-color: #f9f9f9;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.2s ease;
-    appearance: none; /* Remove default arrow in some browsers */
+    
   }
 
   #poTable thead tr.filter-row select:focus {
@@ -22,14 +22,111 @@
     cursor: pointer;
   }
 
-  #poTable thead tr:first-child th {
-    background-color:rgb(113, 185, 130); /* Bootstrap green */
-    color: white;
-    text-align: center;
-  }
-
-  .status-btn {
-  min-width: 100px;
-  text-align: center;
-  white-space: nowrap;
+.view-button {
+  background-color: white;
+  color: #04AA6D;
+  border: 2px solid #04AA6D;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
 }
+
+.view-button:hover {
+  background-color: #04AA6D;
+  color: white;
+}
+
+a.btn.edit-button {
+  background-color: white !important;
+  color: #dc3545 !important; /* Bootstrap red */
+  border: 2px solid #dc3545 !important;
+  padding: 5px 12px !important;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+  text-decoration: none;
+}
+
+a.btn.edit-button:hover {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+
+
+#poTable {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed; /* Optional: makes column widths equal */
+}
+
+/* Apply gradient to the header row itself */
+#poTable thead tr:first-child {
+  background: linear-gradient(to right, #62cff4, #2c67f2);
+}
+
+/* Make the <th> cells transparent and remove borders */
+#poTable thead tr:first-child th {
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: center;
+  padding: 12px;
+}
+
+/* Round only the first and last cells */
+#poTable thead tr:first-child th:first-child {
+  border-top-left-radius: 12px;
+}
+
+#poTable thead tr:first-child th:last-child {
+  border-top-right-radius: 12px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;               /* Fixed width */
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+}
+
+/* Status Colors */
+
+/* Completed - Green */
+.status.completed {
+  background-color: #28a745;
+}
+
+/* Ongoing - Blue */
+.status.ongoing {
+  background-color: #007bff;
+}
+
+/* Pending - Yellow */
+.status.pending {
+  background-color: #ffc107;
+  color: #1e1e1e;
+}
+
+/* Delayed - Red */
+.status.delayed {
+  background-color: #dc3545;
+}
+
+/* Cancelled - Black */
+.status.cancelled {
+  background-color: #343a40;
+}
+
+
+
+
+
+
