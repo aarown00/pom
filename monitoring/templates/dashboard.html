@@ -9,29 +9,7 @@
 
 {% block content %}
 
-{% if messages %}
-<div aria-live="polite" aria-atomic="true" style="position: fixed; bottom: 1rem; right: 1rem; z-index: 1050;">
-  {% for message in messages %}
-  <div class="toast fade" data-delay="8000" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header bg-success text-white">
-      <strong class="mr-auto">Success</strong>
-      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="toast-body">
-      {{ message }}
-    </div>
-  </div>
-  {% endfor %}
-</div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    $('.toast').toast('show');
-  });
-</script>
-{% endif %}
+{% include "toast_messages.html" %}
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Dashboard</h1>
@@ -74,35 +52,35 @@
     <tr>
       <td>
         <!-- View Button -->
-        <button 
-          class="btn btn-sm view-button"
-          onclick="showPurchaseOrderDetails(
-            '{{ po.id|escapejs }}',
-            '{{ po.date_recorded|escapejs }}',
-            '{{ po.purchase_order|escapejs }}',
-            '{{ po.customer_branch.customer_name|escapejs }}',
-            '{{ po.customer_branch.branch_name|escapejs }}',
-            '{{ po.purchase_order_received|escapejs }}',
-            '{{ po.target_date|escapejs }}',
-            '{{ po.classification|escapejs }}',
-            '{{ po.description|escapejs }}',
-            '{{ po.service_report_number|escapejs }}',
-            '{{ po.total_days|escapejs }}',
-            '{{ po.manpower_total|escapejs }}',
-            '{{ po.manpower.all|join:", "|escapejs }}',
-            '{{ po.time_total|escapejs }}',
-            '{{ po.total_work_hour|escapejs }}',
-            '{{ po.date_started|escapejs }}',
-            '{{ po.completion_date|escapejs }}',
-            '{{ po.coc_number|escapejs }}',
-            '{{ po.dr_number|escapejs }}',
-            '{{ po.invoice_number|escapejs }}',
-            '{{ po.remarks|escapejs }}',
-            '{{ po.status|escapejs }}'
-          )"
+        <button class="btn btn-sm view-button"
+          onclick="handleModalClick(this)"
+          data-id="{{ po.id }}"
+          data-date-recorded="{{ po.date_recorded }}"
+          data-po="{{ po.purchase_order }}"
+          data-customer="{{ po.customer_branch.customer_name }}"
+          data-branch="{{ po.customer_branch.branch_name }}"
+          data-date-received="{{ po.purchase_order_received }}"
+          data-target-date="{{ po.target_date }}"
+          data-classification="{{ po.classification }}"
+          data-description="{{ po.description }}"
+          data-service-report-number="{{ po.service_report_number }}"
+          data-manpower-total="{{ po.manpower_total }}"
+          data-manpower-str="{{ po.manpower.all|join:", " }}"
+          data-total-days="{{ po.total_days }}"
+          data-time-total="{{ po.time_total }}"
+          data-total-wh="{{ po.total_work_hour }}"
+          data-date-started="{{ po.date_started }}"
+          data-completion-date="{{ po.completion_date }}"
+          data-coc-number="{{ po.coc_number }}"
+          data-dr-number="{{ po.dr_number }}"
+          data-invoice-number="{{ po.invoice_number }}"
+          data-remarks="{{ po.remarks }}"
+          data-status="{{ po.status }}"
+          data-target-date-delayed="{{ po.target_date_delayed }}"
         >
           View
         </button>
+
 
         <a href="{% url 'edit' username=request.user.username pk=po.id %}" class="btn btn-sm edit-button">Edit</a>
 
@@ -112,9 +90,6 @@
       <td>
         {% if po.status == "Delayed" %}
           <span class="text-danger">{{ po.purchase_order }}</span>
-          <text class="text-danger ms-1">
-            ({{ po.target_date_delayed }} day{{ po.target_date_delayed|pluralize }})
-          </text>
         {% else %}
           {{ po.purchase_order }}
         {% endif %}

@@ -30,7 +30,7 @@ def logout_user(request):
     messages.success(request, "You have been logged out.")
     return redirect('login')
 
-
+#purchase order---------------------------------------------------
 
 @login_required
 def dashboard_view(request, username):

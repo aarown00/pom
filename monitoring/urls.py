@@ -3,12 +3,13 @@ from . import views
 
 urlpatterns = [
     path('', views.login_view, name='login'),
-    path('<str:username>/dashboard/', views.dashboard_view, name='dashboard'),
-    path('<str:username>/create/', views.create_purchase_order, name='create'),
-    path('<str:username>/edit/<int:pk>', views.edit_purchase_order, name='edit'),
     path('logout/', views.logout_user, name='logout'),
-    path('create/', views.create_purchase_order, name='create'),
 
+    path('<str:username>/create/', views.create_purchase_order, name='create'),
+    path('<str:username>/dashboard/', views.dashboard_view, name='dashboard'),
+    path('<str:username>/edit/<int:pk>', views.edit_purchase_order, name='edit'),
+ 
+    
     path('<str:username>/create/customer', views.create_customer, name='create_customer'),
     path('<str:username>/create/customerlist', views.customerlist_view, name='customerlist'), 
 
