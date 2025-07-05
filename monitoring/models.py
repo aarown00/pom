@@ -38,6 +38,12 @@ class PurchaseOrder(models.Model):
         ('GENSET C', 'GENSET C'),
     ]
 
+    MANPOWER_TYPE_CHOICES = [
+        ('Employee Based', 'Employee Based'),
+        ('Contractor Based', 'Contractor Based'),
+        ('Employee & Contractor Based', 'Employee & Contractor Based'),
+    ]
+
     id = models.AutoField(primary_key=True)
     date_recorded = models.DateField(auto_now_add=True)
 
@@ -48,6 +54,7 @@ class PurchaseOrder(models.Model):
     total_days = models.PositiveIntegerField(blank=True, null=True)
     manpower = models.ManyToManyField(ManpowerDetail, blank=True)
     manpower_total = models.PositiveIntegerField(default=0, editable=False)
+    manpower_type = models.CharField(max_length=30, choices=MANPOWER_TYPE_CHOICES, blank=True, null=True, editable=False)
     time_total = models.PositiveIntegerField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -77,11 +84,12 @@ class PurchaseOrder(models.Model):
         elif not self.date_started or self.date_started > today:
             self.status = 'Pending'
 
-        
         # Save temporarily first to create an instance (required for m2m)
         super().save(*args, **kwargs)
+
         # Then update the count based on selected manpower
         self.manpower_total = self.manpower.count()
+
         super().save(update_fields=['manpower_total'])
 
     @property
@@ -111,8 +119,22 @@ class PurchaseOrder(models.Model):
     customer.short_description = 'Customer'
 
 @receiver(m2m_changed, sender=PurchaseOrder.manpower.through)
-def update_manpower_total(sender, instance, action, **kwargs):
+def update_manpower_fields(sender, instance, action, **kwargs):
     if action in ['post_add', 'post_remove', 'post_clear']:
-        instance.manpower_total = instance.manpower.count()
-        instance.save(update_fields=['manpower_total'])
+        manpower = instance.manpower.all()
+        instance.manpower_total = manpower.count()
+
+        has_employee = manpower.filter(category='Employee').exists()
+        has_contractor = manpower.filter(category='Contractor').exists()
+
+        if has_employee and has_contractor:
+            instance.manpower_type = 'Employee & Contractor Based'
+        elif has_employee:
+            instance.manpower_type = 'Employee Based'
+        elif has_contractor:
+            instance.manpower_type = 'Contractor Based'
+        else:
+            instance.manpower_type = None
+
+        instance.save(update_fields=['manpower_total', 'manpower_type'])
 

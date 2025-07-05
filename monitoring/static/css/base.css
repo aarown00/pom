@@ -1,7 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
 body {
-  font-family: 'Open Sans', sans-serif;
+   padding: 0;
+   display: flex;
+   flex-direction: column;
+   font-family: 'Open Sans', sans-serif;
+  
 }
 
 .feather {
@@ -51,18 +55,26 @@ body {
 }
 
 .sidebar .nav-link.active {
-  color: #007bff;
+  background-color: #e9ecef; /* Light background */
+  color: #007bff; /* Bootstrap primary color */
+  border-left: 4px solid #007bff;
 }
+
 
 .sidebar .nav-link:hover .feather,
 .sidebar .nav-link.active .feather {
   color: inherit;
 }
 
-.sidebar-heading {
-  font-size: .75rem;
+.sidebar .sidebar-heading {
+  font-size: 0.75rem !important;
+  font-weight: 600;
   text-transform: uppercase;
+  color: #6c757d; /* similar to Bootstrap's text-muted */
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
+
 
 /*
  * Content
@@ -105,4 +117,12 @@ body {
 .form-control-dark:focus {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
+
+.nav-tabs .nav-link {
+  color: #555 !important; /* Inactive tabs: gray */
+}
+
+.nav-tabs .nav-link.active {
+  color: #0d6efd !important; /* Active tab: Bootstrap primary blue */
 }

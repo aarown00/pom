@@ -101,28 +101,28 @@ a.btn.edit-button:hover {
 
 /* Completed - Green */
 .status.completed {
-  background-color: #28a745;
+  background: linear-gradient(to right, #48bc84, #d0e496) !important;
 }
 
 /* Ongoing - Blue */
 .status.ongoing {
-  background-color: #007bff;
+  background: linear-gradient(to right, #62cff4 , #2c67f2) !important;
 }
 
 /* Pending - Yellow */
 .status.pending {
-  background-color: #ffc107;
-  color: #1e1e1e;
+  background: linear-gradient(to right, #F9B56B, #E59431) !important;
+  color: #fff !important;
 }
 
 /* Delayed - Red */
 .status.delayed {
-  background-color: #dc3545;
+  background: linear-gradient(to right, #b80000, #ff5e5e) !important;
 }
 
 /* Cancelled - Black */
 .status.cancelled {
-  background-color: #343a40;
+  background: linear-gradient(to right, #000000, #444444) !important;
 }
 
 

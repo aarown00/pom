@@ -28,18 +28,19 @@
   border-top-right-radius: 12px;
 }
 
-.add-button {
+.delete-button {
   background-color: white;
-  color: #04AA6D;
-  border: 2px solid #04AA6D;
+  color: #e74c3c; /* red tone */
+  border: 2px solid #e74c3c;
   padding: 5px 12px;
   border-radius: 5px;
   font-weight: bold;
   transition-duration: 0.4s;
+  text-decoration: none;
 }
 
-.add-button:hover {
-  background-color: #04AA6D;
+.delete-button:hover {
+  background-color: #e74c3c;
   color: white;
 }
 

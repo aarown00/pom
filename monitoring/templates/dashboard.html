@@ -5,6 +5,7 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <link rel="stylesheet" href="{% static 'css/stats.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -15,15 +16,28 @@
     <h1 class="h2">Dashboard</h1>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb breadcrumb-sm mb-0">
-      <li class="breadcrumb-item">Project Monitoring System</li>
+      <li class="breadcrumb-item">P.O Monitoring System</li>
       <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
       </ol>
     </nav>
 </div>
 
   <div class="alert alert-success" role="alert">
-  Welcome to Dashboard! Kindly check table for status updates.
-</div>
+    Welcome to Dashboard! Kindly check table for status updates.
+  </div>
+
+  {% include "stats.html" %}
+
+</br>
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'create' username=request.user.username %}">Add P.O</a>
+  </li>
+</ul>
 
 <table id="poTable" class="row-border hover" style="width:100%">
   <thead>
@@ -63,18 +77,19 @@
           data-target-date="{{ po.target_date }}"
           data-classification="{{ po.classification }}"
           data-description="{{ po.description }}"
-          data-service-report-number="{{ po.service_report_number }}"
+          data-service-report-number="{{ po.service_report_number|default:'None' }}"
           data-manpower-total="{{ po.manpower_total }}"
-          data-manpower-str="{{ po.manpower.all|join:", " }}"
+          data-manpower-str="{{ po.manpower.all|join:", "|default:'None' }}"
+          data-manpower-type="{{ po.manpower_type|default_if_none:'No manpower assigned' }}"
           data-total-days="{{ po.total_days }}"
           data-time-total="{{ po.time_total }}"
           data-total-wh="{{ po.total_work_hour }}"
-          data-date-started="{{ po.date_started }}"
-          data-completion-date="{{ po.completion_date }}"
-          data-coc-number="{{ po.coc_number }}"
-          data-dr-number="{{ po.dr_number }}"
-          data-invoice-number="{{ po.invoice_number }}"
-          data-remarks="{{ po.remarks }}"
+          data-date-started="{{ po.date_started|default:'None' }}"
+          data-completion-date="{{ po.completion_date|default:'None' }}"
+          data-coc-number="{{ po.coc_number|default:'None' }}"
+          data-dr-number="{{ po.dr_number|default:'None' }}"
+          data-invoice-number="{{ po.invoice_number|default:'None' }}"
+          data-remarks="{{ po.remarks|default:'None' }}"
           data-status="{{ po.status }}"
           data-target-date-delayed="{{ po.target_date_delayed }}"
         >

@@ -9,6 +9,7 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
         'classification',
         'description',
         'manpower_total',
+        'manpower_type',
         'date_recorded',
         'purchase_order_received',
         'date_started',
@@ -20,6 +21,8 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
         'invoice_number',
         'status',
     )
+
+    
 
     filter_horizontal = ('manpower',)
 

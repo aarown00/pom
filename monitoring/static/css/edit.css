@@ -173,21 +173,6 @@
   color: white;
 }
 
-.back-button {
-  background-color: white !important;
-  color: #dc3545 !important; /* Bootstrap red */
-  border: 2px solid #dc3545 !important;
-  padding: 5px 12px !important;
-  border-radius: 5px;
-  font-weight: bold;
-  transition-duration: 0.4s;
-  text-decoration: none;
-}
-
-.back-button:hover {
-  background-color: #dc3545 !important;
-  color: white !important;
-}
 
 
 

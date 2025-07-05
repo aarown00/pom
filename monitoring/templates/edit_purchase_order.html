@@ -13,8 +13,9 @@
     <h1 class="h2">P.O#: {{ po.purchase_order }}</h1>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb breadcrumb-sm mb-0">
-      <li class="breadcrumb-item">Project Monitoring System</li>
+      <li class="breadcrumb-item">P.O Monitoring System</li>
       <li class="breadcrumb-item active" aria-current="page">Purchase Orders</li>
+      <li class="breadcrumb-item active" aria-current="page">Edit P.O: {{ po.purchase_order }}</li>
       </ol>
     </nav>
 </div>
@@ -22,6 +23,15 @@
   <div class="alert alert-warning" role="alert">
   Update details here to update statuses!
 </div>
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Edit P.O</a>
+  </li>
+</ul>
 
 <div class="mt-3 px-4">
   <div class="card shadow rounded w-100" style="border: none;">
@@ -173,8 +183,7 @@
 
 
         <button type="submit" class="btn add-button mt-3">Update</button>
-        <a href="{% url 'dashboard' username=request.user.username %}" class="btn back-button mt-3">Back</a>
-
+    
       </form>
     </div>
   </div>

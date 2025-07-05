@@ -12,6 +12,7 @@
     button.dataset.serviceReportNumber,
     button.dataset.manpowerTotal,
     button.dataset.manpowerStr,
+    button.dataset.manpowerType,
     button.dataset.totalDays,
     button.dataset.timeTotal,
     button.dataset.totalWh,
@@ -29,7 +30,7 @@
   function showPurchaseOrderDetails(
   id, dateRecorded, po, customer, branch,
   dateReceived, targetDate, classification, description, serviceReportNumber,
-  manpowerTotal, manpowerStr, totalDays, timeTotal, totalWorkHour,
+  manpowerTotal, manpowerStr, manpowerType, totalDays, timeTotal, totalWorkHour,
   dateStarted, completionDate, cocNumber, drNumber, invoiceNumber,
   remarks, status, targetDateDelayed
 ) {
@@ -47,6 +48,7 @@
   document.getElementById('po-service-report-number').innerText = serviceReportNumber;
   document.getElementById('po-manpower-total').innerText = manpowerTotal;
   document.getElementById('po-manpower-string').innerText = manpowerStr;
+  document.getElementById('po-manpower-type').innerText = manpowerType;
   document.getElementById('po-total-days').innerText = totalDays;
   document.getElementById('po-time-total').innerText = timeTotal;
   document.getElementById('po-total-wh').innerText = totalWorkHour;
@@ -61,7 +63,7 @@
   const delayEl = document.getElementById('po-target-date-delayed');
 
   if (status === "Delayed" && targetDateDelayed) {
-    delayEl.innerText = `(${targetDateDelayed} day${targetDateDelayed === '1' ? '' : 's'} late)`;
+    delayEl.innerText = `(${targetDateDelayed} day${targetDateDelayed === '1' ? '' : 's'})`;
     delayEl.style.display = 'inline';
   } else {
     delayEl.innerText = "";

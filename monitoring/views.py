@@ -39,10 +39,21 @@ def dashboard_view(request, username):
 
     purchase_orders = PurchaseOrder.objects.all().order_by('-id')
 
+    # Count each status
+    status_counts = {
+        'pending': PurchaseOrder.objects.filter(status='Pending').count(),
+        'ongoing': PurchaseOrder.objects.filter(status='Ongoing').count(),
+        'completed': PurchaseOrder.objects.filter(status='Completed').count(),
+        'cancelled': PurchaseOrder.objects.filter(status='Cancelled').count(),
+        'delayed': PurchaseOrder.objects.exclude(status__in=[
+            'Pending', 'Ongoing', 'Completed', 'Cancelled'
+        ]).count(),
+    }
+
     return render(request, 'dashboard.html', {
         'purchase_orders': purchase_orders,
+        'status_counts': status_counts,
     })
-
 
 @login_required
 def create_purchase_order(request, username):
