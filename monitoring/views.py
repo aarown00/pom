@@ -6,6 +6,8 @@ from .forms import PurchaseOrderForm
 from .forms_customer import CustomerDetailForm
 from .forms_manpower import ManpowerDetailForm
 from .models import PurchaseOrder, CustomerDetail, ManpowerDetail
+from django.db.models import ProtectedError
+from django.core.exceptions import ValidationError
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -94,15 +96,30 @@ def edit_purchase_order(request, username, pk):
 #customer----------------------------------------------------------------------
 
 @login_required
-def customerlist_view(request, username):
+def dashboard_customer_view(request, username):
     if request.user.username != username:
-        return redirect(f'/{request.user.username}/create/customerlist')
+        return redirect(f'/{request.user.username}/dashboard/customer')
 
     customer_details = CustomerDetail.objects.order_by('customer_name')
 
     return render(request, 'dashboard_customer.html', {
         'customer_details': customer_details,
     })
+
+@login_required
+def delete_customer(request, username, pk):
+    if request.user.username != username:
+        return redirect(f'/{request.user.username}/dashboard/customer')
+
+    if request.method == 'POST':
+        customer = get_object_or_404(CustomerDetail, pk=pk)
+        try:
+            customer.delete()
+            messages.success(request, "Customer deleted successfully.")
+        except ProtectedError:
+            messages.error(request, "Cannot delete this customer because it is still in use.")
+
+    return redirect('dashboard_customer', username=username)
 
 @login_required
 def create_customer(request, username):
@@ -124,15 +141,32 @@ def create_customer(request, username):
 #manpower----------------------------------------------------------------------
 
 @login_required
-def manpowerlist_view(request, username):
+def dashboard_manpower_view(request, username):
     if request.user.username != username:
-        return redirect(f'/{request.user.username}/create/manpowerlist')
+        return redirect(f'/{request.user.username}/dashboard/manpower')
 
     manpower_details = ManpowerDetail.objects.order_by('name')
 
     return render(request, 'dashboard_manpower.html', {
         'manpower_details': manpower_details,
     })
+
+
+@login_required
+def delete_manpower(request, username, pk):
+    if request.user.username != username:
+        return redirect(f'/{request.user.username}/dashboard/manpower')
+
+    manpower = get_object_or_404(ManpowerDetail, pk=pk)
+
+    try:
+        manpower.delete()
+        messages.success(request, "Manpower deleted successfully.")
+    except ValidationError as e:
+        messages.error(request, e.message)
+
+    return redirect('dashboard_manpower', username=username)
+
 
 
 @login_required

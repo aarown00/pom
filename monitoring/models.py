@@ -2,10 +2,11 @@ from django.db import models
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 class CustomerDetail(models.Model):
-    customer_name = models.CharField(max_length=100)
-    branch_name = models.CharField(max_length=100)
+    customer_name = models.CharField(max_length=200)
+    branch_name = models.TextField()
 
     def __str__(self):
         return f"{self.customer_name} - {self.branch_name}"
@@ -16,11 +17,17 @@ class ManpowerDetail(models.Model):
         ('Contractor', 'Contractor'),
     ]
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
 
     def __str__(self):
         return self.name
+    
+    def delete(self, *args, **kwargs):
+        # Check if this manpower is linked to any PurchaseOrder
+        if self.purchaseorder_set.exists():
+            raise ValidationError(f"Cannot delete '{self.name}' because it is used in existing P.O's")
+        super().delete(*args, **kwargs)
 
 
 class PurchaseOrder(models.Model):
@@ -47,9 +54,9 @@ class PurchaseOrder(models.Model):
     id = models.AutoField(primary_key=True)
     date_recorded = models.DateField(auto_now_add=True)
 
-    purchase_order = models.CharField(max_length=100)
+    purchase_order = models.CharField(max_length=100, unique=True)
     purchase_order_received = models.DateField()
-    customer_branch = models.ForeignKey(CustomerDetail, on_delete=models.CASCADE)
+    customer_branch = models.ForeignKey(CustomerDetail, on_delete=models.PROTECT)
 
     total_days = models.PositiveIntegerField(blank=True, null=True)
     manpower = models.ManyToManyField(ManpowerDetail, blank=True)
@@ -98,7 +105,7 @@ class PurchaseOrder(models.Model):
             return self.manpower_total * self.time_total
         return None
 
-    classification = models.CharField(max_length=20, choices=CLASSIFICATION_CHOICES)
+    classification = models.CharField(max_length=100, choices=CLASSIFICATION_CHOICES)
     description = models.TextField()
     service_report_number = models.CharField(blank=True, null=True)
     date_started = models.DateField(blank=True, null=True)

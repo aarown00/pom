@@ -9,6 +9,8 @@
 
 {% block content %}
 
+{% include "toast_messages.html" %}
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Customers</h1>
     <nav aria-label="breadcrumb">
@@ -26,7 +28,7 @@
  
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="{% url 'customerlist' username=request.user.username %}">Customer List</a>
+    <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">Customer List</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'create_customer' username=request.user.username %}">Add Customer</a>
@@ -45,8 +47,11 @@
     <tbody>
       {% for customer in customer_details %}
       <tr>
-        <td>
-          <a href="#" class="btn btn-sm delete-button">Delete</a>
+         <td>
+        <form method="post" action="{% url 'delete_customer' username=request.user.username pk=customer.pk %}" style="display:inline;" onsubmit="return confirmDelete()">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm delete-button">Delete</button>
+        </form>
         </td>
         <td>{{ customer.customer_name }}</td>
         <td>{{ customer.branch_name }}</td>
@@ -58,6 +63,12 @@
       {% endfor %}
     </tbody>
   </table>
+
+<script>
+  function confirmDelete() {
+    return confirm("Are you sure you want to delete this customer?");
+  }
+</script>
 
 
 <script>

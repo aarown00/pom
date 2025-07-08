@@ -9,6 +9,8 @@
 
 {% block content %}
 
+{% include "toast_messages.html" %}
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Manpower</h1>
     <nav aria-label="breadcrumb">
@@ -26,7 +28,7 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="{% url 'manpowerlist' username=request.user.username %}">Manpower List</a>
+    <a class="nav-link" href="{% url 'dashboard_manpower' username=request.user.username %}">Manpower List</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'create_manpower' username=request.user.username %}">Add Manpower</a>
@@ -46,7 +48,10 @@
       {% for manpower in manpower_details %}
       <tr>
         <td>
-          <a href="#" class="btn btn-sm delete-button">Delete</a>
+          <form method="post" action="{% url 'delete_manpower' username=request.user.username pk=manpower.pk %}" style="display:inline;" onsubmit="return confirmDelete()">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm delete-button">Delete</button>
+        </form>
         </td>
         <td>{{ manpower.name }}</td>
         <td>{{ manpower.category }}</td>
@@ -59,6 +64,11 @@
     </tbody>
   </table>
 
+  <script>
+  function confirmDelete() {
+    return confirm("Are you sure you want to delete this customer?");
+  }
+</script>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {

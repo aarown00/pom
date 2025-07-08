@@ -2,8 +2,16 @@
 <div aria-live="polite" aria-atomic="true" style="position: fixed; bottom: 1rem; right: 1rem; z-index: 1050;">
   {% for message in messages %}
   <div class="toast fade" data-delay="8000" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header bg-success text-white">
-      <strong class="mr-auto">Success</strong>
+    <div class="toast-header 
+      {% if 'error' in message.tags or 'danger' in message.tags %}bg-danger text-white
+      {% else %}bg-success text-white
+      {% endif %}
+    ">
+      <strong class="mr-auto">
+        {% if 'error' in message.tags or 'danger' in message.tags %}Error
+        {% else %}Success
+        {% endif %}
+      </strong>
       <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>

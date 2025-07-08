@@ -1,0 +1,75 @@
+.stat-card {
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  min-height: 60px;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding-right: 1rem;
+}
+
+.icon-wrapper {
+  width: 28px;
+  display: flex;
+  justify-content: center;
+}
+
+.icon-large {
+  width: 28px;
+  height: 28px;
+}
+
+
+.stat-card:hover {
+  transform: translateY(-4px);
+}
+
+.stat-card .inner {
+  padding: 1rem;
+}
+
+.card-label {
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
+  opacity: 0.85;
+}
+
+.card-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-top: 0.2rem;
+}
+
+
+
+.bg-pending {
+  background: linear-gradient(to right, #F9B56B, #E59431) !important;
+  color: #fff !important;
+}
+
+.bg-ongoing {
+  background: linear-gradient(to right, #62cff4 , #2c67f2) !important;
+}
+
+.bg-completed {
+  background: linear-gradient(to right, #48bc84, #d0e496) !important;
+}
+
+.bg-delayed {
+  background: linear-gradient(to right, #b80000, #ff5e5e) !important;
+}
+
+.bg-cancelled {
+  background: linear-gradient(to right, #000000, #444444) !important;
+}

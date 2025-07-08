@@ -51,13 +51,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'customerlist' username=request.user.username %}">
+                <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">
                   <span data-feather="users"></span>
                   Customers
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'manpowerlist' username=request.user.username %}">
+                <a class="nav-link" href="{% url 'dashboard_manpower' username=request.user.username %}">
                   <span data-feather="user-check"></span>
                   Manpower
                 </a>
