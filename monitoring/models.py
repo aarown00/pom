@@ -1,7 +1,7 @@
 from django.db import models
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.dispatch import receiver
-from django.utils import timezone
+from django.utils.timezone import localdate
 from django.core.exceptions import ValidationError
 
 class CustomerDetail(models.Model):
@@ -45,65 +45,17 @@ class PurchaseOrder(models.Model):
         ('GENSET C', 'GENSET C'),
     ]
 
-    MANPOWER_TYPE_CHOICES = [
-        ('Employee Based', 'Employee Based'),
-        ('Contractor Based', 'Contractor Based'),
-        ('Employee & Contractor Based', 'Employee & Contractor Based'),
-    ]
-
     id = models.AutoField(primary_key=True)
     date_recorded = models.DateField(auto_now_add=True)
-
     purchase_order = models.CharField(max_length=100, unique=True)
     purchase_order_received = models.DateField()
     customer_branch = models.ForeignKey(CustomerDetail, on_delete=models.PROTECT)
-
     total_days = models.PositiveIntegerField(blank=True, null=True)
-    manpower = models.ManyToManyField(ManpowerDetail, blank=True)
+
     manpower_total = models.PositiveIntegerField(default=0, editable=False)
-    manpower_type = models.CharField(max_length=30, choices=MANPOWER_TYPE_CHOICES, blank=True, null=True, editable=False)
-    time_total = models.PositiveIntegerField(blank=True, null=True)
+    work_hours_total = models.PositiveIntegerField(default=0, editable=False)
+    working_days_total = models.PositiveIntegerField(default=0, editable=False)
 
-    def save(self, *args, **kwargs):
-        today = timezone.now().date()
-
-        # Respect existing Cancelled status — do not change it
-        if self.status == 'Cancelled':
-            super().save(*args, **kwargs)
-            return
-
-        self.target_date_delayed = 0
-
-        # Priority 1: Completed if finished today
-        if self.completion_date == today:
-            self.status = 'Completed'
-
-        # Priority 2: Delayed if past target and not completed
-        elif self.target_date < today and not self.completion_date:
-            self.status = 'Delayed'
-            self.target_date_delayed = (today - self.target_date).days 
-
-        # Priority 3: Ongoing if started today
-        elif self.date_started == today:
-            self.status = 'Ongoing'
-
-        # Priority 4: Pending if start is in future or not set
-        elif not self.date_started or self.date_started > today:
-            self.status = 'Pending'
-
-        # Save temporarily first to create an instance (required for m2m)
-        super().save(*args, **kwargs)
-
-        # Then update the count based on selected manpower
-        self.manpower_total = self.manpower.count()
-
-        super().save(update_fields=['manpower_total'])
-
-    @property
-    def total_work_hour(self):
-        if self.manpower_total is not None and self.time_total is not None:
-            return self.manpower_total * self.time_total
-        return None
 
     classification = models.CharField(max_length=100, choices=CLASSIFICATION_CHOICES)
     description = models.TextField()
@@ -118,6 +70,59 @@ class PurchaseOrder(models.Model):
     remarks = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, blank=True, null=True, default='Pending')
 
+
+    def save(self, *args, **kwargs):
+        today = localdate()  # uses system local time
+
+        if self.status == 'Cancelled':
+            super().save(*args, **kwargs)
+            return
+
+        # Calculate total_days (clamp to 0, respect completion date)
+        if self.date_started:
+            end_date = self.completion_date if self.completion_date else today
+            delta_days = (end_date - self.date_started).days
+            self.total_days = max(0, delta_days)
+        else:
+            self.total_days = 0
+
+        self.target_date_delayed = 0
+
+        # Status logic
+        if self.completion_date:
+            self.status = 'Completed'
+
+        elif self.target_date and self.target_date < today:
+            self.status = 'Delayed'
+            self.target_date_delayed = (today - self.target_date).days
+
+        elif self.date_started and self.date_started <= today:
+            self.status = 'Ongoing'
+
+        else:
+            self.status = 'Pending'
+
+        super().save(*args, **kwargs)
+
+    def update_totals(self):
+        daily_logs = self.daily_work_statuses.all()
+
+        manpower_total = 0
+        work_hours_total = 0
+        working_days_total = 0
+
+        for log in daily_logs:
+            manpower_count = log.manpower.count()
+            if manpower_count > 0:
+                manpower_total += manpower_count
+                working_days_total += 1
+                work_hours_total += manpower_count * log.time_total
+
+        self.manpower_total = manpower_total
+        self.working_days_total = working_days_total
+        self.work_hours_total = work_hours_total
+        self.save(update_fields=['manpower_total', 'working_days_total', 'work_hours_total'])
+
     def __str__(self):
         return f"{self.purchase_order}"
     
@@ -125,23 +130,23 @@ class PurchaseOrder(models.Model):
         return f"{self.customer_branch.customer_name} - {self.customer_branch.branch_name}"
     customer.short_description = 'Customer'
 
-@receiver(m2m_changed, sender=PurchaseOrder.manpower.through)
-def update_manpower_fields(sender, instance, action, **kwargs):
-    if action in ['post_add', 'post_remove', 'post_clear']:
-        manpower = instance.manpower.all()
-        instance.manpower_total = manpower.count()
 
-        has_employee = manpower.filter(category='Employee').exists()
-        has_contractor = manpower.filter(category='Contractor').exists()
+class DailyWorkStatus(models.Model):
+    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE, related_name='daily_work_statuses')
+    date = models.DateField(blank=True, null=True)
+    manpower = models.ManyToManyField(ManpowerDetail, blank=True)
+    time_total = models.PositiveIntegerField(blank=True, null=True)
 
-        if has_employee and has_contractor:
-            instance.manpower_type = 'Employee & Contractor Based'
-        elif has_employee:
-            instance.manpower_type = 'Employee Based'
-        elif has_contractor:
-            instance.manpower_type = 'Contractor Based'
-        else:
-            instance.manpower_type = None
+    def __str__(self):
+        manpower_list = ", ".join([m.name for m in self.manpower.all()])
+        return f"{self.date} - {self.purchase_order.purchase_order} ({self.time_total} hrs)"
 
-        instance.save(update_fields=['manpower_total', 'manpower_type'])
 
+@receiver(post_save, sender=DailyWorkStatus)
+@receiver(post_delete, sender=DailyWorkStatus)
+def update_po_totals_on_change(sender, instance, **kwargs):
+    instance.purchase_order.update_totals()
+
+@receiver(m2m_changed, sender=DailyWorkStatus.manpower.through)
+def update_po_totals_on_m2m_change(sender, instance, **kwargs):
+    instance.purchase_order.update_totals()

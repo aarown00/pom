@@ -82,8 +82,8 @@
           data-manpower-str="{{ po.manpower.all|join:", "|default:'None' }}"
           data-manpower-type="{{ po.manpower_type|default_if_none:'No manpower assigned' }}"
           data-total-days="{{ po.total_days }}"
-          data-time-total="{{ po.time_total }}"
-          data-total-wh="{{ po.total_work_hour }}"
+          data-working-days-total="{{ po.working_days_total }}"
+          data-work-hours-total="{{ po.work_hours_total }}"
           data-date-started="{{ po.date_started|default:'None' }}"
           data-completion-date="{{ po.completion_date|default:'None' }}"
           data-coc-number="{{ po.coc_number|default:'None' }}"
@@ -98,7 +98,7 @@
 
 
         <a href="{% url 'edit' username=request.user.username pk=po.id %}" class="btn btn-sm edit-button">Edit</a>
-
+        <a href="{% url 'itinenary' username=request.user.username pk=po.id %}" class="btn btn-sm edit-button">Schedule</a>
 
       </td>
 

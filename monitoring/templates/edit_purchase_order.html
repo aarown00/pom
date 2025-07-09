@@ -85,96 +85,95 @@
         </div>
 
 
-        <!-- Row 3 -->
-        <div class="formbold-input-flex-4">
-          <div>
-           <label for="{{ form.purchase_order_received.id_for_label }}" class="formbold-form-label">
-                {{ form.purchase_order_received.label }}
-              </label>
-              {{ form.purchase_order_received }}
-              {{ form.purchase_order_received.errors }}
-          </div>
-          <div>
-            <label for="{{ form.target_date.id_for_label }}" class="formbold-form-label">
-                {{ form.target_date.label }}
-              </label>
-              {{ form.target_date }}
-              {{ form.target_date.errors }}
-          </div>
-          <div>
-            <label for="{{ form.date_started.id_for_label }}" class="formbold-form-label">
-                {{ form.date_started.label }}
-              </label>
-              {{ form.date_started }}
-              {{ form.date_started.errors }}
-          </div>
-          <div>
-            <label for="{{ form.completion_date.id_for_label }}" class="formbold-form-label">
-                {{ form.completion_date.label }}
-              </label>
-              {{ form.completion_date }}
-              {{ form.completion_date.errors }}
-          </div>
+      <!-- Row 3 -->
+      <div class="formbold-input-flex-4">
+        <div>
+          <label for="{{ form.purchase_order_received.id_for_label }}" class="formbold-form-label">
+            {{ form.purchase_order_received.label }}
+          </label>
+          <input type="text" name="{{ form.purchase_order_received.name }}" id="{{ form.purchase_order_received.id_for_label }}"
+                class="form-control flatpickr"
+                placeholder="MM/DD/YYYY"
+                value="{{ form.purchase_order_received.value|date:'m/d/Y' }}">
+          {{ form.purchase_order_received.errors }}
         </div>
+
+        <div>
+          <label for="{{ form.target_date.id_for_label }}" class="formbold-form-label">
+            {{ form.target_date.label }}
+          </label>
+          <input type="text" name="{{ form.target_date.name }}" id="{{ form.target_date.id_for_label }}"
+                class="form-control flatpickr"
+                placeholder="MM/DD/YYYY"
+                value="{{ form.target_date.value|date:'m/d/Y' }}">
+          {{ form.target_date.errors }}
+        </div>
+
+        <div>
+          <label for="{{ form.service_report_number.id_for_label }}" class="formbold-form-label">
+            {{ form.service_report_number.label }}
+          </label>
+          {{ form.service_report_number }}
+          {{ form.service_report_number.errors }}
+        </div>
+
+        <div>
+          <label for="{{ form.dr_number.id_for_label }}" class="formbold-form-label">
+            {{ form.dr_number.label }}
+          </label>
+          {{ form.dr_number }}
+          {{ form.dr_number.errors }}
+        </div>
+      </div>
+
 
         <!-- Row 4 -->
-        <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
-          <div>
-            <label for="{{ form.total_days.id_for_label }}" class="formbold-form-label">
-                {{ form.total_days.label }}
-              </label>
-              {{ form.total_days }}
-              {{ form.total_days.errors }}
-          </div>
-          <div>
-           <label for="{{ form.service_report_number.id_for_label }}" class="formbold-form-label">
-                {{ form.service_report_number.label }}
-              </label>
-              {{ form.service_report_number }}
-              {{ form.service_report_number.errors }}
-          </div>
-           <div>
-           <label for="{{ form.dr_number.id_for_label }}" class="formbold-form-label">
-                {{ form.dr_number.label }}
-              </label>
-              {{ form.dr_number}}
-              {{ form.dr_number.errors }}
-          </div>
-          <div>
-           <label for="{{ form.coc_number.id_for_label }}" class="formbold-form-label">
-                {{ form.coc_number.label }}
-              </label>
-              {{ form.coc_number }}
-              {{ form.coc_number.errors }}
-          </div>
+      <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
+        <div>
+          <label for="{{ form.date_started.id_for_label }}" class="formbold-form-label">
+            {{ form.date_started.label }}
+          </label>
+          <input type="text"
+                name="{{ form.date_started.name }}"
+                id="{{ form.date_started.id_for_label }}"
+                class="form-control flatpickr"
+                placeholder="MM/DD/YYYY"
+                value="{{ form.date_started.value|date:'m/d/Y' }}">
+          {{ form.date_started.errors }}
         </div>
+
+        <div>
+          <label for="{{ form.completion_date.id_for_label }}" class="formbold-form-label">
+            {{ form.completion_date.label }}
+          </label>
+          <input type="text"
+                name="{{ form.completion_date.name }}"
+                id="{{ form.completion_date.id_for_label }}"
+                class="form-control flatpickr-completion"
+                placeholder="MM/DD/YYYY"
+                value="{{ form.completion_date.value|date:'m/d/Y' }}">
+          {{ form.completion_date.errors }}
+        </div>
+
+        <div>
+          <label for="{{ form.invoice_number.id_for_label }}" class="formbold-form-label">
+            {{ form.invoice_number.label }}
+          </label>
+          {{ form.invoice_number }}
+          {{ form.invoice_number.errors }}
+        </div>
+
+        <div>
+          <label for="{{ form.coc_number.id_for_label }}" class="formbold-form-label">
+            {{ form.coc_number.label }}
+          </label>
+          {{ form.coc_number }}
+          {{ form.coc_number.errors }}
+        </div>
+      </div>
+
 
         <!-- Row 4 -->
-        <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
-          <div>
-            <label for="{{ form.time_total.id_for_label }}" class="formbold-form-label">
-                {{ form.time_total.label }}
-              </label>
-              {{ form.time_total }}
-              {{ form.time_total.errors }}
-          </div>
-          <div>
-           <label for="{{ form.manpower.id_for_label }}" class="formbold-form-label">
-                {{ form.manpower.label }}
-              </label>
-              {{ form.manpower }}
-              {{ form.manpower.errors }}
-          </div>
-           <div>
-           <label for="{{ form.invoice_number.id_for_label }}" class="formbold-form-label">
-                {{ form.invoice_number.label }}
-              </label>
-              {{ form.invoice_number}}
-              {{ form.invoice_number.errors }}
-          </div>
-        </div>
-
-        <!-- Row 5 -->
         <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
           <div style="width: 100%;">
             <label for="{{ form.remarks.id_for_label }}" class="formbold-form-label">
@@ -185,8 +184,6 @@
           </div>
         </div>
 
-
-
         <button type="submit" class="btn add-button mt-3">Update</button>
     
       </form>
@@ -194,7 +191,28 @@
   </div>
 </div>
 
+<!-- jQuery (REQUIRED, first) -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Global flatpickr setup (default config)
+    flatpickr(".flatpickr", {
+      dateFormat: "m/d/Y",
+      allowInput: true
+    });
+
+    // Specific config for completion date (limit to today)
+    flatpickr(".flatpickr-completion", {
+      dateFormat: "m/d/Y",
+      maxDate: "today",
+      allowInput: true
+    });
+  });
+</script>
+
 
 <script>
   $(document).ready(function () {

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import PurchaseOrderForm
 from .forms_customer import CustomerDetailForm
 from .forms_manpower import ManpowerDetailForm
+from .forms_dws import DailyWorkStatusFormSet
 from .models import PurchaseOrder, CustomerDetail, ManpowerDetail
 from django.db.models import ProtectedError
 from django.core.exceptions import ValidationError
@@ -73,7 +74,6 @@ def create_purchase_order(request, username):
 
     return render(request, 'create_purchase_order.html', {'form': form})
 
-
 @login_required
 def edit_purchase_order(request, username, pk):
     po_instance = get_object_or_404(PurchaseOrder, pk=pk)
@@ -91,6 +91,26 @@ def edit_purchase_order(request, username, pk):
         'form': form,
         'po': po_instance  # ✅ this line enables po.id to work in HTML
     })
+
+
+@login_required
+def edit_dws(request, username, pk):
+    purchase_order = get_object_or_404(PurchaseOrder, pk=pk)
+
+    if request.method == 'POST':
+        formset = DailyWorkStatusFormSet(request.POST, instance=purchase_order)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, 'Daily logs updated successfully!')
+            return redirect('dashboard', username=username)  # or another redirect
+    else:
+        formset = DailyWorkStatusFormSet(instance=purchase_order)
+
+    return render(request, 'edit_dws.html', {
+        'formset': formset,
+        'po': purchase_order,
+    })
+
 
 
 #customer----------------------------------------------------------------------

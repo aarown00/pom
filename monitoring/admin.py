@@ -1,39 +1,32 @@
 from django.contrib import admin
-from .models import CustomerDetail, PurchaseOrder, ManpowerDetail
+from .models import CustomerDetail, PurchaseOrder, ManpowerDetail, DailyWorkStatus
+
+# Inline for DailyWorkStatus
+class DailyWorkStatusInline(admin.TabularInline):  # or admin.StackedInline for vertical layout
+    model = DailyWorkStatus
+    extra = 1  # number of empty forms to show
+    filter_horizontal = ('manpower',)  # for better many-to-many UI
 
 @admin.register(PurchaseOrder)
 class PurchaseOrderAdmin(admin.ModelAdmin):
     list_display = (
-        'purchase_order',
-        'customer',
-        'classification',
-        'description',
+    'id',
+    'purchase_order',
+    'status',
+    )
+    readonly_fields = (
         'manpower_total',
-        'manpower_type',
-        'date_recorded',
-        'purchase_order_received',
-        'date_started',
-        'target_date',
-        'completion_date',
-        'coc_number',
-        'service_report_number',
-        'dr_number',
-        'invoice_number',
-        'status',
+        'work_hours_total',
+        'working_days_total',
     )
 
-    
+    inlines = [DailyWorkStatusInline]  # attach DailyWorkStatus inline here
 
-    filter_horizontal = ('manpower',)
 
     class Media:
         css = {
             'all': ('css/admin.css',)
         }
-
-    def total_work_hour_display(self, obj):
-        return obj.total_work_hour
-    total_work_hour_display.short_description = 'Total Work Hour'
 
 @admin.register(ManpowerDetail)
 class ManpowerDetailAdmin(admin.ModelAdmin):

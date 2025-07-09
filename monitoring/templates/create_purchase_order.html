@@ -88,18 +88,17 @@
         <!-- Row 3 -->
         <div class="formbold-input-flex-4">
           <div>
-           <label for="{{ form.purchase_order_received.id_for_label }}" class="formbold-form-label">
-                {{ form.purchase_order_received.label }}
-              </label>
-              {{ form.purchase_order_received }}
-              {{ form.purchase_order_received.errors }}
+            <label for="id_purchase_order_received" class="formbold-form-label">
+              P.O RECEIVED:
+            </label>
+            <input type="text" name="purchase_order_received" class="form-control flatpickr" placeholder="MM/DD/YYYY" required id="id_purchase_order_received">
           </div>
+
           <div>
-            <label for="{{ form.target_date.id_for_label }}" class="formbold-form-label">
-                {{ form.target_date.label }}
-              </label>
-              {{ form.target_date }}
-              {{ form.target_date.errors }}
+            <label for="id_target_date" class="formbold-form-label">
+              TARGET DATE:
+            </label>
+            <input type="text" name="target_date" class="form-control flatpickr" placeholder="MM/DD/YYYY" required id="id_target_date_received">
           </div>
         </div>
 
@@ -109,5 +108,13 @@
   </div>
 </div>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    flatpickr(".flatpickr", {
+      dateFormat: "m/d/Y",  // MM/DD/YYYY
+      allowInput: true
+    });
+  });
+</script>
 
 {% endblock %}

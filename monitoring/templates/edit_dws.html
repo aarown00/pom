@@ -1,0 +1,18 @@
+<form method="post">
+  {% csrf_token %}
+  {{ formset.management_form }}
+
+  <table>
+    {% for form in formset %}
+      <tr>
+        {{ form.id }} <!-- hidden id field, must be rendered -->
+        <td>{{ form.date }}</td>
+        <td>{{ form.manpower }}</td>
+        <td>{{ form.time_total }}</td>
+        <td>{{ form.DELETE }}</td> <!-- if you want delete option -->
+      </tr>
+    {% endfor %}
+  </table>
+
+  <button type="submit">Save</button>
+</form>
