@@ -9,8 +9,8 @@
       { targets: 7, visible: false, searchable: false } // hide ID column
     ],
     language: {
-      search: 'Enter: P.O #', // leave empty so we can use our own label
-      searchPlaceholder: 'Type and Enter No.' // <- placeholder
+      search: 'Search P.O:', // leave empty so we can use our own label
+      searchPlaceholder: 'Type and Enter P.O...' // <- placeholder
     },
 
     search: {

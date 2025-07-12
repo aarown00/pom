@@ -10,6 +10,10 @@ from .models import PurchaseOrder, CustomerDetail, ManpowerDetail
 from django.db.models import ProtectedError
 from django.core.exceptions import ValidationError
 
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect(f'/{request.user.username}/dashboard/')
@@ -27,7 +31,7 @@ def login_view(request):
             return redirect('login')
     return render(request, 'login.html')
 
-
+@login_required
 def logout_user(request):
     logout(request)
     messages.success(request, "You have been logged out.")
@@ -83,7 +87,7 @@ def edit_purchase_order(request, username, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Purchase order updated successfully!')
-            return redirect('dashboard', username=username)
+            return redirect('edit', username=username, pk=pk)
     else:
         form = PurchaseOrderForm(instance=po_instance)
 
@@ -101,8 +105,8 @@ def edit_dws(request, username, pk):
         formset = DailyWorkStatusFormSet(request.POST, instance=purchase_order)
         if formset.is_valid():
             formset.save()
-            messages.success(request, 'Daily logs updated successfully!')
-            return redirect('dashboard', username=username)  # or another redirect
+            messages.success(request, 'Itinenary updated successfully!')
+            return redirect('itinenary', username=username, pk=pk)
     else:
         formset = DailyWorkStatusFormSet(instance=purchase_order)
 
@@ -137,7 +141,7 @@ def delete_customer(request, username, pk):
             customer.delete()
             messages.success(request, "Customer deleted successfully.")
         except ProtectedError:
-            messages.error(request, "Cannot delete this customer because it is still in use.")
+            messages.error(request, "Cannot delete this customer because it is still in use in existing P.O's!")
 
     return redirect('dashboard_customer', username=username)
 

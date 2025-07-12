@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Page Not Found - 404</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h1>404</h1>
+  
+  <p>
+    {% if user.is_authenticated %}
+      You're logged in, but the page you're looking for doesn't exist.
+    {% else %}
+      You might need to log in first or the page doesn't exist.
+    {% endif %}
+  </p>
+  
+  {% if user.is_authenticated %}
+    <a href="{% url 'dashboard' username=user.username %}">Go back to Dashboard</a>
+  {% else %}
+    <a href="/">Go back to Login</a>
+  {% endif %}
+</body>
+</html>

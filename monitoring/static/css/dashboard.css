@@ -30,6 +30,7 @@
   border-radius: 5px;
   font-weight: bold;
   transition-duration: 0.4s;
+  min-width: 90px;
 }
 
 .view-button:hover {
@@ -37,7 +38,39 @@
   color: white;
 }
 
-a.btn.edit-button {
+.itinenary-button {
+  background-color: white;
+  color: #3498db; 
+  border: 2px solid #3498db; 
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+  min-width: 90px;
+}
+
+.itinenary-button:hover {
+  background-color: #3498db; 
+  color: white; 
+}
+
+.update-button {
+  background-color: white;
+  color: #e67e22; /* Orange text */
+  border: 2px solid #e67e22; /* Orange border */
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+  min-width: 90px;
+}
+
+.update-button:hover {
+  background-color: #e67e22; /* Orange background on hover */
+  color: white;
+}
+
+a.btn.cancel-button {
   background-color: white !important;
   color: #dc3545 !important; /* Bootstrap red */
   border: 2px solid #dc3545 !important;
@@ -46,9 +79,10 @@ a.btn.edit-button {
   font-weight: bold;
   transition-duration: 0.4s;
   text-decoration: none;
+  min-width: 90px;
 }
 
-a.btn.edit-button:hover {
+a.btn.cancel-button:hover {
   background-color: #dc3545 !important;
   color: white !important;
 }

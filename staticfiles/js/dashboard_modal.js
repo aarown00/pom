@@ -11,11 +11,10 @@
     button.dataset.description,
     button.dataset.serviceReportNumber,
     button.dataset.manpowerTotal,
-    button.dataset.manpowerStr,
     button.dataset.manpowerType,
     button.dataset.totalDays,
-    button.dataset.timeTotal,
-    button.dataset.totalWh,
+    button.dataset.workingDaysTotal,
+    button.dataset.workHoursTotal,
     button.dataset.dateStarted,
     button.dataset.completionDate,
     button.dataset.cocNumber,
@@ -30,7 +29,7 @@
   function showPurchaseOrderDetails(
   id, dateRecorded, po, customer, branch,
   dateReceived, targetDate, classification, description, serviceReportNumber,
-  manpowerTotal, manpowerStr, manpowerType, totalDays, timeTotal, totalWorkHour,
+  manpowerTotal, manpowerType, totalDays, workingDaysTotal, workHoursTotal,
   dateStarted, completionDate, cocNumber, drNumber, invoiceNumber,
   remarks, status, targetDateDelayed
 ) {
@@ -47,11 +46,10 @@
   document.getElementById('po-description').innerText = description;
   document.getElementById('po-service-report-number').innerText = serviceReportNumber;
   document.getElementById('po-manpower-total').innerText = manpowerTotal;
-  document.getElementById('po-manpower-string').innerText = manpowerStr;
   document.getElementById('po-manpower-type').innerText = manpowerType;
   document.getElementById('po-total-days').innerText = totalDays;
-  document.getElementById('po-time-total').innerText = timeTotal;
-  document.getElementById('po-total-wh').innerText = totalWorkHour;
+  document.getElementById('po-working-days-total').innerText = workingDaysTotal;
+  document.getElementById('po-work-hours-total').innerText = workHoursTotal;
   document.getElementById('po-date-started').innerText = dateStarted;
   document.getElementById('po-completion-date').innerText = completionDate;
   document.getElementById('po-coc-number').innerText = cocNumber;

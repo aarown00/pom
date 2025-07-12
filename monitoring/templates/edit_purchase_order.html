@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% block title %}Purchase Order Schedulling and Update{% endblock %}
+{% block title %}Update Purchase Order{% endblock %}
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'css/edit.css' %}">
@@ -9,19 +9,41 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">P.O#: {{ po.purchase_order }}</h1>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb breadcrumb-sm mb-0">
-      <li class="breadcrumb-item">P.O Monitoring System</li>
-      <li class="breadcrumb-item active" aria-current="page">Purchase Orders</li>
-      <li class="breadcrumb-item active" aria-current="page">Edit P.O: {{ po.purchase_order }}</li>
-      </ol>
-    </nav>
+{% include "toast_messages.html" %}
+
+<form method="post">
+  {% csrf_token %}
+
+<div class="sticky-wrapper">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom">
+    
+     <div class="d-flex align-items-center">
+      <h1 class="h2 mb-0" style="margin-right: 20px;">P.O#: {{ po.purchase_order }}</h1>
+
+     {% if po.status == "Pending" %}
+      <span class="badge badge-warning large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Ongoing" %}
+      <span class="badge badge-primary large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Completed" %}
+      <span class="badge badge-success large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Cancelled" %}
+      <span class="badge badge-dark large-badge">Status: {{ po.status }}</span>
+    {% else %}
+      <span class="badge badge-danger large-badge">Status: {{ po.status }}</span>
+    {% endif %}
+    </div>
+
+    <button type="submit" class="btn add-button mt-1">Save</button>
+
+  </div>
 </div>
 
-  <div class="alert alert-warning" role="alert">
-  Update details here to update statuses!
+
+
+<div style="height: 1rem;"></div>
+
+<div class="alert alert-warning" role="alert">
+  Update details here to update reflected statuses!
 </div>
 
 <ul class="nav nav-tabs">
@@ -29,18 +51,16 @@
     <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link active" href="#">Edit P.O</a>
+    <a class="nav-link active" href="#">Update P.O</a>
   </li>
 </ul>
 
 <div class="mt-3 px-4">
   <div class="card shadow rounded w-100" style="border: none;">
     <div class="card-header add-card-header">
-      <h5 class="mb-0">Edit Purchase Order</h5>
+      <h5 class="mb-0">Update Purchase Order</h5>
     </div>
     <div class="card-body">
-      <form method="post">
-        {% csrf_token %}
         
       </br>
         <!-- Row 1 -->
@@ -87,26 +107,20 @@
 
       <!-- Row 3 -->
       <div class="formbold-input-flex-4">
-        <div>
+        <div class="mb-3">
           <label for="{{ form.purchase_order_received.id_for_label }}" class="formbold-form-label">
-            {{ form.purchase_order_received.label }}
-          </label>
-          <input type="text" name="{{ form.purchase_order_received.name }}" id="{{ form.purchase_order_received.id_for_label }}"
-                class="form-control flatpickr"
-                placeholder="MM/DD/YYYY"
-                value="{{ form.purchase_order_received.value|date:'m/d/Y' }}">
-          {{ form.purchase_order_received.errors }}
+                {{ form.purchase_order_received.label }}
+              </label>
+              {{ form.purchase_order_received }}
+              {{ form.purchase_order_received.errors }}
         </div>
 
         <div>
-          <label for="{{ form.target_date.id_for_label }}" class="formbold-form-label">
-            {{ form.target_date.label }}
-          </label>
-          <input type="text" name="{{ form.target_date.name }}" id="{{ form.target_date.id_for_label }}"
-                class="form-control flatpickr"
-                placeholder="MM/DD/YYYY"
-                value="{{ form.target_date.value|date:'m/d/Y' }}">
-          {{ form.target_date.errors }}
+           <label for="{{ form.target_date.id_for_label }}" class="formbold-form-label">
+                {{ form.target_date.label }}
+              </label>
+              {{ form.target_date }}
+              {{ form.target_date.errors }}
         </div>
 
         <div>
@@ -131,28 +145,18 @@
       <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
         <div>
           <label for="{{ form.date_started.id_for_label }}" class="formbold-form-label">
-            {{ form.date_started.label }}
-          </label>
-          <input type="text"
-                name="{{ form.date_started.name }}"
-                id="{{ form.date_started.id_for_label }}"
-                class="form-control flatpickr"
-                placeholder="MM/DD/YYYY"
-                value="{{ form.date_started.value|date:'m/d/Y' }}">
-          {{ form.date_started.errors }}
+                {{ form.date_started.label }}
+              </label>
+              {{ form.date_started }}
+              {{ form.date_started.errors }}
         </div>
 
         <div>
           <label for="{{ form.completion_date.id_for_label }}" class="formbold-form-label">
-            {{ form.completion_date.label }}
-          </label>
-          <input type="text"
-                name="{{ form.completion_date.name }}"
-                id="{{ form.completion_date.id_for_label }}"
-                class="form-control flatpickr-completion"
-                placeholder="MM/DD/YYYY"
-                value="{{ form.completion_date.value|date:'m/d/Y' }}">
-          {{ form.completion_date.errors }}
+                {{ form.completion_date.label }}
+              </label>
+              {{ form.completion_date }}
+              {{ form.completion_date.errors }}
         </div>
 
         <div>
@@ -184,40 +188,14 @@
           </div>
         </div>
 
-        <button type="submit" class="btn add-button mt-3">Update</button>
+        <button type="submit" class="btn add-button mt-3">Save</button>
     
       </form>
     </div>
   </div>
 </div>
 
-<!-- jQuery (REQUIRED, first) -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Global flatpickr setup (default config)
-    flatpickr(".flatpickr", {
-      dateFormat: "m/d/Y",
-      allowInput: true
-    });
-
-    // Specific config for completion date (limit to today)
-    flatpickr(".flatpickr-completion", {
-      dateFormat: "m/d/Y",
-      maxDate: "today",
-      allowInput: true
-    });
-  });
-</script>
-
-
-<script>
-  $(document).ready(function () {
-    $('.selectpicker').selectpicker();
-  });
-</script>
 
 {% endblock %}

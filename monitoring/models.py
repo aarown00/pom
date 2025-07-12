@@ -25,8 +25,8 @@ class ManpowerDetail(models.Model):
     
     def delete(self, *args, **kwargs):
         # Check if this manpower is linked to any PurchaseOrder
-        if self.purchaseorder_set.exists():
-            raise ValidationError(f"Cannot delete '{self.name}' because it is used in existing P.O's")
+        if self.dailyworkstatus_set.exists():
+            raise ValidationError(f"Cannot delete '{self.name}' because it is used in existing itinenary!")
         super().delete(*args, **kwargs)
 
 
@@ -44,6 +44,19 @@ class PurchaseOrder(models.Model):
         ('GENSET B', 'GENSET B'),
         ('GENSET C', 'GENSET C'),
     ]
+
+    MANPOWER_TYPE_CHOICES = [
+        ('employee', 'Employee Based'),
+        ('contractor', 'Contractor Based'),
+        ('both', 'Employee + Contractor Based'),
+    ]
+
+    manpower_type = models.CharField(
+        max_length=20,
+        choices=MANPOWER_TYPE_CHOICES,
+        blank=True,
+        null=True,
+    )
 
     id = models.AutoField(primary_key=True)
     date_recorded = models.DateField(auto_now_add=True)
@@ -136,11 +149,43 @@ class DailyWorkStatus(models.Model):
     date = models.DateField(blank=True, null=True)
     manpower = models.ManyToManyField(ManpowerDetail, blank=True)
     time_total = models.PositiveIntegerField(blank=True, null=True)
+    itinenary_remarks = models.TextField(blank=True, null=True)
 
     def __str__(self):
         manpower_list = ", ".join([m.name for m in self.manpower.all()])
         return f"{self.date} - {self.purchase_order.purchase_order} ({self.time_total} hrs)"
 
+#signals
+
+
+def update_purchase_order_manpower_type(purchase_order):
+    from .models import ManpowerDetail  # avoid circular import
+
+    manpower = ManpowerDetail.objects.filter(
+        dailyworkstatus__purchase_order=purchase_order
+    ).distinct()
+
+    categories = set(m.category for m in manpower)
+
+    if categories == {"Employee"}:
+        purchase_order.manpower_type = "employee"
+    elif categories == {"Contractor"}:
+        purchase_order.manpower_type = "contractor"
+    elif categories == {"Employee", "Contractor"}:
+        purchase_order.manpower_type = "both"
+    else:
+        purchase_order.manpower_type = None
+
+    purchase_order.save(update_fields=["manpower_type"])
+
+@receiver(m2m_changed, sender=DailyWorkStatus.manpower.through)
+def update_manpower_type_on_m2m_change(sender, instance, action, **kwargs):
+    if action in ["post_add", "post_remove", "post_clear"]:
+        update_purchase_order_manpower_type(instance.purchase_order)
+
+@receiver(post_save, sender=DailyWorkStatus)
+def update_manpower_type_on_dws_save(sender, instance, **kwargs):
+    update_purchase_order_manpower_type(instance.purchase_order)
 
 @receiver(post_save, sender=DailyWorkStatus)
 @receiver(post_delete, sender=DailyWorkStatus)

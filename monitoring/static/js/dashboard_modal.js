@@ -11,7 +11,6 @@
     button.dataset.description,
     button.dataset.serviceReportNumber,
     button.dataset.manpowerTotal,
-    button.dataset.manpowerStr,
     button.dataset.manpowerType,
     button.dataset.totalDays,
     button.dataset.workingDaysTotal,
@@ -30,7 +29,7 @@
   function showPurchaseOrderDetails(
   id, dateRecorded, po, customer, branch,
   dateReceived, targetDate, classification, description, serviceReportNumber,
-  manpowerTotal, manpowerStr, manpowerType, totalDays, workingDaysTotal, workHoursTotal,
+  manpowerTotal, manpowerType, totalDays, workingDaysTotal, workHoursTotal,
   dateStarted, completionDate, cocNumber, drNumber, invoiceNumber,
   remarks, status, targetDateDelayed
 ) {
@@ -47,7 +46,6 @@
   document.getElementById('po-description').innerText = description;
   document.getElementById('po-service-report-number').innerText = serviceReportNumber;
   document.getElementById('po-manpower-total').innerText = manpowerTotal;
-  document.getElementById('po-manpower-string').innerText = manpowerStr;
   document.getElementById('po-manpower-type').innerText = manpowerType;
   document.getElementById('po-total-days').innerText = totalDays;
   document.getElementById('po-working-days-total').innerText = workingDaysTotal;

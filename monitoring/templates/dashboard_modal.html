@@ -11,7 +11,7 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title" id="invoiceModalLabel">Purchase Order Details</h5>
+        <h5 class="modal-title" id="invoiceModalLabel">Purchase Order</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -40,7 +40,7 @@
           <div class="row gx-3 mt-4">
             <div class="col-md-6 mb-3">
               <div class="card">
-                <div class="card-header">CUSTOMER DETAILS</div>
+                <div class="card-header">P.O DETAILS</div>
                 <div class="card-body">
                   <ul class="list-unstyled mb-0">
                     <li class="d-flex">
@@ -115,9 +115,8 @@
                   <tr>
                     <th class="text-center">Manpower Type</th>
                     <th class="text-center">Total Days</th>
-                    <th class="text-center">Total Working Days</th>
+                    <th class="text-center">Actual Working Days</th>
                     <th class="text-center">Total Manpower Accumulated</th>
-                    <th class="text-center">Total Time</th>
                     <th class="text-center">Total Work Hours</th>
                   </tr>
                 </thead>
@@ -127,7 +126,6 @@
                     <td class="text-center"><span id="po-total-days"></span></td>
                     <td class="text-center"><span id="po-working-days-total"></span></td>
                     <td class="text-center"><span id="po-manpower-total"></span></td>
-                    <td class="text-center"></span>9</td>
                     <td class="text-center"><span id="po-work-hours-total"></span></td>
                   </tr>
                 </tbody>
@@ -135,27 +133,20 @@
             </div>
           </div>
 
-         <!-- Row 4: Manpower, Service Report, Status Cards -->
-          <div class="row gx-3 mt-3">
-            <div class="col-md-4">
-              <div class="card h-100">
-                <div class="card-header">MANPOWER ASSIGNED</div>
-                <div class="card-body">
-                  <span id="po-manpower-string">Joven, Joel, Jordine</span>
-                </div>
+         <!-- Row 4: Remarks and Status Cards -->
+        <div class="row gx-3 mt-3">
+          <!-- Remarks Card (now stretched to col-md-8) -->
+          <div class="col-md-8">
+            <div class="card h-100">
+              <div class="card-header">REMARKS</div>
+              <div class="card-body">
+                <span id="po-remarks"></span>
               </div>
             </div>
+          </div>
 
-            <div class="col-md-4">
-              <div class="card h-100">
-                <div class="card-header">REMARKS</div>
-                <div class="card-body">
-                  <span id="po-remarks"></span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-4">
+          <!-- Status Card (unchanged at col-md-4) -->
+          <div class="col-md-4">
             <div class="card text-center h-100">
               <div class="card-body">
                 <p class="text-uppercase fw-bold text-dark mb-1" style="font-size: 0.95rem;">
@@ -166,6 +157,7 @@
               </div>
             </div>
           </div>
+        </div>
 
 
 

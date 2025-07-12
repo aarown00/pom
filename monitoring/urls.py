@@ -21,3 +21,5 @@ urlpatterns = [
 
 
 ]
+
+handler404 = 'monitoring.views.custom_404_view'

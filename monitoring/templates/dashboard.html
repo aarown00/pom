@@ -13,17 +13,20 @@
 {% include "toast_messages.html" %}
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Dashboard</h1>
+    <div class="d-flex align-items-center gap-2">
+      {% comment %} <img src="{% static 'img/mlogo.png' %}" alt="Logo" style="height: 32px; width: 32px; object-fit: contain; margin-right: 0.5rem;"> {% endcomment %}
+      <h1 class="h3 mb-0">Mabuhay Power & Diesel Generator Services Co. Ltd</h1>
+    </div>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb breadcrumb-sm mb-0">
       <li class="breadcrumb-item">P.O Monitoring System</li>
       <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
       </ol>
     </nav>
-</div>
+  </div>
 
   <div class="alert alert-success" role="alert">
-    Welcome to Dashboard! Kindly check table for status updates.
+    Welcome to Dashboard! Kindly check and manage table for status updates.
   </div>
 
   {% include "stats.html" %}
@@ -42,9 +45,9 @@
 <table id="poTable" class="row-border hover" style="width:100%">
   <thead>
     <tr>
-      <th></th>
+      <th>ACTIONS</th>
       <th>P.O #</th>
-      <th>P.O RECEIVED</th>
+      <th>CUSTOMER</th>
       <th>DATE STARTED</th>
       <th>TARGET DATE</th>
       <th>COMPLETION DATE</th>
@@ -79,8 +82,7 @@
           data-description="{{ po.description }}"
           data-service-report-number="{{ po.service_report_number|default:'None' }}"
           data-manpower-total="{{ po.manpower_total }}"
-          data-manpower-str="{{ po.manpower.all|join:", "|default:'None' }}"
-          data-manpower-type="{{ po.manpower_type|default_if_none:'No manpower assigned' }}"
+          data-manpower-type="{{ po.get_manpower_type_display|default_if_none:'No manpower assigned' }}"
           data-total-days="{{ po.total_days }}"
           data-working-days-total="{{ po.working_days_total }}"
           data-work-hours-total="{{ po.work_hours_total }}"
@@ -97,8 +99,9 @@
         </button>
 
 
-        <a href="{% url 'edit' username=request.user.username pk=po.id %}" class="btn btn-sm edit-button">Edit</a>
-        <a href="{% url 'itinenary' username=request.user.username pk=po.id %}" class="btn btn-sm edit-button">Schedule</a>
+        <a href="{% url 'edit' username=request.user.username pk=po.id %}" class="btn btn-sm update-button">Update</a>
+        <a href="{% url 'itinenary' username=request.user.username pk=po.id %}" class="btn btn-sm itinenary-button">Itinenary</a> 
+        <a href="" class="btn btn-sm cancel-button">Cancel</a>
 
       </td>
 
@@ -110,7 +113,7 @@
         {% endif %}
       </td>
 
-      <td>{{ po.purchase_order_received }}</td>
+      <td>{{ po.customer_branch.customer_name }}</td>   
       <td>{{ po.date_started }}</td>
       <td>{{ po.target_date }}</td>
       <td>{{ po.completion_date }}</td>

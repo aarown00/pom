@@ -1,18 +1,110 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block title %}Itinenary Purchase Order{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/edit_dws.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "toast_messages.html" %}
+
 <form method="post">
   {% csrf_token %}
-  {{ formset.management_form }}
+ {{ formset.management_form }}
 
-  <table>
-    {% for form in formset %}
-      <tr>
-        {{ form.id }} <!-- hidden id field, must be rendered -->
-        <td>{{ form.date }}</td>
-        <td>{{ form.manpower }}</td>
-        <td>{{ form.time_total }}</td>
-        <td>{{ form.DELETE }}</td> <!-- if you want delete option -->
-      </tr>
-    {% endfor %}
-  </table>
+<div class="sticky-wrapper">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom">
+    
+     <div class="d-flex align-items-center">
+      <h1 class="h2 mb-0" style="margin-right: 20px;">P.O#: {{ po.purchase_order }}</h1>
 
-  <button type="submit">Save</button>
-</form>
+     {% if po.status == "Pending" %}
+      <span class="badge badge-warning large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Ongoing" %}
+      <span class="badge badge-primary large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Completed" %}
+      <span class="badge badge-success large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Cancelled" %}
+      <span class="badge badge-dark large-badge">Status: {{ po.status }}</span>
+    {% else %}
+      <span class="badge badge-danger large-badge">Status: {{ po.status }}</span>
+    {% endif %}
+    </div>
+
+    <button type="submit" class="btn add-button mt-1">Save</button>
+
+  </div>
+</div>
+
+<div style="height: 1rem;"></div>
+
+  <div class="alert alert-warning" role="alert">
+  Update details here to update itinenary!
+</div>
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Itinenary</a>
+  </li>
+</ul>
+
+<div class="mt-3 px-4">
+  <div class="card shadow rounded w-100" style="border: none;">
+    <div class="card-header add-card-header">
+      <h5 class="mb-0">P.O Itinenary</h5>
+    </div>
+    <div class="card-body">
+      
+         <table class="table">
+            <thead class>
+            <tr>
+                <th scope="col">Day</th>
+                <th scope="col">Date</th>
+                <th scope="col">Manpower</th>
+                <th scope="col">Time Total</th>
+                <th scope="col">Report</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for form in formset %}
+            <tr>
+                {{ form.id }}  <!-- Hidden ID field -->
+                <td>Day {{ forloop.counter }}</td>
+                <td>{{ form.date }}</td>
+                <td>{{ form.manpower }}</td>
+                <td>
+                  {{ form.time_total }}
+                  {% if form.time_total.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ form.time_total.errors.0 }}
+                    </div>
+                  {% endif %}
+                </td>
+                <td>{{ form.itinenary_remarks }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn add-button mt-3">Save</button>
+        </form>
+
+  </div>
+  </div>
+</div>
+
+<!-- jQuery (REQUIRED, first) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('.selectpicker').selectpicker();
+  });
+</script>
+
+{% endblock %}

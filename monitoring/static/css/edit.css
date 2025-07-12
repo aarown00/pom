@@ -1,11 +1,4 @@
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  body {
-    font-family: 'Open Sans', sans-serif;
-}
+
   .formbold-main-wrapper {
     display: flex;
     align-items: center;
@@ -28,65 +21,6 @@
   .formbold-input-flex-4 > div {
   width: calc(25% - 15px);
   margin-bottom: 30px; /* adds spacing between inputs vertically */
-}
-
-
-  .formbold-input-radio-wrapper {
-    margin-bottom: 28px;
-  }
-  .formbold-radio-flex {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  .formbold-radio-label {
-    font-size: 14px;
-    line-height: 24px;
-    color: #07074D;
-    position: relative;
-    padding-left: 25px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  .formbold-input-radio {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-  }
-  .formbold-radio-checkmark {
-    position: absolute;
-    top: -1px;
-    left: 0;
-    height: 18px;
-    width: 18px;
-    background-color: #FFFFFF;
-    border: 1px solid #DDE3EC;
-    border-radius: 50%;
-  }
-  .formbold-radio-label .formbold-input-radio:checked ~ .formbold-radio-checkmark {
-    background-color: #6A64F1;
-  }
-  .formbold-radio-checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-
-  .formbold-radio-label .formbold-input-radio:checked ~ .formbold-radio-checkmark:after {
-    display: block;
-  }
-
-  .formbold-radio-label .formbold-radio-checkmark:after {
-    top: 50%;
-    left: 50%;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    transform: translate(-50%, -50%);
   }
 
   .formbold-form-input {
@@ -144,7 +78,7 @@
 }
 
 .card-header.add-card-header {
-  background: linear-gradient(to right, #52C755, #3CA544);
+  background: linear-gradient(to right, #f39c12, #e67e22);
   color: white !important;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
@@ -174,5 +108,17 @@
 }
 
 
+.sticky-wrapper {
+  position: sticky;
+  top: 48px; /* Match navbar height */
+  z-index: 1000;
+  background-color: white;
+  border-bottom: 1px solid #dee2e6;
+}
 
-
+.large-badge {
+  font-size: 1rem; /* Larger text */
+  padding: 0.6rem 1rem; /* More spacing */
+  border-radius: 0.25rem; /* Rounder badge */
+  font-weight: 600;
+}
