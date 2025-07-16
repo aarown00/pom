@@ -43,7 +43,7 @@
 <div style="height: 1rem;"></div>
 
 <div class="alert alert-warning" role="alert">
-  Update details here to update reflected statuses!
+  Update P.O Details here. Click 'Save' to ensure your latest changes are recorded.
 </div>
 
 <ul class="nav nav-tabs">
@@ -116,35 +116,7 @@
         </div>
 
         <div>
-           <label for="{{ form.target_date.id_for_label }}" class="formbold-form-label">
-                {{ form.target_date.label }}
-              </label>
-              {{ form.target_date }}
-              {{ form.target_date.errors }}
-        </div>
-
-        <div>
-          <label for="{{ form.service_report_number.id_for_label }}" class="formbold-form-label">
-            {{ form.service_report_number.label }}
-          </label>
-          {{ form.service_report_number }}
-          {{ form.service_report_number.errors }}
-        </div>
-
-        <div>
-          <label for="{{ form.dr_number.id_for_label }}" class="formbold-form-label">
-            {{ form.dr_number.label }}
-          </label>
-          {{ form.dr_number }}
-          {{ form.dr_number.errors }}
-        </div>
-      </div>
-
-
-        <!-- Row 4 -->
-      <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
-        <div>
-          <label for="{{ form.date_started.id_for_label }}" class="formbold-form-label">
+           <label for="{{ form.date_started.id_for_label }}" class="formbold-form-label">
                 {{ form.date_started.label }}
               </label>
               {{ form.date_started }}
@@ -152,11 +124,39 @@
         </div>
 
         <div>
+          <label for="{{ form.target_date.id_for_label }}" class="formbold-form-label">
+            {{ form.target_date.label }}
+          </label>
+          {{ form.target_date }}
+          {{ form.target_date.errors }}
+        </div>
+
+        <div>
           <label for="{{ form.completion_date.id_for_label }}" class="formbold-form-label">
-                {{ form.completion_date.label }}
+            {{ form.completion_date.label }}
+          </label>
+          {{ form.completion_date}}
+          {{ form.completion_date.errors }}
+        </div>
+      </div>
+
+
+        <!-- Row 4 -->
+      <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
+        <div>
+          <label for="{{ form.service_report_number.id_for_label }}" class="formbold-form-label">
+                {{ form.service_report_number.label }}
               </label>
-              {{ form.completion_date }}
-              {{ form.completion_date.errors }}
+              {{ form.service_report_number }}
+              {{ form.service_report_number.errors }}
+        </div>
+
+        <div>
+          <label for="{{ form.dr_number.id_for_label }}" class="formbold-form-label">
+                {{ form.dr_number.label }}
+              </label>
+              {{ form.dr_number }}
+              {{ form.dr_number.errors }}
         </div>
 
         <div>
@@ -195,7 +195,7 @@
   </div>
 </div>
 
-
+{% include "leave_page.html" %}
 
 
 {% endblock %}

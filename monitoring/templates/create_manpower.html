@@ -23,17 +23,10 @@
 </div>
 
   <div class="alert alert-warning" role="alert">
-  Add manpower details here!
+  Add manpower details here! Click 'Save' to ensure new manpower are added.
 </div>
 
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard_manpower' username=request.user.username %}">Manpower List</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'create_manpower' username=request.user.username %}">Add Manpower</a>
-  </li>
-</ul>
+{% include "tabs.html" %}
 
 <div class="mt-3 px-4">
   <div class="card shadow rounded w-100" style="border: none;">
@@ -71,5 +64,6 @@
   </div>
 </div>
 
+{% include "leave_page.html" %}
 
 {% endblock %}

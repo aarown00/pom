@@ -159,6 +159,34 @@ a.btn.cancel-button:hover {
   background: linear-gradient(to right, #000000, #444444) !important;
 }
 
+/* Use flex to control the top row layout */
+div.dt-container .dt-layout-row:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: row-reverse; /* THIS is the key line to switch them */
+}
+
+/* Widen the search input */
+div.dt-container .dt-search input {
+  width: 1000px;
+  max-width: 100%;
+  padding: 6px 12px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background-color: white;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Light blue row hover */
+#poTable tbody tr:hover {
+  background-color: #e0f0ff !important;  /* Light blue */
+}
+
+
+
 
 
 

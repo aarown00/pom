@@ -33,25 +33,18 @@
 
 </br>
 
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'create' username=request.user.username %}">Add P.O</a>
-  </li>
-</ul>
+   {% include "tabs.html" %}
 
 <table id="poTable" class="row-border hover" style="width:100%">
   <thead>
     <tr>
-      <th>ACTIONS</th>
       <th>P.O #</th>
       <th>CUSTOMER</th>
-      <th>DATE STARTED</th>
+      <th>STARTED DATE</th>
       <th>TARGET DATE</th>
       <th>COMPLETION DATE</th>
       <th>STATUS</th>
+      <th>ACTIONS</th>
       <th></th> <!-- Hidden ID -->
     </tr>
     <tr class="filter-row">
@@ -68,6 +61,32 @@
     {% for po in purchase_orders %}
     <tr>
       <td>
+        {% if po.status == "Delayed" %}
+          <span class="text-danger">{{ po.purchase_order }}</span>
+        {% else %}
+          {{ po.purchase_order }}
+        {% endif %}
+      </td>
+
+      <td>{{ po.customer_branch.customer_name }}</td>   
+      <td>{{ po.date_started }}</td>
+      <td>{{ po.target_date }}</td>
+      <td>{{ po.completion_date }}</td>
+      <td>
+        {% if po.status == "Pending" %}
+          <span class="status pending">Pending</span>
+        {% elif po.status == "Ongoing" %}
+          <span class="status ongoing">Ongoing</span>
+        {% elif po.status == "Completed" %}
+          <span class="status completed">Completed</span>
+        {% elif po.status == "Cancelled" %}
+          <span class="status cancelled">Cancelled</span>
+        {% else %}
+          <span class="status delayed">Delayed</span>
+        {% endif %}
+      </td>
+
+       <td>
         <!-- View Button -->
         <button class="btn btn-sm view-button"
           onclick="handleModalClick(this)"
@@ -103,32 +122,6 @@
         <a href="{% url 'itinenary' username=request.user.username pk=po.id %}" class="btn btn-sm itinenary-button">Itinenary</a> 
         <a href="" class="btn btn-sm cancel-button">Cancel</a>
 
-      </td>
-
-      <td>
-        {% if po.status == "Delayed" %}
-          <span class="text-danger">{{ po.purchase_order }}</span>
-        {% else %}
-          {{ po.purchase_order }}
-        {% endif %}
-      </td>
-
-      <td>{{ po.customer_branch.customer_name }}</td>   
-      <td>{{ po.date_started }}</td>
-      <td>{{ po.target_date }}</td>
-      <td>{{ po.completion_date }}</td>
-      <td>
-        {% if po.status == "Pending" %}
-          <span class="status pending">Pending</span>
-        {% elif po.status == "Ongoing" %}
-          <span class="status ongoing">Ongoing</span>
-        {% elif po.status == "Completed" %}
-          <span class="status completed">Completed</span>
-        {% elif po.status == "Cancelled" %}
-          <span class="status cancelled">Cancelled</span>
-        {% else %}
-          <span class="status delayed">Delayed</span>
-        {% endif %}
       </td>
 
       <td>{{ po.id }}</td>

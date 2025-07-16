@@ -26,14 +26,7 @@
   View and delete customer details here!
 </div>
  
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">Customer List</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'create_customer' username=request.user.username %}">Add Customer</a>
-  </li>
-</ul>
+{% include "tabs.html" %}
 
 
   <table id="customerTable" class="row-border hover" style="width:100%">
@@ -60,11 +53,7 @@
     </tbody>
   </table>
 
-<script>
-  function confirmDelete() {
-    return confirm("Are you sure you want to delete this customer?");
-  }
-</script>
+  {% include "confirm_page.html" %}
 
 
 <script>

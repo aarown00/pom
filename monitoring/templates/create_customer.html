@@ -23,17 +23,10 @@
 </div>
 
   <div class="alert alert-warning" role="alert">
-  Add customer details here!
+  Add customer details here! Click 'Save' to ensure new customer are recorded.
 </div>
 
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">Customer List</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'create_customer' username=request.user.username %}">Add Customer</a>
-  </li>
-</ul>
+{% include "tabs.html" %}
 
 
 
@@ -71,5 +64,6 @@
   </div>
 </div>
 
+{% include "leave_page.html" %}
 
 {% endblock %}

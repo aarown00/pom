@@ -22,8 +22,8 @@ class DailyWorkStatusForm(forms.ModelForm):
         fields = ['date', 'manpower', 'time_total', 'itinenary_remarks']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'time_total': forms.NumberInput(attrs={'class': 'form-control'}),
-            'itinenary_remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter scope of work...'}),
+            'time_total': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter time total in this day...'}),
+            'itinenary_remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter job done...'}),
         }
 
     def clean(self):

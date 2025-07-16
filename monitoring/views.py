@@ -5,11 +5,12 @@ from django.contrib.auth.decorators import login_required
 from .forms import PurchaseOrderForm
 from .forms_customer import CustomerDetailForm
 from .forms_manpower import ManpowerDetailForm
-from .forms_dws import DailyWorkStatusFormSet
-from .models import PurchaseOrder, CustomerDetail, ManpowerDetail
+from .forms_dws import DailyWorkStatusFormSet, DailyWorkStatusForm
+from .models import PurchaseOrder, CustomerDetail, ManpowerDetail, DailyWorkStatus
 from django.db.models import ProtectedError
 from django.core.exceptions import ValidationError
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
@@ -208,3 +209,28 @@ def create_manpower(request, username):
         form = ManpowerDetailForm()
 
     return render(request, 'create_manpower.html', {'form': form})
+
+
+@csrf_exempt  # or use @require_POST and CSRF token in fetch if needed
+def ajax_validate_field(request):
+    if request.method == "POST":
+        field_name = request.POST.get("field")
+        value = request.POST.get("value")
+        instance_id = request.POST.get("id")  # optional for editing
+
+        # Create dummy form instance
+        data = {field_name: value}
+        if instance_id:
+            form = PurchaseOrderForm(data, instance=PurchaseOrder.objects.get(pk=instance_id))
+        else:
+            form = PurchaseOrderForm(data)
+
+        form.is_valid()
+
+        if form.errors.get(field_name):
+            return JsonResponse({
+                "valid": False,
+                "error": form.errors[field_name][0]
+            })
+        else:
+            return JsonResponse({"valid": True})

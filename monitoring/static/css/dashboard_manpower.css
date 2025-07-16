@@ -44,6 +44,10 @@
   color: white;
 }
 
+/* Light blue row hover */
+#manpowerTable tbody tr:hover {
+  background-color: #e0f0ff !important;  /* Light blue */
+}
 
 
 

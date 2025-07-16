@@ -126,7 +126,7 @@ class PurchaseOrder(models.Model):
 
         for log in daily_logs:
             manpower_count = log.manpower.count()
-            if manpower_count > 0:
+            if manpower_count > 0 and log.time_total is not None:
                 manpower_total += manpower_count
                 working_days_total += 1
                 work_hours_total += manpower_count * log.time_total

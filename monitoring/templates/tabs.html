@@ -1,0 +1,20 @@
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">Customer List</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard_manpower' username=request.user.username %}">Manpower List</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'create' username=request.user.username %}">Add P.O</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'create_customer' username=request.user.username %}">Add Customer</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'create_manpower' username=request.user.username %}">Add Manpower</a>
+  </li>
+</ul>

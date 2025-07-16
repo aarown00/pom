@@ -71,12 +71,6 @@
   padding: 0.75rem;
 }
 
-.bigfont {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color:rgb(0, 0, 0);
-}
-
 .text-muted {
   font-size: 0.875rem;
 }
@@ -101,3 +95,9 @@
     opacity: 1;
   }
 }
+
+.large-badge {
+  font-size: 1rem; /* Or adjust size */
+  padding: 0.5em 0.75em;
+}
+

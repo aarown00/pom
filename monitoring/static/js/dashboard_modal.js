@@ -56,7 +56,7 @@
   document.getElementById('po-dr-number').innerText = drNumber;
   document.getElementById('po-invoice-number').innerText = invoiceNumber;
   document.getElementById('po-remarks').innerText = remarks;
-  document.getElementById('po-status').innerText = status;
+ setPurchaseOrderStatus(status);
 
   const delayEl = document.getElementById('po-target-date-delayed');
 
@@ -71,4 +71,26 @@
   const modal = new bootstrap.Modal(document.getElementById('purchaseOrderModal'));
   modal.show();
 }
+
+function setPurchaseOrderStatus(status) {
+  const el = document.getElementById('po-status');
+  let classList = 'badge large-badge';
+
+  if (status === 'Pending') {
+    classList += ' badge-warning';
+  } else if (status === 'Ongoing') {
+    classList += ' badge-primary';
+  } else if (status === 'Completed') {
+    classList += ' badge-success';
+  } else if (status === 'Cancelled') {
+    classList += ' badge-dark';
+  } else {
+    classList += ' badge-danger';
+  }
+
+  el.className = classList + ' ms-2';  // or use 'ml-2' for Bootstrap 4
+  el.innerText = `Status: ${status}`;
+}
+
+
 

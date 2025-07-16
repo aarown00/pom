@@ -41,8 +41,8 @@
 
 <div style="height: 1rem;"></div>
 
-  <div class="alert alert-warning" role="alert">
-  Update details here to update itinenary!
+<div class="alert alert-warning" role="alert">
+  Update Itinenary Details here. Click 'Save' to ensure your latest changes are recorded. No manpower means no visit day.
 </div>
 
 <ul class="nav nav-tabs">
@@ -64,11 +64,11 @@
          <table class="table">
             <thead class>
             <tr>
-                <th scope="col">Day</th>
+                <th scope="col">Visit</th>
                 <th scope="col">Date</th>
                 <th scope="col">Manpower</th>
                 <th scope="col">Time Total</th>
-                <th scope="col">Report</th>
+                <th scope="col">Remarks</th>
             </tr>
             </thead>
             <tbody>
@@ -106,5 +106,11 @@
     $('.selectpicker').selectpicker();
   });
 </script>
+
+
+
+
+
+{% include "leave_page.html" %}
 
 {% endblock %}
