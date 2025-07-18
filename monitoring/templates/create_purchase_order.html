@@ -27,85 +27,103 @@
 {% include "tabs.html" %}
 
 
-<div class="mt-3 px-4">
-  <div class="card shadow rounded w-100" style="border: none;">
-    <div class="card-header add-card-header">
-      <h5 class="mb-0">Add Purchase Order</h5>
+<div class="container-fluid py-4">
+  <!-- Main Card -->
+  <div class="card">
+    <!-- Card Header -->
+    <div class="card-header add-card-header d-flex justify-content-between align-items-center">
+      <h2 class="h5 mb-0">
+        <a href="#" class="text-white"><i class="fas fa-arrow-left mr-2"></i></a>
+        Add Purchase Order
+      </h2>
     </div>
+
+    <!-- Card Body -->
     <div class="card-body">
       <form method="post">
         {% csrf_token %}
-        
-      </br>
-        <!-- Row 1 -->
-        <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
-           <div style="width: 25%;">
-            <label for="{{ form.purchase_order.id_for_label }}" class="formbold-form-label">
-              {{ form.purchase_order.label }}
-            </label>
 
-            {{ form.purchase_order }}
+        <div class="row">
+          <!-- LEFT SIDE -->
+          <div class="col-lg-8">
+            <!-- Basic Info Card -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <h3 class="h6 mb-4">P.O Details</h3>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="{{ form.purchase_order.id_for_label }}">{{ form.purchase_order.label }}</label>
+                    {{ form.purchase_order }}
+                    <div class="invalid-feedback d-block" id="purchase-order-error" style="{% if form.purchase_order.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.purchase_order.errors %}
+                        {{ form.purchase_order.errors.0 }}
+                      {% endif %}
+                    </div>
+                  </div>
 
-            
-            <div class="invalid-feedback d-block" id="purchase-order-error" style="{% if form.purchase_order.errors %}display: block;{% else %}display: none;{% endif %}">
-              {% if form.purchase_order.errors %}
-                {{ form.purchase_order.errors.0 }}
-              {% endif %}
+                  <div class="form-group col-md-8">
+                    <label for="{{ form.customer_branch.id_for_label }}">{{ form.customer_branch.label }}</label>
+                    {{ form.customer_branch }}
+                    {{ form.customer_branch.errors }}
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="{{ form.classification.id_for_label }}">{{ form.classification.label }}</label>
+                    {{ form.classification }}
+                    {{ form.classification.errors }}
+                  </div>
+                  <div class="form-group col-md-8">
+                    <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                    {{ form.description }}
+                    {{ form.description.errors }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Date Fields -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <h3 class="h6 mb-4">Schedule</h3>
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <label for="{{ form.purchase_order_received.id_for_label }}">{{ form.purchase_order_received.label }}</label>
+                    {{ form.purchase_order_received }}
+                    {{ form.purchase_order_received.errors }}
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label for="{{ form.target_date.id_for_label }}">{{ form.target_date.label }}</label>
+                    {{ form.target_date }}
+                    {{ form.target_date.errors }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          </div>
-          <div style="width: 75%;">
-            <label for="{{ form.customer_branch.id_for_label }}" class="formbold-form-label">
-                {{ form.customer_branch.label }}
-              </label>
-              {{ form.customer_branch }}
-              {{ form.customer_branch.errors }}
+          <!-- RIGHT SIDE (Just for Save button) -->
+          <div class="col-lg-4 d-flex align-items-start gap-2 mt-1">
+            <button type="submit" class="btn add-button">
+              <i data-feather="save"></i> Save
+            </button>
+            <a href="{% url 'create_customer' username=request.user.username %}" class="btn add-po-button" style="margin-left: 8px;">
+              <i data-feather="user-plus"></i> Add Customer
+            </a> 
+            <a href="{% url 'create_manpower' username=request.user.username %}" class="btn add-po-button" style="margin-left: 8px;">
+              <i data-feather="user-plus"></i> Add Manpower
+            </a> 
           </div>
         </div>
 
-        <!-- Row 2 -->
-        <div class="formbold-input-flex-4" style="flex-wrap: nowrap;">
-          <div style="width: 25%;">
-            <label for="{{ form.classification.id_for_label }}" class="formbold-form-label">
-                {{ form.classification.label }}
-              </label>
-              {{ form.classification }}
-              {{ form.classification.errors }}
-          </div>
-          <div style="width: 75%;">
-            <label for="{{ form.description.id_for_label }}" class="formbold-form-label">
-                {{ form.description.label }}
-              </label>
-              {{ form.description }}
-              {{ form.description.errors }}
-          </div>
-        </div>
 
-
-        <!-- Row 3 -->
-        <div class="formbold-input-flex-4">
-          <div>
-            <label for="{{ form.purchase_order_received.id_for_label }}" class="formbold-form-label">
-                {{ form.purchase_order_received.label }}
-              </label>
-              {{ form.purchase_order_received }}
-              {{ form.purchase_order_received.errors }}
-          </div>
-
-          <div>
-            <label for="{{ form.target_date.id_for_label }}" class="formbold-form-label">
-                {{ form.target_date.label }}
-              </label>
-              {{ form.target_date}}
-              {{ form.target_date.errors }}
-          </div>
-        </div>
-
-        <button type="submit" class="btn add-button mt-3">Add</button>
       </form>
-    </div>
-  </div>
-</div>
+    </div> <!-- .card-body -->
+  </div> <!-- .card -->
+</div> <!-- .container-fluid -->
+
+
 
 {% include "leave_page.html" %}
 
@@ -113,9 +131,18 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const field = document.getElementById('id_purchase_order');
+    const errorDiv = document.getElementById('purchase-order-error');
 
-    field.addEventListener('input', function () {
-      const value = field.value;
+    function runAjaxValidation() {
+      const value = field.value.trim();
+
+      // If the field is empty, don't show any error; let Django/HTML handle it
+      if (value === '') {
+        field.classList.remove('is-invalid');
+        errorDiv.style.display = 'none';
+        errorDiv.textContent = '';
+        return;
+      }
 
       fetch("{% url 'ajax_validate_field' %}", {
         method: 'POST',
@@ -123,11 +150,10 @@
           'X-CSRFToken': '{{ csrf_token }}',
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `field=purchase_order&value=${encodeURIComponent(value)}`
+        body: `form=purchase_order&field=purchase_order&value=${encodeURIComponent(value)}`
       })
       .then(response => response.json())
       .then(data => {
-        const errorDiv = document.getElementById('purchase-order-error');
         if (data.valid) {
           field.classList.remove('is-invalid');
           errorDiv.style.display = 'none';
@@ -138,10 +164,12 @@
           errorDiv.textContent = data.error;
         }
       });
-    });
+    }
+
+    field.addEventListener('input', runAjaxValidation);
+    field.addEventListener('blur', runAjaxValidation);
   });
 </script>
-
 
 
 

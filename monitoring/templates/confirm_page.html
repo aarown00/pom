@@ -30,8 +30,40 @@
     min-width: 80px;
   }
 
-  .btn-no { background-color: #dc3545; color: white; }
-  .btn-yes { background-color: #6c757d; color: white; }
+ .btn-no {
+  background-color: white !important;
+  color: #dc3545 !important; /* Bootstrap red */
+  border: 2px solid #dc3545 !important;
+  padding: 5px 12px !important;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+  text-decoration: none;
+  min-width: 90px;
+}
+
+.btn-no:hover {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+.btn-yes {
+  background-color: white !important;
+  color: #6c757d !important; /* Bootstrap gray */
+  border: 2px solid #6c757d !important;
+  padding: 5px 12px !important;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+  text-decoration: none;
+  min-width: 90px;
+}
+
+.btn-yes:hover {
+  background-color: #6c757d !important;
+  color: white !important;
+}
+
 </style>
 
 <div id="confirmModal">

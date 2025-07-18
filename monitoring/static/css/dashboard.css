@@ -70,7 +70,7 @@
   color: white;
 }
 
-a.btn.cancel-button {
+.cancel-button {
   background-color: white !important;
   color: #dc3545 !important; /* Bootstrap red */
   border: 2px solid #dc3545 !important;
@@ -82,7 +82,7 @@ a.btn.cancel-button {
   min-width: 90px;
 }
 
-a.btn.cancel-button:hover {
+.cancel-button:hover {
   background-color: #dc3545 !important;
   color: white !important;
 }

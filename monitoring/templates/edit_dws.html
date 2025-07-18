@@ -34,7 +34,14 @@
     {% endif %}
     </div>
 
-    <button type="submit" class="btn add-button mt-1">Save</button>
+    <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
+      <button type="submit" class="btn add-button">
+        <i data-feather="save"></i> Save
+      </button>
+      <a href="{% url 'dashboard' username=request.user.username %}" class="btn dashboard-button" style="margin-left: 8px;">
+        <i data-feather="corner-up-left"></i> Back to Dashboard
+      </a>
+    </div>
 
   </div>
 </div>
@@ -42,7 +49,7 @@
 <div style="height: 1rem;"></div>
 
 <div class="alert alert-warning" role="alert">
-  Update Itinenary Details here. Click 'Save' to ensure your latest changes are recorded. No manpower means no visit day.
+  Update Itinenary Details here. Click 'Save' to ensure your latest changes are recorded. No manpower means no count of days and hours.
 </div>
 
 <ul class="nav nav-tabs">
@@ -64,31 +71,34 @@
          <table class="table">
             <thead class>
             <tr>
-                <th scope="col">Visit</th>
-                <th scope="col">Date</th>
+                <th scope="col">Visit Date</th>
                 <th scope="col">Manpower</th>
                 <th scope="col">Time Total</th>
                 <th scope="col">Remarks</th>
             </tr>
             </thead>
             <tbody>
-            {% for form in formset %}
+          {% for form in formset %}
             <tr>
-                {{ form.id }}  <!-- Hidden ID field -->
-                <td>Day {{ forloop.counter }}</td>
+                {{ form.id }}
                 <td>{{ form.date }}</td>
-                <td>{{ form.manpower }}</td>
                 <td>
-                  {{ form.time_total }}
-                  {% if form.time_total.errors %}
-                    <div class="invalid-feedback d-block">
-                      {{ form.time_total.errors.0 }}
+                    {{ form.manpower }}
+                </td>
+                <td>
+                    {{ form.time_total }}
+                    <div class="invalid-feedback d-block time-total-error" style="display: none;">
+                      {% if form.time_total.errors %}
+                        {{ form.time_total.errors.0 }}
+                      {% endif %}
                     </div>
-                  {% endif %}
+
                 </td>
                 <td>{{ form.itinenary_remarks }}</td>
             </tr>
             {% endfor %}
+
+
             </tbody>
         </table>
 
@@ -106,6 +116,62 @@
     $('.selectpicker').selectpicker();
   });
 </script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const formRows = document.querySelectorAll('tr'); // your form rows inside the formset
+
+  formRows.forEach(function (row, index) {
+    const manpowerSelect = row.querySelector('select[name$="-manpower"]');
+    const timeTotalInput = row.querySelector('input[name$="-time_total"]');
+    const errorDiv = row.querySelector('.time-total-error');
+
+    if (!manpowerSelect || !timeTotalInput || !errorDiv) return;
+
+    function validateTimeTotal() {
+      const selectedOptions = Array.from(manpowerSelect.selectedOptions).map(option => option.value);
+      const timeTotal = timeTotalInput.value;
+
+      // Skip validation if nothing is selected
+      if (selectedOptions.length === 0 && !timeTotal) {
+        timeTotalInput.classList.remove('is-invalid');
+        errorDiv.style.display = 'none';
+        errorDiv.textContent = '';
+        return;
+      }
+
+      fetch("{% url 'ajax_validate_time_total' %}", {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          'manpower[]': selectedOptions,
+          'time_total': timeTotal
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.valid) {
+          timeTotalInput.classList.remove('is-invalid');
+          errorDiv.style.display = 'none';
+          errorDiv.textContent = '';
+        } else {
+          timeTotalInput.classList.add('is-invalid');
+          errorDiv.style.display = 'block';
+          errorDiv.textContent = data.error;
+        }
+      });
+    }
+
+    manpowerSelect.addEventListener('change', validateTimeTotal);
+    timeTotalInput.addEventListener('input', validateTimeTotal);
+  });
+});
+</script>
+
 
 
 

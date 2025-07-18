@@ -32,7 +32,7 @@
   <table id="customerTable" class="row-border hover" style="width:100%">
     <thead>
       <tr>
-        <th></th>
+        <th>ACTIONS</th>
         <th>CUSTOMER NAME</th>
         <th>BRANCH/ADDRESS</th>
       </tr>
@@ -41,9 +41,11 @@
       {% for customer in customer_details %}
       <tr>
          <td>
-        <form method="post" action="{% url 'delete_customer' username=request.user.username pk=customer.pk %}" style="display:inline;" onsubmit="return confirmDelete()">
+        <form method="post" action="{% url 'delete_customer' username=request.user.username pk=customer.pk %}" 
+        style="display:inline;" 
+        onsubmit="return confirmDelete('Are you sure you want to cancel this Customer?\n\n{{ customer.customer_name }},{{customer.branch_name}}\n\nWarning: This action is irreversible and cannot be undone.')">
           {% csrf_token %}
-          <button type="submit" class="btn btn-sm delete-button">Delete</button>
+          <button type="submit" class="btn btn-sm delete-button"><i data-feather="trash-2"></i> Delete</button>
         </form>
         </td>
         <td>{{ customer.customer_name }}</td>

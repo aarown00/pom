@@ -75,6 +75,11 @@ class PurchaseOrder(models.Model):
     service_report_number = models.CharField(blank=True, null=True)
     date_started = models.DateField(blank=True, null=True)
     target_date = models.DateField()
+    target_date_status = models.CharField(
+        max_length=20,
+        choices=[("original", "Original"), ("adjusted", "Adjusted")],
+        default="original"
+    )
     target_date_delayed = models.PositiveIntegerField(default=0)
     completion_date = models.DateField(blank=True, null=True)
     coc_number = models.CharField(max_length=100, blank=True, null=True)
@@ -115,9 +120,17 @@ class PurchaseOrder(models.Model):
         else:
             self.status = 'Pending'
 
+        # track adjusted target date
+        if self.pk:
+            # This is an update, not creation
+            original = PurchaseOrder.objects.get(pk=self.pk)
+            if original.target_date != self.target_date:
+                self.target_date_status = "adjusted"
+
         super().save(*args, **kwargs)
 
     def update_totals(self):
+        from .models import ManpowerDetail  # avoid circular import
         daily_logs = self.daily_work_statuses.all()
 
         manpower_total = 0
@@ -125,16 +138,22 @@ class PurchaseOrder(models.Model):
         working_days_total = 0
 
         for log in daily_logs:
-            manpower_count = log.manpower.count()
-            if manpower_count > 0 and log.time_total is not None:
-                manpower_total += manpower_count
+            # Get all manpower details for this log
+            manpower_details = ManpowerDetail.objects.filter(dailyworkstatus=log)
+
+            total_count = manpower_details.count()
+            valid_count = manpower_details.filter(category__in=["Employee", "Both"]).count()
+
+            if log.time_total is not None and total_count > 0:
+                manpower_total += total_count
                 working_days_total += 1
-                work_hours_total += manpower_count * log.time_total
+                work_hours_total += valid_count * log.time_total
 
         self.manpower_total = manpower_total
         self.working_days_total = working_days_total
         self.work_hours_total = work_hours_total
         self.save(update_fields=['manpower_total', 'working_days_total', 'work_hours_total'])
+
 
     def __str__(self):
         return f"{self.purchase_order}"

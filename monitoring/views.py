@@ -11,6 +11,8 @@ from django.db.models import ProtectedError
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
@@ -96,6 +98,19 @@ def edit_purchase_order(request, username, pk):
         'form': form,
         'po': po_instance  # ✅ this line enables po.id to work in HTML
     })
+
+@login_required
+def cancel_purchase_order(request, username, pk):
+    po = get_object_or_404(PurchaseOrder, pk=pk)
+
+    if request.method == "POST" and request.POST.get("status") == "Cancelled":
+        po.status = "Cancelled"
+        po.save()
+        messages.success(request, "Purchase Order has been cancelled.")
+    else:
+        messages.error(request, "Invalid or missing status.")
+
+    return redirect('dashboard', username=username)
 
 
 @login_required
@@ -211,19 +226,34 @@ def create_manpower(request, username):
     return render(request, 'create_manpower.html', {'form': form})
 
 
-@csrf_exempt  # or use @require_POST and CSRF token in fetch if needed
+
+#ajax
+@csrf_exempt
 def ajax_validate_field(request):
     if request.method == "POST":
         field_name = request.POST.get("field")
         value = request.POST.get("value")
-        instance_id = request.POST.get("id")  # optional for editing
+        form_name = request.POST.get("form")  # now required
+        instance_id = request.POST.get("id")
 
-        # Create dummy form instance
         data = {field_name: value}
-        if instance_id:
-            form = PurchaseOrderForm(data, instance=PurchaseOrder.objects.get(pk=instance_id))
+
+        # Choose the correct form and model
+        if form_name == "purchase_order":
+            ModelForm = PurchaseOrderForm
+            Model = PurchaseOrder
+        elif form_name == "manpower":
+            ModelForm = ManpowerDetailForm
+            Model = ManpowerDetail
         else:
-            form = PurchaseOrderForm(data)
+            return JsonResponse({"valid": False, "error": "Invalid form type."})
+
+        # Editing support
+        if instance_id:
+            instance = Model.objects.get(pk=instance_id)
+            form = ModelForm(data, instance=instance)
+        else:
+            form = ModelForm(data)
 
         form.is_valid()
 
@@ -234,3 +264,14 @@ def ajax_validate_field(request):
             })
         else:
             return JsonResponse({"valid": True})
+        
+
+@require_POST
+def validate_time_total(request):
+    manpower_ids = request.POST.getlist('manpower[]')
+    time_total = request.POST.get('time_total')
+
+    if manpower_ids and not time_total:
+        return JsonResponse({'valid': False, 'error': 'Time total is required when manpower is selected.'})
+
+    return JsonResponse({'valid': True})

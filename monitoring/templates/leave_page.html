@@ -37,14 +37,39 @@
   }
 
   .btn-stay {
-    background-color: #dc3545; /* red */
-    color: white;
-  }
+  background-color: white !important;
+  color: #dc3545 !important; /* red */
+  border: 2px solid #dc3545 !important;
+  padding: 5px 12px !important;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+  text-decoration: none;
+  min-width: 90px;
+}
 
-  .btn-leave {
-    background-color: #6c757d; /* gray */
-    color: white;
-  }
+.btn-stay:hover {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+.btn-leave {
+  background-color: white !important;
+  color: #6c757d !important; /* gray */
+  border: 2px solid #6c757d !important;
+  padding: 5px 12px !important;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+  text-decoration: none;
+  min-width: 90px;
+}
+
+.btn-leave:hover {
+  background-color: #6c757d !important;
+  color: white !important;
+}
+
 </style>
 
 <div id="unsavedModal">

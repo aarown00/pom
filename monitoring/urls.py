@@ -9,6 +9,7 @@ urlpatterns = [
     path('<str:username>/dashboard/', views.dashboard_view, name='dashboard'),
     path('<str:username>/edit/<int:pk>', views.edit_purchase_order, name='edit'),
     path('<str:username>/itinenary/<int:pk>', views.edit_dws, name='itinenary'),
+    path('<str:username>/cancel/<int:pk>', views.cancel_purchase_order, name='cancel'),
 
     path('<str:username>/create/customer', views.create_customer, name='create_customer'),
     path('<str:username>/dashboard/customer', views.dashboard_customer_view, name='dashboard_customer'), 
@@ -21,6 +22,10 @@ urlpatterns = [
     
     # urls.py
     path('ajax/validate-field/', views.ajax_validate_field, name='ajax_validate_field'),
+    path('ajax/validate-time-total/', views.validate_time_total, name='ajax_validate_time_total'),
+
+
+
 
 
 ]

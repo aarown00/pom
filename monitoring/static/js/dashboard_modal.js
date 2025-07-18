@@ -22,7 +22,8 @@
     button.dataset.invoiceNumber,
     button.dataset.remarks,
     button.dataset.status,
-    button.dataset.targetDateDelayed
+    button.dataset.targetDateDelayed,
+    button.dataset.targetDateStatus
   );
 }
 
@@ -31,7 +32,7 @@
   dateReceived, targetDate, classification, description, serviceReportNumber,
   manpowerTotal, manpowerType, totalDays, workingDaysTotal, workHoursTotal,
   dateStarted, completionDate, cocNumber, drNumber, invoiceNumber,
-  remarks, status, targetDateDelayed
+  remarks, status, targetDateDelayed, targetDateStatus
 ) {
 
 
@@ -41,7 +42,13 @@
   document.getElementById('po-customer').innerText = customer;
   document.getElementById('po-branch').innerText = branch;
   document.getElementById('po-date-received').innerText = dateReceived;
-  document.getElementById('po-target-date').innerText = targetDate;
+
+  let targetDateText = targetDate;
+  if (targetDateStatus !== "original") {
+    targetDateText += ` (${targetDateStatus})`;
+  }
+  document.getElementById('po-target-date').innerText = targetDateText;
+  
   document.getElementById('po-classification').innerText = classification;
   document.getElementById('po-description').innerText = description;
   document.getElementById('po-service-report-number').innerText = serviceReportNumber;

@@ -25,9 +25,21 @@
     </nav>
   </div>
 
-  <div class="alert alert-success" role="alert">
-    Welcome to Dashboard! Kindly check and manage table for status updates.
-  </div>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+  Welcome to Dashboard! Kindly check and manage table for status updates.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="alert alert-primary alert-dismissible fade show" role="alert">
+  Note: A blue Target Date indicates it has been adjusted.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+
 
   {% include "stats.html" %}
 
@@ -61,16 +73,22 @@
     {% for po in purchase_orders %}
     <tr>
       <td>
-        {% if po.status == "Delayed" %}
-          <span class="text-danger">{{ po.purchase_order }}</span>
-        {% else %}
           {{ po.purchase_order }}
-        {% endif %}
       </td>
 
       <td>{{ po.customer_branch.customer_name }}</td>   
       <td>{{ po.date_started }}</td>
-      <td>{{ po.target_date }}</td>
+      <td>
+       {% if po.target_date_status == "adjusted" %}
+        <span class="text-primary">{{ po.target_date }}</span>
+
+      {% else %}
+        {{ po.target_date }}
+      {% endif %}
+      </td>
+
+
+
       <td>{{ po.completion_date }}</td>
       <td>
         {% if po.status == "Pending" %}
@@ -113,6 +131,7 @@
           data-remarks="{{ po.remarks|default:'None' }}"
           data-status="{{ po.status }}"
           data-target-date-delayed="{{ po.target_date_delayed }}"
+          data-target-date-status="{{ po.target_date_status }}"
         >
           View
         </button>
@@ -120,10 +139,18 @@
 
         <a href="{% url 'edit' username=request.user.username pk=po.id %}" class="btn btn-sm update-button">Update</a>
         <a href="{% url 'itinenary' username=request.user.username pk=po.id %}" class="btn btn-sm itinenary-button">Itinenary</a> 
-        <a href="" class="btn btn-sm cancel-button">Cancel</a>
+        {% if po.status != "Cancelled" %}
+          <form method="post"
+              action="{% url 'cancel' username=request.user.username pk=po.pk %}"
+              style="display:inline;"
+              onsubmit="return confirmDelete('Are you sure you want to cancel this Purchase Order?\n\nP.O: {{ po.purchase_order }}\n\nWarning: This action is irreversible and cannot be undone.')">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="Cancelled">
+          <button type="submit" class="btn btn-sm cancel-button">Cancel</button>
+        </form>
 
+        {% endif %}
       </td>
-
       <td>{{ po.id }}</td>
     </tr>
     {% endfor %}
@@ -131,7 +158,7 @@
 </table>
 
 {% include 'dashboard_modal.html' %}
-
+{% include "confirm_page.html" %}
 
 
 <script src="{% static 'js/dashboard.js' %}"></script>
