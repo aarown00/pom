@@ -26,7 +26,7 @@ echo =====================================================
 echo The server is already running!
 echo.
 echo You can access it anytime at:  http://po.monitoring/ 
-echo You can access it anytime at:  192.168.1.9 
+echo You can access it anytime at:  192.168.1.10 
 echo.
 echo There's no need to open this file multiple times.
 echo As long as this single window is open, the program is accessible at any devices.

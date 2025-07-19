@@ -72,7 +72,7 @@ class PurchaseOrder(models.Model):
 
     classification = models.CharField(max_length=100, choices=CLASSIFICATION_CHOICES)
     description = models.TextField()
-    service_report_number = models.CharField(blank=True, null=True)
+    service_report_number = models.CharField(max_length=100, blank=True, null=True)
     date_started = models.DateField(blank=True, null=True)
     target_date = models.DateField()
     target_date_status = models.CharField(
