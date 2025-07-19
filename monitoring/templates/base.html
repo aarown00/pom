@@ -20,13 +20,24 @@
 
     <!-- Top Navbar -->
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0">P.O Monitoring System</a>
+      <!-- Brand -->
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0">P.O Monitoring System</a>
 
-    <div class="mx-auto text-white text-center">
-        <span>MABUHAY POWER & DIESEL GENERATOR SERVICES CO. LTD </span>
-    </div>
+    
+       <!-- Center (visually centered with manual offset to the right) -->
+  <div class="text-white text-center position-absolute w-100" style="left: 50%; transform: translateX(-40%);">
+    <span>MABUHAY POWER & DIESEL GENERATOR SERVICES CO. LTD</span>
+  </div>
 
+      <!-- Welcome Message (aligned right) -->
+      <ul class="navbar-nav px-3 ml-auto d-flex align-items-center">
+        <li class="nav-item text-white">
+          <i data-feather="user" class="mr-2"></i> Welcome, {{ request.user.username }}
+        </li>
+      </ul>
     </nav>
+
+
 
     <!-- Sidebar + Main -->
     <div class="container-fluid">
