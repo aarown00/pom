@@ -1,75 +1,44 @@
 <!-- stats.html -->
-<div class="mb-3">
-  <h4 class="fw-semibold">Dashboard</h4>
-  <p class="text-muted mb-3">Accumulated statuses count of purchase orders below.</p>
-</div>
-
-<!-- Your existing stats cards here -->
-<div class="row">
-  <!-- stat-card columns -->
-</div>
-
-
-
-<div class="row justify-content-center g-2 text-center">
-  <div class="col-6 col-sm-4 col-md-2">
-    <div class="stat-card bg-pending d-flex align-items-center rounded-3 p-2 ps-3 text-white">
-      <div class="icon-wrapper me-3">
-        <i data-feather="clock" class="icon-large"></i>
-      </div>
-      <div class="text-start">
-        <small class="card-label">Pending</small>
-        <div class="card-value">{{ status_counts.pending }}</div>
-      </div>
-    </div>
+<div class="container-fluid px-4">
+  <div class="mb-3">
+    <h4 class="fw-semibold">Dashboard</h4>
+    <p class="text-muted mb-3">Accumulated statuses count of purchase orders below.</p>
   </div>
 
-  <div class="col-6 col-sm-4 col-md-2">
-    <div class="stat-card bg-ongoing d-flex align-items-center rounded-3 p-2 ps-3 text-white">
-      <div class="icon-wrapper me-3">
-        <i data-feather="refresh-cw" class="icon-large"></i>
-      </div>
-      <div class="text-start">
-        <small class="card-label">Ongoing</small>
-        <div class="card-value">{{ status_counts.ongoing }}</div>
+  <div class="row gx-3 gy-2 align-items-stretch text-white text-start">
+    <div class="col">
+      <div class="stat-bar bg-pending">
+        <div class="stat-value">{{ status_counts.pending }}</div>
+        <div class="stat-label">Pending</div>
       </div>
     </div>
-  </div>
 
-  <div class="col-6 col-sm-4 col-md-2">
-    <div class="stat-card bg-completed d-flex align-items-center rounded-3 p-2 ps-3 text-white">
-      <div class="icon-wrapper me-3">
-        <i data-feather="check-circle" class="icon-large"></i>
-      </div>
-      <div class="text-start">
-        <small class="card-label">Completed</small>
-        <div class="card-value">{{ status_counts.completed }}</div>
+    <div class="col">
+      <div class="stat-bar bg-ongoing">
+        <div class="stat-value">{{ status_counts.ongoing }}</div>
+        <div class="stat-label">Ongoing</div>
       </div>
     </div>
-  </div>
 
-  <div class="col-6 col-sm-4 col-md-2">
-    <div class="stat-card bg-delayed d-flex align-items-center rounded-3 p-2 ps-3 text-white">
-      <div class="icon-wrapper me-3">
-        <i data-feather="alert-circle" class="icon-large"></i>
-      </div>
-      <div class="text-start">
-        <small class="card-label">Delayed</small>
-        <div class="card-value">{{ status_counts.delayed }}</div>
+    <div class="col">
+      <div class="stat-bar bg-completed">
+        <div class="stat-value">{{ status_counts.completed }}</div>
+        <div class="stat-label">Completed</div>
       </div>
     </div>
-  </div>
 
-  <div class="col-6 col-sm-4 col-md-2">
-    <div class="stat-card bg-cancelled d-flex align-items-center rounded-3 p-2 ps-3 text-white">
-      <div class="icon-wrapper me-3">
-        <i data-feather="x-circle" class="icon-large"></i>
+    <div class="col">
+      <div class="stat-bar bg-delayed">
+        <div class="stat-value">{{ status_counts.delayed }}</div>
+        <div class="stat-label">Delayed</div>
       </div>
-      <div class="text-start">
-        <small class="card-label">Cancelled</small>
-        <div class="card-value">{{ status_counts.cancelled }}</div>
+    </div>
+
+    <div class="col">
+      <div class="stat-bar bg-cancelled">
+        <div class="stat-value">{{ status_counts.cancelled }}</div>
+        <div class="stat-label">Cancelled</div>
       </div>
     </div>
   </div>
 </div>
-

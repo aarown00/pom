@@ -1,56 +1,32 @@
-.stat-card {
-  border-radius: 1rem;
+.stat-bar {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05));
+  height: 60px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  text-align: center;
-  color: white;
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
-  min-height: 60px;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+.stat-label {
   font-size: 0.85rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding-right: 1rem;
-}
-
-.icon-wrapper {
-  width: 28px;
-  display: flex;
-  justify-content: center;
-}
-
-.icon-large {
-  width: 28px;
-  height: 28px;
-}
-
-.stat-card .inner {
-  padding: 1rem;
-}
-
-.card-label {
-  font-size: 0.75rem;
-  font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: block;
-  margin-bottom: 2px;
-  opacity: 0.85;
+  letter-spacing: 0.4px;
+  opacity: 0.9;
+  line-height: 1;
 }
-
-.card-value {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-top: 0.2rem;
-}
-
 
 
 .bg-pending {
   background: linear-gradient(to right, #F9B56B, #E59431) !important;
-  color: #fff !important;
 }
 
 .bg-ongoing {

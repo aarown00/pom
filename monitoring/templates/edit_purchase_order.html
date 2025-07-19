@@ -49,10 +49,6 @@
 
 <div style="height: 1rem;"></div>
 
-<div class="alert alert-warning" role="alert">
-  Update P.O Details here. Click 'Save' to ensure your latest changes are recorded.
-</div>
-
 <ul class="nav nav-tabs">
   <li class="nav-item">
     <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
@@ -61,6 +57,10 @@
     <a class="nav-link active" href="#">Update P.O</a>
   </li>
 </ul>
+</br>
+<div class="alert alert-warning mb-0" role="alert">
+  Update P.O Details here. Click 'Save' to ensure your latest changes are recorded.
+</div>
 
  <div class="container-fluid py-4">
   <!-- Main Card -->
