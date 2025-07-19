@@ -90,10 +90,14 @@ WSGI_APPLICATION = 'mabuhaypowers_pom.wsgi.application'
 #      }
 #  }
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default="postgresql://mabuhaypom_user:Rk5UUixEn1asq4abxBKFdMiS5oRyxK5K@dpg-d1tu2vqdbo4c73e0pvgg-a.singapore-postgres.render.com/mabuhaypom"
+#     )
+# }
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default="postgresql://mabuhaypom_user:Rk5UUixEn1asq4abxBKFdMiS5oRyxK5K@dpg-d1tu2vqdbo4c73e0pvgg-a.singapore-postgres.render.com/mabuhaypom"
-    )
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
 
 
