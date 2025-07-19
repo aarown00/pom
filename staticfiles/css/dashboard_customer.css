@@ -44,6 +44,11 @@
   color: white;
 }
 
+/* Light blue row hover */
+#customerTable tbody tr:hover {
+  background-color: #e0f0ff !important;  /* Light blue */
+}
+
 
 
 
