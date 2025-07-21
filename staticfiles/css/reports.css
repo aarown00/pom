@@ -1,0 +1,76 @@
+/* Basic layout and remove default table border */
+table.table.table-bordered {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  border: none;
+}
+
+/* Gradient header row */
+table.table.table-bordered thead tr:first-child {
+  background: linear-gradient(to right, #62cff4, #2c67f2);
+}
+
+/* Header cells */
+table.table.table-bordered thead tr:first-child th {
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: center;
+  padding: 12px;
+}
+
+/* Rounded corners */
+table.table.table-bordered thead tr:first-child th:first-child {
+  border-top-left-radius: 12px;
+}
+table.table.table-bordered thead tr:first-child th:last-child {
+  border-top-right-radius: 12px;
+}
+
+/* Body cells: remove vertical borders, keep horizontal lines */
+table.table.table-bordered tbody td {
+  border-top: 1px solid #dee2e6; /* Horizontal line between rows */
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  padding: 10px;
+  text-align: center;
+}
+
+table.table.table-bordered tbody tr:hover {
+  background-color: #e0f0ff !important;
+}
+
+
+.filter-button {
+  background-color: white;
+  color: #3498db; 
+  border: 2px solid #3498db; 
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+  min-width: 90px;
+}
+
+.filter-button:hover {
+  background-color: #3498db; 
+  color: white; 
+}
+
+.export-button {
+  background-color: white;
+  color: #04AA6D;
+  border: 2px solid #04AA6D;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+  min-width: 90px;
+}
+
+.export-button:hover {
+  background-color: #04AA6D;
+  color: white;
+}

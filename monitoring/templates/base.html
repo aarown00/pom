@@ -105,13 +105,13 @@
 
             <!-- REPORTS SECTION -->
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Reports</span>
+              <span>Export</span>
             </h6>
             <ul class="nav flex-column mb-2">
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'reports' username=request.user.username %}">
                   <span data-feather="printer"></span>
-                  Print Report/s
+                  Reports
                 </a>
               </li>
             </ul>

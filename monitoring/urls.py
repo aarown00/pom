@@ -19,14 +19,13 @@ urlpatterns = [
     path('<str:username>/dashboard/manpower', views.dashboard_manpower_view, name='dashboard_manpower'), 
     path('<str:username>/delete/manpower/<int:pk>', views.delete_manpower, name='delete_manpower'), 
 
-    
-    # urls.py
+    # ajax
     path('ajax/validate-field/', views.ajax_validate_field, name='ajax_validate_field'),
     path('ajax/validate-time-total/', views.validate_time_total, name='ajax_validate_time_total'),
 
-
-
-
+    #reports
+    path('<str:username>/reports/', views.reports, name='reports'),
+    path('<str:username>/reports/export/purchase_orders', views.export_po_to_excel, name='export_po_to_excel'),
 
 ]
 

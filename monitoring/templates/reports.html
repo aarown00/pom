@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Reports{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/reports.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "toast_messages.html" %}
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex align-items-center gap-2">
+      {% comment %} <img src="{% static 'img/mlogo.png' %}" alt="Logo" style="height: 32px; width: 32px; object-fit: contain; margin-right: 0.5rem;"> {% endcomment %}
+      <h1 class="h3 mb-0">Mabuhay Power & Diesel Generator Services Co. Ltd</h1>
+    </div>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-sm mb-0">
+      <li class="breadcrumb-item">P.O Monitoring System</li>
+      <li class="breadcrumb-item active" aria-current="page">Reports</li>
+      </ol>
+    </nav>
+  </div>
+
+ 
+
+  {% include "tabs.html" %} </br>
+<div class="alert alert-warning mb-0" role="alert">
+  Export P.O Report/s here to excel file. Filter date range first to view summary before exporting data.
+</div>
+
+</br>
+
+<form method="get" class="form-inline mb-3">
+  <label>From:</label>
+  <input type="date" id="from-date" name="from" class="form-control mx-2" required value="{{ from_date }}">
+
+  <label>To:</label>
+  <input type="date" id="to-date" name="to" class="form-control mx-2" required value="{{ to_date }}">
+
+  <button type="submit" class="btn btn-sm filter-button"><i data-feather="filter"></i> Filter</button>
+</form>
+
+
+
+{% if po_reports %}
+  <div class="mb-3">
+    <button type="button" id="exportBtn" class="btn export-button mb-2"
+            data-url="{% url 'export_po_to_excel' username %}?from={{ request.GET.from }}&to={{ request.GET.to }}">
+      <i data-feather="download"></i> Export
+    </button>
+
+    <div class="text-muted">
+      Showing purchase order entries from <strong>{{ request.GET.from }}</strong> to <strong>{{ request.GET.to }}</strong>
+    </div>
+  </div>
+{% endif %}
+
+
+
+
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>RECORDED DATE</th>
+      <th>PURCHASE ORDER</th>
+      <th>CUSTOMER</th>
+      <th>BRANCH/ADDRESS</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if po_reports %}
+      {% for po in po_reports %}
+        <tr>
+          <td>{{ po.date_recorded }}</td>
+          <td>{{ po.purchase_order }}</td>
+          <td>{{ po.customer_branch.customer_name }}</td>
+          <td>{{ po.customer_branch.branch_name }}</td>
+        </tr>
+      {% endfor %}
+    {% elif request.GET.from and request.GET.to %}
+      <tr>
+        <td colspan="4" class="text-center text-muted">No purchase orders found in this date range.</td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="4" class="text-center text-muted">Please select a date range to view and export data.</td>
+      </tr>
+    {% endif %}
+  </tbody>
+</table>
+
+
+
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const fromInput = document.getElementById('from-date');
+    const toInput = document.getElementById('to-date');
+    const form = document.querySelector('form[method="get"]');
+
+    fromInput.addEventListener('change', () => {
+      toInput.min = fromInput.value;
+    });
+
+    toInput.addEventListener('change', () => {
+      fromInput.max = toInput.value;
+    });
+
+    form.addEventListener('submit', function (e) {
+      if (fromInput.value && toInput.value && fromInput.value > toInput.value) {
+        alert("Invalid date range: 'From' date cannot be after 'To' date.");
+        e.preventDefault();
+      }
+    });
+  });
+</script>
+
+<script>
+  document.getElementById('exportBtn').addEventListener('click', function () {
+    const exportUrl = this.getAttribute('data-url');
+    window.location.href = exportUrl;
+  });
+</script>
+
+
+
+
+
+
+{% endblock %}
