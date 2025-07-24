@@ -22,77 +22,40 @@
     cursor: pointer;
   }
 
-.view-button {
-  background-color: white;
-  color: #04AA6D;
-  border: 2px solid #04AA6D;
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-weight: bold;
-  transition-duration: 0.4s;
-  min-width: 90px;
+.dropdown-menu.dropdown-modern {
+  min-width: 180px;
+  padding: 0.3rem 0;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
 }
 
-.view-button:hover {
-  background-color: #04AA6D;
-  color: white;
+.dropdown-item {
+  transition: background-color 0.2s ease, color 0.2s ease;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.itinenary-button {
-  background-color: white;
-  color: #3498db; 
-  border: 2px solid #3498db; 
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-weight: bold;
-  transition-duration: 0.4s;
-  min-width: 90px;
+.dropdown-item:hover {
+  background-color: #e6f0ff;
+  color: #004085;
 }
 
-.itinenary-button:hover {
-  background-color: #3498db; 
-  color: white; 
+.dropdown-item i.icon {
+  width: 16px;
+  height: 16px;
 }
 
-.update-button {
-  background-color: white;
-  color: #e67e22; /* Orange text */
-  border: 2px solid #e67e22; /* Orange border */
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-weight: bold;
-  transition-duration: 0.4s;
-  min-width: 90px;
-}
-
-.update-button:hover {
-  background-color: #e67e22; /* Orange background on hover */
-  color: white;
-}
-
-.cancel-button {
-  background-color: white !important;
-  color: #dc3545 !important; /* Bootstrap red */
-  border: 2px solid #dc3545 !important;
-  padding: 5px 12px !important;
-  border-radius: 5px;
-  font-weight: bold;
-  transition-duration: 0.4s;
-  text-decoration: none;
-  min-width: 90px;
-}
-
-.cancel-button:hover {
-  background-color: #dc3545 !important;
-  color: white !important;
-}
 
 
 
 #poTable {
   border-collapse: collapse;
   width: 100%;
-  table-layout: fixed; /* Optional: makes column widths equal */
 }
 
 /* Apply gradient to the header row itself */
@@ -170,7 +133,7 @@ div.dt-container .dt-layout-row:first-child {
 
 /* Widen the search input */
 div.dt-container .dt-search input {
-  width: 1000px;
+  width: 500px;
   max-width: 100%;
   padding: 6px 12px;
   border: 1px solid #aaa;
@@ -184,7 +147,6 @@ div.dt-container .dt-search input {
 #poTable tbody tr:hover {
   background-color: #e0f0ff !important;  /* Light blue */
 }
-
 
 
 

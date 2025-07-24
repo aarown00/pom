@@ -2,7 +2,6 @@
 #manpowerTable {
   border-collapse: collapse;
   width: 100%;
-  table-layout: fixed; /* Optional: makes column widths equal */
 }
 
 /* Apply gradient to the header row itself */
