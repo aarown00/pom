@@ -8,7 +8,7 @@ REM === Check if this CMD window is already running ===
 tasklist /v | findstr /i "%TITLE%" >nul
 if %ERRORLEVEL%==0 (
     echo Server is already running. Opening browser...
-    start http://po.monitoring/
+    start http://192.168.1.10/
     goto :eof
 )
 
@@ -19,13 +19,12 @@ REM === Activate virtual environment ===
 call ..\env\Scripts\activate.bat
 
 REM === Open browser once ===
-start http://po.monitoring/
+start http://192.168.1.10/
 
 echo.
 echo =====================================================
 echo The server is already running!
 echo.
-echo You can access it anytime at:  http://po.monitoring/ 
 echo You can access it anytime at:  192.168.1.10 
 echo.
 echo There's no need to open this file multiple times.
