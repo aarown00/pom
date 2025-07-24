@@ -10,3 +10,13 @@ class CustomerDetailForm(forms.ModelForm):
     class Meta:
         model = CustomerDetail
         fields = ['customer_name', 'branch_name']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Add 'is-invalid' class to any fields with errors
+        for field_name, field in self.fields.items():
+            if self.errors.get(field_name):
+                css = field.widget.attrs.get("class", "")
+                if "is-invalid" not in css:
+                    field.widget.attrs["class"] = f"{css} is-invalid"

@@ -34,6 +34,12 @@ class DailyWorkStatusForm(forms.ModelForm):
         if manpower and manpower.exists() and time_total is None:
             self.add_error('time_total', "Time total is required when manpower is selected.")
 
+    def clean_itinenary_remarks(self):
+        remarks = self.cleaned_data.get('itinenary_remarks', '')
+        if remarks and len(remarks) > 150:
+            raise forms.ValidationError("Remarks must be 150 characters or less.")
+        return remarks
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

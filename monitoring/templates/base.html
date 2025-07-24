@@ -18,24 +18,40 @@
   </head>
   <body>
 
-    <!-- Top Navbar -->
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <!-- Brand -->
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0">P.O Monitoring System</a>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top shadow px-3">
+  <!-- Brand (left) -->
+  <a class="navbar-brand" href="#">P.O Monitoring System</a>
 
-    
-       <!-- Center (visually centered with manual offset to the right) -->
-  <div class="text-white text-center position-absolute w-100" style="left: 50%; transform: translateX(-40%);">
-    <span>MABUHAY POWER & DIESEL GENERATOR SERVICES CO. LTD</span>
+
+  <!-- Toggler for collapse on small screens -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar content collapsible -->
+  <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+    <!-- Center Title -->
+    <div class="mx-auto text-center text-white">
+      MABUHAY POWER & DIESEL GENERATOR SERVICES CO. LTD
+    </div>
+
+    <!-- Right (Welcome message) -->
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i data-feather="user" class="me-2"></i>
+          <span>Welcome, {{ request.user.username }}</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+          <a class="dropdown-item" href="{% url 'logout' %}">
+            <i data-feather="log-out" class="me-2"></i> Logout
+          </a>
+        </div>
+      </li>
+    </ul>
   </div>
+</nav>
 
-      <!-- Welcome Message (aligned right) -->
-      <ul class="navbar-nav px-3 ml-auto d-flex align-items-center">
-        <li class="nav-item text-white">
-          <i data-feather="user" class="mr-2"></i> Welcome, {{ request.user.username }}
-        </li>
-      </ul>
-    </nav>
 
 
 
@@ -118,18 +134,7 @@
 
             <hr>
 
-            <!-- SYSTEM SECTION -->
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>System</span>
-            </h6>
-            <ul class="nav flex-column mb-2">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'admin:index' %}">
-                  <span data-feather="settings"></span>
-                  Admin Panel
-                </a>
-              </li>
-            </ul>
+            
           </div>
 
 
@@ -172,6 +177,8 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.9.0/dist/feather.min.js"></script>
     <script>feather.replace();</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+  
 
     <script src="{% static 'js/base.js' %}"></script>
 

@@ -14,13 +14,13 @@ class PurchaseOrderForm(UniqueFieldValidationMixin, forms.ModelForm):
     label="CLASSIFICATION"
     )
     description = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Enter Description", "class": "form-control", "rows": 3}), label="DESCRIPTION/CATEGORY:")
-    service_report_number= forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Service Report No.", "class": "form-control"}), label="SERVICE REPORT NO:", required=False)
+    service_report_number= forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Service Report No.", "class": "form-control"}), label="SR NO:", required=False)
     date_started = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}), label="STARTED DATE:", required=False)
     target_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}), label="TARGET DATE:")
     completion_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control", "max": localdate().isoformat()}), label="COMPLETION DATE:", required=False)
     coc_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter COC No.", "class": "form-control"}), label="COC NO:", required=False)
-    dr_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter DR No.", "class": "form-control"}), label="DELIVERY RECEIPT NO.", required=False)
-    invoice_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Invoice No.", "class": "form-control"}), label="INVOICE NO.", required=False)
+    dr_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter DR No.", "class": "form-control"}), label="DR NO.", required=False)
+    invoice_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Invoice No.", "class": "form-control"}), label="INV NO.", required=False)
     remarks = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Enter Remarks", "class": "form-control", "rows": 3}), label="REMARKS:", required=False)
 
     unique_fields = ['purchase_order']

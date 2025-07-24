@@ -5,12 +5,14 @@
   animation: fadeInUp 0.3s ease-out;
 }
 
+
 .modal-header {
   border-bottom: 1px solid #dee2e6;
   background: #f8f9fa;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+
 
 .modal-footer {
   border-top: 1px solid #dee2e6;

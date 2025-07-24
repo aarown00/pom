@@ -30,8 +30,8 @@
  
 
 
-
-  <table id="customerTable" class="row-border hover" style="width:100%">
+<div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
+  <table id="customerTable" class="row-border hover nowrap" style="width: 100%;">
     <thead>
       <tr>
         <th>ACTIONS</th>
@@ -45,7 +45,7 @@
          <td>
         <form method="post" action="{% url 'delete_customer' username=request.user.username pk=customer.pk %}" 
         style="display:inline;" 
-        onsubmit="return confirmDelete('Are you sure you want to cancel this Customer?\n\n{{ customer.customer_name }},{{customer.branch_name}}\n\nWarning: This action is irreversible and cannot be undone.')">
+        onsubmit="return confirmDelete('Are you sure you want to cancel this Customer?\n\n{{ customer.customer_name }}\n{{customer.branch_name}}\n\nWarning: This action is irreversible and cannot be undone.')">
           {% csrf_token %}
           <button type="submit" class="btn btn-sm delete-button"><i data-feather="trash-2"></i> Delete</button>
         </form>
@@ -56,6 +56,57 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
+
+{% if customer_details.paginator.count > 0 %}
+  <div class="text-muted mb-2">
+    Showing 
+    {{ customer_details.start_index }} 
+    to 
+    {{ customer_details.end_index }} 
+    of 
+    {{ customer_details.paginator.count }} 
+    entries
+  </div>
+{% endif %}
+
+<nav aria-label="Customer pagination">
+  <ul class="pagination justify-content-center">
+    {% if customer_details.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1">&laquo; First</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ customer_details.previous_page_number }}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&laquo; First</span></li>
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link">
+        Page {{ customer_details.number }} of {{ customer_details.paginator.num_pages }}
+      </span>
+    </li>
+
+    {% if customer_details.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ customer_details.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ customer_details.paginator.num_pages }}">Last &raquo;</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+      <li class="page-item disabled"><span class="page-link">Last &raquo;</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+
+
 
   {% include "confirm_page.html" %}
 
@@ -65,6 +116,8 @@
     new DataTable('#customerTable', {
       searching: false,
       ordering: false,
+      paging: false,
+      info: false,
     });
   });
 </script>

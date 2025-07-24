@@ -1,8 +1,10 @@
 
   document.addEventListener('DOMContentLoaded', function () {
   const table = new DataTable('#poTable', {
+    responsive: true,
     ordering: false,
     searching: true,
+    lengthMenu: [ [10, 20], [10, 20] ],
 
 
     columnDefs: [
@@ -70,4 +72,3 @@
     }
   });
 });
-

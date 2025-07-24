@@ -78,7 +78,11 @@
                   <div class="form-group col-md-8">
                     <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
                     {{ form.description }}
-                    {{ form.description.errors }}
+                    <div class="invalid-feedback d-block" id="description-error" style="{% if form.description.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.description.errors %}
+                        {{ form.description.errors.0 }}
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -104,18 +108,15 @@
             </div>
           </div>
 
-          <!-- RIGHT SIDE (Just for Save button) -->
-          <div class="col-lg-4 d-flex align-items-start gap-2 mt-1">
-            <button type="submit" class="btn add-button">
-              <i data-feather="save"></i> Save
-            </button>
-            <a href="{% url 'create_customer' username=request.user.username %}" class="btn add-po-button" style="margin-left: 8px;">
-              <i data-feather="user-plus"></i> Add Customer
-            </a> 
-            <a href="{% url 'create_manpower' username=request.user.username %}" class="btn add-po-button" style="margin-left: 8px;">
-              <i data-feather="user-plus"></i> Add Manpower
-            </a> 
-          </div>
+        <div class="col-lg-4 d-flex flex-wrap flex-lg-nowrap align-items-start mt-1" style="margin-bottom: 1rem;">
+          <!-- Save Button -->
+          <button type="submit" class="btn add-button d-flex align-items-center"
+            style="margin: 0 8px 8px 0;">
+            <i data-feather="save" style="margin-right: 5px;"></i> Save
+          </button>
+
+        </div>
+
         </div>
 
 
@@ -131,44 +132,67 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const field = document.getElementById('id_purchase_order');
-    const errorDiv = document.getElementById('purchase-order-error');
 
-    function runAjaxValidation() {
-      const value = field.value.trim();
+    function attachAjaxValidator({ fieldId, errorId, fieldName }) {
+      const field = document.getElementById(fieldId);
+      const errorDiv = document.getElementById(errorId);
+      if (!field || !errorDiv) return;
 
-      // If the field is empty, don't show any error; let Django/HTML handle it
-      if (value === '') {
-        field.classList.remove('is-invalid');
-        errorDiv.style.display = 'none';
-        errorDiv.textContent = '';
-        return;
-      }
+      function runAjaxValidation() {
+        const value = field.value.trim();
 
-      fetch("{% url 'ajax_validate_field' %}", {
-        method: 'POST',
-        headers: {
-          'X-CSRFToken': '{{ csrf_token }}',
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `form=purchase_order&field=purchase_order&value=${encodeURIComponent(value)}`
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.valid) {
+        if (value === '') {
           field.classList.remove('is-invalid');
           errorDiv.style.display = 'none';
           errorDiv.textContent = '';
-        } else {
-          field.classList.add('is-invalid');
-          errorDiv.style.display = 'block';
-          errorDiv.textContent = data.error;
+          return;
         }
-      });
+
+        fetch("{% url 'ajax_validate_field' %}", {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `form=purchase_order&field=${fieldName}&value=${encodeURIComponent(value)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.valid) {
+            field.classList.remove('is-invalid');
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+          } else {
+            field.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = data.error;
+          }
+        });
+      }
+
+      field.addEventListener('input', runAjaxValidation);
+      field.addEventListener('blur', runAjaxValidation);
     }
 
-    field.addEventListener('input', runAjaxValidation);
-    field.addEventListener('blur', runAjaxValidation);
+    // ✅ Apply to purchase_order and description fields
+    attachAjaxValidator({
+      fieldId: 'id_purchase_order',
+      errorId: 'purchase-order-error',
+      fieldName: 'purchase_order'
+    });
+
+    attachAjaxValidator({
+      fieldId: 'id_description',
+      errorId: 'description-error',
+      fieldName: 'description'
+    });
+
+     attachAjaxValidator({
+      fieldId: 'id_remarks',
+      errorId: 'remarks-error',
+      fieldName: 'remarks'
+    });
+
   });
 </script>
 

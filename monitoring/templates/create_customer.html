@@ -56,28 +56,35 @@
                   <div class="form-group col-md-4">
                     <label for="{{ form.customer_name.id_for_label }}">{{ form.customer_name.label }}</label>
                     {{ form.customer_name }}
-                    {{ form.customer_name.errors }}
+                    <div class="invalid-feedback d-block" id="customer-name-error" style="{% if form.customer_name.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.customer_name.errors %}
+                        {{ form.customer_name.errors.0 }}
+                      {% endif %}
+                    </div>
                   </div>
 
                   <div class="form-group col-md-8">
                     <label for="{{ form.branch_name.id_for_label }}">{{ form.branch_name.label }}</label>
                     {{ form.branch_name }}
-                    {{ form.branch_name.errors }}
+                    <div class="invalid-feedback d-block" id="branch-name-error" style="{% if form.branch_name.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.branch_name.errors %}
+                        {{ form.branch_name.errors.0 }}
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- RIGHT SIDE (Save Button aligned left) -->
-          <div class="col-lg-4 d-flex align-items-start gap-2 mt-1">
-            <button type="submit" class="btn add-button">
-              <i data-feather="save"></i> Save
-            </button>
-            <a href="{% url 'create' username=request.user.username %}" class="btn add-po-button" style="margin-left: 8px;">
-              <i data-feather="file-plus"></i> Add P.O
-            </a> 
-          </div>
+          <div class="col-lg-4 d-flex flex-wrap flex-lg-nowrap align-items-start mt-1" style="margin-bottom: 1rem;">
+          <!-- Save Button -->
+          <button type="submit" class="btn add-button d-flex align-items-center"
+            style="margin: 0 8px 8px 0;">
+            <i data-feather="save" style="margin-right: 5px;"></i> Save
+          </button>
+
+        </div>
         </div> <!-- .row -->
 
       </form>
@@ -88,4 +95,74 @@
 
 {% include "leave_page.html" %}
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function attachAjaxValidator({ fieldId, errorId, fieldName, instanceId = null }) {
+      const field = document.getElementById(fieldId);
+      const errorDiv = document.getElementById(errorId);
+      if (!field || !errorDiv) return;
+
+      function runAjaxValidation() {
+        const value = field.value.trim();
+
+        if (value === '') {
+          field.classList.remove('is-invalid');
+          errorDiv.style.display = 'none';
+          errorDiv.textContent = '';
+          return;
+        }
+
+        const params = new URLSearchParams();
+        params.append('form', 'customer');
+        params.append('field', fieldName);
+        params.append('value', value);
+        if (instanceId) {
+          params.append('id', instanceId);
+        }
+
+        fetch("{% url 'ajax_validate_field' %}", {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: params.toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.valid) {
+            field.classList.remove('is-invalid');
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+          } else {
+            field.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = data.error;
+          }
+        });
+      }
+
+      field.addEventListener('input', runAjaxValidation);
+      field.addEventListener('blur', runAjaxValidation);
+    }
+
+    // Call validators here
+    attachAjaxValidator({
+      fieldId: 'id_customer_name',
+      errorId: 'customer-name-error',
+      fieldName: 'customer_name',
+      instanceId: '{{ form.instance.id|default_if_none:"" }}'
+    });
+
+    attachAjaxValidator({
+      fieldId: 'id_branch_name',
+      errorId: 'branch-name-error',
+      fieldName: 'branch_name',
+      instanceId: '{{ form.instance.id|default_if_none:"" }}'
+    });
+
+  
+
+  });
+</script>
 {% endblock %}

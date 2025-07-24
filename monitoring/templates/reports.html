@@ -64,20 +64,22 @@
   <table class="table table-bordered">
   <thead>
     <tr>
-      <th>RECORDED DATE</th>
       <th>PURCHASE ORDER</th>
       <th>CUSTOMER</th>
-      <th>BRANCH/ADDRESS</th>
+      <th>STARTED DATE</th>
+      <th>COMPLETION DATE</th>
+      <th>STATUS</th>
     </tr>
   </thead>
   <tbody>
     {% if po_reports %}
       {% for po in po_reports %}
         <tr>
-          <td>{{ po.date_recorded }}</td>
           <td>{{ po.purchase_order }}</td>
           <td>{{ po.customer_branch.customer_name }}</td>
-          <td>{{ po.customer_branch.branch_name }}</td>
+          <td>{{ po.date_started }}</td>
+          <td>{{ po.completion_date }}</td>
+          <td>{{ po.status }}</td>
         </tr>
       {% endfor %}
     {% elif request.GET.from and request.GET.to %}
@@ -92,6 +94,45 @@
   </tbody>
 </table>
 
+{% if po_reports.paginator.count > 0 %}
+  <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
+    Showing {{ po_reports.start_index }} to {{ po_reports.end_index }} of {{ po_reports.paginator.count }} entries
+  </div>
+{% endif %}
+
+<nav aria-label="Report pagination">
+  <ul class="pagination justify-content-center">
+    {% if po_reports.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&page=1">&laquo; First</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&page={{ po_reports.previous_page_number }}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&laquo; First</span></li>
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link">
+        Page {{ po_reports.number }} of {{ po_reports.paginator.num_pages }}
+      </span>
+    </li>
+
+    {% if po_reports.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&page={{ po_reports.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&page={{ po_reports.paginator.num_pages }}">Last &raquo;</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+      <li class="page-item disabled"><span class="page-link">Last &raquo;</span></li>
+    {% endif %}
+  </ul>
+</nav>
 
 
 

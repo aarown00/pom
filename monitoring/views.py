@@ -14,6 +14,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from openpyxl import Workbook
 from django.utils.dateparse import parse_date
+from django.core.paginator import Paginator
 
 
 def custom_404_view(request, exception):
@@ -87,6 +88,10 @@ def create_purchase_order(request, username):
 def edit_purchase_order(request, username, pk):
     po_instance = get_object_or_404(PurchaseOrder, pk=pk)
 
+    if po_instance.status == "Cancelled":
+        messages.error(request, "This Purchase Order has been cancelled and cannot be updated.")
+        return redirect('dashboard', username=username)
+
     if request.method == 'POST':
         form = PurchaseOrderForm(request.POST, instance=po_instance)
         if form.is_valid():
@@ -103,6 +108,11 @@ def edit_purchase_order(request, username, pk):
 
 @login_required
 def cancel_purchase_order(request, username, pk):
+
+    if not request.user.is_superuser:
+        messages.error(request, "You do not have permission to cancel orders!")
+        return redirect('dashboard', username=username)
+    
     po = get_object_or_404(PurchaseOrder, pk=pk)
 
     if request.method == "POST" and request.POST.get("status") == "Cancelled":
@@ -110,7 +120,7 @@ def cancel_purchase_order(request, username, pk):
         po.save()
         messages.success(request, "Purchase Order has been cancelled.")
     else:
-        messages.error(request, "Invalid or missing status.")
+        messages.error(request, "Purchase Order already cancelled.")
 
     return redirect('dashboard', username=username)
 
@@ -118,6 +128,10 @@ def cancel_purchase_order(request, username, pk):
 @login_required
 def edit_dws(request, username, pk):
     purchase_order = get_object_or_404(PurchaseOrder, pk=pk)
+
+    if purchase_order.status == "Cancelled":
+        messages.error(request, "This Purchase Order has been cancelled and cannot be updated.")
+        return redirect('dashboard', username=username)
 
     if request.method == 'POST':
         formset = DailyWorkStatusFormSet(request.POST, instance=purchase_order)
@@ -142,7 +156,11 @@ def dashboard_customer_view(request, username):
     if request.user.username != username:
         return redirect(f'/{request.user.username}/dashboard/customer')
 
-    customer_details = CustomerDetail.objects.order_by('customer_name')
+    customer_list = CustomerDetail.objects.order_by('customer_name')
+    
+    paginator = Paginator(customer_list, 10)  
+    page_number = request.GET.get('page')
+    customer_details = paginator.get_page(page_number)
 
     return render(request, 'dashboard_customer.html', {
         'customer_details': customer_details,
@@ -187,7 +205,11 @@ def dashboard_manpower_view(request, username):
     if request.user.username != username:
         return redirect(f'/{request.user.username}/dashboard/manpower')
 
-    manpower_details = ManpowerDetail.objects.order_by('name')
+    manpower_list = ManpowerDetail.objects.order_by('name')
+    paginator = Paginator(manpower_list, 10) 
+
+    page_number = request.GET.get('page')
+    manpower_details = paginator.get_page(page_number)
 
     return render(request, 'dashboard_manpower.html', {
         'manpower_details': manpower_details,
@@ -247,6 +269,12 @@ def ajax_validate_field(request):
         elif form_name == "manpower":
             ModelForm = ManpowerDetailForm
             Model = ManpowerDetail
+        elif form_name == "customer":
+            ModelForm = CustomerDetailForm
+            Model = CustomerDetail
+        elif form_name == "dws":
+            ModelForm = DailyWorkStatusForm
+            Model = DailyWorkStatus
         else:
             return JsonResponse({"valid": False, "error": "Invalid form type."})
 
@@ -290,11 +318,15 @@ def reports(request, username):
     from_date = parse_date(from_date_str) if from_date_str else None
     to_date = parse_date(to_date_str) if to_date_str else None
 
-    po_reports = []
+    po_queryset = []
     if from_date and to_date:
-        po_reports = PurchaseOrder.objects.filter(
+        po_queryset = PurchaseOrder.objects.filter(
             date_recorded__range=(from_date, to_date)
         ).order_by('date_recorded')
+
+    paginator = Paginator(po_queryset, 10) 
+    page_number = request.GET.get('page')
+    po_reports = paginator.get_page(page_number)
 
     return render(request, 'reports.html', {
         'username': username,

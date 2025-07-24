@@ -1,23 +1,25 @@
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">Customer List</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard_manpower' username=request.user.username %}">Manpower List</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'create' username=request.user.username %}">Add P.O</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'create_customer' username=request.user.username %}">Add Customer</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'create_manpower' username=request.user.username %}">Add Manpower</a>
-  </li>
-   <li class="nav-item">
-    <a class="nav-link" href="{% url 'reports' username=request.user.username %}">Reports</a>
-  </li>
-</ul>
+<div class="nav-tabs-container overflow-auto mb-3">
+  <ul class="nav nav-tabs flex-nowrap">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">Customer List</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'dashboard_manpower' username=request.user.username %}">Manpower List</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'create' username=request.user.username %}">Add P.O</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'create_customer' username=request.user.username %}">Add Customer</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'create_manpower' username=request.user.username %}">Add Manpower</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'reports' username=request.user.username %}">Reports</a>
+    </li>
+  </ul>
+</div>

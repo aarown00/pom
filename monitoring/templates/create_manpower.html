@@ -73,15 +73,14 @@
             </div>
           </div>
 
-          <!-- RIGHT SIDE (Save Button aligned left) -->
-          <div class="col-lg-4 d-flex align-items-start gap-2 mt-1">
-            <button type="submit" class="btn add-button">
-              <i data-feather="save"></i> Save
-            </button>
-            <a href="{% url 'create' username=request.user.username %}" class="btn add-po-button" style="margin-left: 8px;">
-              <i data-feather="file-plus"></i> Add P.O
-           </a> 
-          </div>
+          <div class="col-lg-4 d-flex flex-wrap flex-lg-nowrap align-items-start mt-1" style="margin-bottom: 1rem;">
+          <!-- Save Button -->
+          <button type="submit" class="btn add-button d-flex align-items-center"
+            style="margin: 0 8px 8px 0;">
+            <i data-feather="save" style="margin-right: 5px;"></i> Save
+          </button>
+
+        </div>
         </div> <!-- .row -->
 
       </form>

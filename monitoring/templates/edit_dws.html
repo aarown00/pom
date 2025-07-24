@@ -87,14 +87,20 @@
                 </td>
                 <td>
                     {{ form.time_total }}
-                    <div class="invalid-feedback d-block time-total-error" style="display: none;">
+                    <div class="invalid-feedback d-block time-total-error" id="time-total-error" style="{% if form.time_total.errors %}display: block;{% else %}display: none;{% endif %}">
                       {% if form.time_total.errors %}
                         {{ form.time_total.errors.0 }}
                       {% endif %}
                     </div>
 
                 </td>
-                <td>{{ form.itinenary_remarks }}</td>
+                <td>{{ form.itinenary_remarks }}
+                  <div class="invalid-feedback d-block itinenary-remarks-error" style="{% if form.itinenary_remarks.errors %}display: block;{% else %}display: none;{% endif %}">
+                    {% if form.itinenary_remarks.errors %}
+                      {{ form.itinenary_remarks.errors.0 }}
+                    {% endif %}
+                  </div>
+                </td>
             </tr>
             {% endfor %}
 
@@ -172,6 +178,185 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const dateInputs = document.querySelectorAll('input[type="date"]');
+
+    function updateMinDates(startIndex = 0) {
+      for (let i = startIndex; i < dateInputs.length - 1; i++) {
+        const currentDate = new Date(dateInputs[i].value);
+        if (!dateInputs[i].value || isNaN(currentDate)) {
+          // Clear restrictions on all subsequent fields
+          for (let j = i + 1; j < dateInputs.length; j++) {
+            dateInputs[j].min = '';
+          }
+          break;
+        }
+
+        // Calculate next minDate (+1 day)
+        const nextDate = new Date(currentDate.getTime() + 86400000);
+        const year = nextDate.getFullYear();
+        const month = String(nextDate.getMonth() + 1).padStart(2, '0');
+        const day = String(nextDate.getDate()).padStart(2, '0');
+
+        // Set min of next input
+        dateInputs[i + 1].min = `${year}-${month}-${day}`;
+      }
+    }
+
+    // Recalculate all minDates on page load
+    updateMinDates(0);
+
+    // Attach change listeners
+    dateInputs.forEach((input, index) => {
+      input.addEventListener('change', function () {
+        updateMinDates(index);
+      });
+    });
+  });
+</script>
+
+{% comment %} <script>
+document.addEventListener('DOMContentLoaded', function () {
+  function attachAjaxValidators({ fieldName, errorClass, instanceId = null }) {
+    const inputs = document.querySelectorAll(`input[name$="-${fieldName}"], textarea[name$="-${fieldName}"]`);
+
+    inputs.forEach(input => {
+      const row = input.closest('tr') || input.closest('.form-row');
+      const errorDiv = row ? row.querySelector(`.${errorClass}`) : null;
+
+      if (!input || !errorDiv) return;
+
+      function runAjaxValidation() {
+        const value = input.value.trim();
+        const params = new URLSearchParams();
+
+        if (value === '') {
+          input.classList.remove('is-invalid');
+          errorDiv.style.display = 'none';
+          errorDiv.textContent = '';
+          return;
+        }
+
+        params.append('form', 'dws');
+        params.append('field', fieldName);
+        params.append('value', value);
+        if (instanceId) {
+          params.append('id', instanceId);
+        }
+
+        fetch("{% url 'ajax_validate_field' %}", {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: params.toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.valid) {
+            input.classList.remove('is-invalid');
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+          } else {
+            input.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = data.error;
+          }
+        });
+      }
+
+      input.addEventListener('input', runAjaxValidation);
+      input.addEventListener('blur', runAjaxValidation);
+    });
+  }
+
+  // ✅ Call the reusable function for fields you want to validate
+  attachAjaxValidators({
+    fieldName: 'itinenary_remarks',
+    errorClass: 'itinenary-remarks-error',
+    instanceId: '{{ form.instance.id|default_if_none:"" }}'
+  });
+
+  attachAjaxValidators({
+    fieldName: 'time_total',
+    errorClass: 'time-total-error',
+    instanceId: '{{ form.instance.id|default_if_none:"" }}'
+  });
+});
+</script> {% endcomment %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  function attachDynamicAjaxValidator({ fieldName, errorClass, instanceId = null }) {
+    const inputs = document.querySelectorAll(`[name$="-${fieldName}"]`);
+
+    inputs.forEach(input => {
+      const row = input.closest('tr') || input.closest('.form-row');
+      const errorDiv = row ? row.querySelector(`.${errorClass}`) : null;
+
+      if (!input || !errorDiv) return;
+
+      function runAjaxValidation() {
+        const value = input.value.trim();
+        const params = new URLSearchParams();
+
+        if (value === '') {
+          input.classList.remove('is-invalid');
+          errorDiv.style.display = 'none';
+          errorDiv.textContent = '';
+          return;
+        }
+
+        params.append('form', 'dws');
+        params.append('field', fieldName);
+        params.append('value', value);
+        if (instanceId) {
+          params.append('id', instanceId);
+        }
+
+        fetch("{% url 'ajax_validate_field' %}", {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: params.toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.valid) {
+            input.classList.remove('is-invalid');
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+          } else {
+            input.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = data.error;
+          }
+        });
+      }
+
+      input.addEventListener('input', runAjaxValidation);
+      input.addEventListener('blur', runAjaxValidation);
+    });
+  }
+
+  // ✅ Call after defining it
+  attachDynamicAjaxValidator({
+    fieldName: 'itinenary_remarks',
+    errorClass: 'itinenary-remarks-error',
+    instanceId: '{{ form.instance.id|default_if_none:"" }}'
+  });
+
+  attachDynamicAjaxValidator({
+    fieldName: 'time_total',
+    errorClass: 'time-total-error',
+    instanceId: '{{ form.instance.id|default_if_none:"" }}'
+  });
+});
+</script>
 
 
 
