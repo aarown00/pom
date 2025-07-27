@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-8^h_ap8lvjlmxrd8gc=0b6(x!)$*ie-jd#0-l1tkbly@@iuady
 DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ['*']
+# CSRF_TRUSTED_ORIGINS = ['https://mabuhayops.onrender.com']
 
 
 # Application definition
@@ -101,15 +101,11 @@ WSGI_APPLICATION = 'mabuhaypowers_pom.wsgi.application'
 #      'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 #  }
 
-import pg8000
-
-conn = pg8000.connect(
-    user="aaronmart",
-    password="pass123",
-    host="localhost",
-    database="mabuhaypowers_pom",
-    port=5432
-)
+DATABASES = {
+       'default': dj_database_url.config(
+           default="postgresql://test_pom_user:lL8A2ymwCj8k76o4etpxgwgRHMYOLkt6@dpg-d23au53e5dus73af6520-a.singapore-postgres.render.com/test_pom"
+       )
+   }
 
 
 
