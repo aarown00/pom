@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-8^h_ap8lvjlmxrd8gc=0b6(x!)$*ie-jd#0-l1tkbly@@iuady
 DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
-# CSRF_TRUSTED_ORIGINS = ['https://mabuhayops.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['*']
 
 
 # Application definition
