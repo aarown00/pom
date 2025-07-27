@@ -79,17 +79,17 @@ WSGI_APPLICATION = 'mabuhaypowers_pom.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.postgresql',
-         'NAME': 'mabuhaypowers_pom',
-         'USER': 'aaronmart',
-         'PASSWORD': 'pass123',
-         'HOST': 'localhost',
-         'PORT': '5432',
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.postgresql',
+#          'NAME': 'mabuhaypowers_pom',
+#          'USER': 'aaronmart',
+#          'PASSWORD': 'pass123',
+#          'HOST': 'localhost',
+#          'PORT': '5432',
 
-      }
-  }
+#       }
+#   }
 
 # DATABASES = {
 #       'default': dj_database_url.config(
@@ -100,6 +100,16 @@ DATABASES = {
 # DATABASES = {
 #      'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 #  }
+
+import pg8000
+
+conn = pg8000.connect(
+    user="aaronmart",
+    password="pass123",
+    host="localhost",
+    database="mabuhaypowers_pom",
+    port=5432
+)
 
 
 
