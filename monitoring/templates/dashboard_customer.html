@@ -31,18 +31,20 @@
 
 
 <div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
-  <table id="customerTable" class="row-border hover nowrap" style="width: 100%;">
+  <table id="customerTable" class="row-border hover" style="width: 100%;">
     <thead>
       <tr>
-        <th>ACTIONS</th>
         <th>CUSTOMER NAME</th>
         <th>BRANCH/ADDRESS</th>
+        <th>ACTIONS</th>
       </tr>
     </thead>
     <tbody>
       {% for customer in customer_details %}
       <tr>
-         <td>
+        <td>{{ customer.customer_name }}</td>
+        <td>{{ customer.branch_name }}</td>
+        <td>
         <form method="post" action="{% url 'delete_customer' username=request.user.username pk=customer.pk %}" 
         style="display:inline;" 
         onsubmit="return confirmDelete('Are you sure you want to cancel this Customer?\n\n{{ customer.customer_name }}\n{{customer.branch_name}}\n\nWarning: This action is irreversible and cannot be undone.')">
@@ -50,8 +52,6 @@
           <button type="submit" class="btn btn-sm delete-button"><i data-feather="trash-2"></i> Delete</button>
         </form>
         </td>
-        <td>{{ customer.customer_name }}</td>
-        <td>{{ customer.branch_name }}</td>
       </tr>
       {% endfor %}
     </tbody>

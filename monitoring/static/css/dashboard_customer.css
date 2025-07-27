@@ -4,18 +4,24 @@
   width: 100%;
 }
 
+#customerTable th,
+#customerTable td {
+  padding: 24px; /* More generous padding */
+}
+
 /* Apply gradient to the header row itself */
 #customerTable thead tr:first-child {
-  background: linear-gradient(to right, #62cff4, #2c67f2);
+  background: #f9fafb;
+  border-bottom: 2px solid #dee2e6; /* subtle divider */
 }
 
 /* Make the <th> cells transparent and remove borders */
 #customerTable thead tr:first-child th {
-  background: transparent;
-  border: none;
-  color: white;
-  text-align: center;
-  padding: 12px;
+  color: #212529;           /* dark text */
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-align: left;
 }
 
 /* Round only the first and last cells */
@@ -45,8 +51,57 @@
 
 /* Light blue row hover */
 #customerTable tbody tr:hover {
-  background-color: #e0f0ff !important;  /* Light blue */
+  background-color: #e8f4fd; /* Light blue hover */
 }
+
+/* Slightly reduce padding on medium laptops (1366x768, 1400x900) */
+@media (max-width: 1400px) {
+  #customerTable th,
+  #customerTable td {
+    padding: 18px 12px;
+    font-size: 0.9rem;
+  }
+
+  .status {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+
+}
+
+/* Optimize for slightly larger displays (1600x900 and below) */
+@media (max-width: 1600px) {
+  #customerTable th,
+  #customerTable td {
+    padding: 20px 14px;
+  }
+
+  .status {
+    font-size: 0.82rem;
+  }
+}
+
+/* Fix pagination wrapping and alignment for small screens */
+@media (max-width: 576px) {
+  nav[aria-label="Customer pagination"] .pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  nav[aria-label="Customer pagination"] .page-link {
+    width: auto;
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  nav[aria-label="Customer pagination"] .page-item {
+    width: 100%;
+    max-width: 250px;
+  }
+}
+
 
 
 

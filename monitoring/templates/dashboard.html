@@ -45,12 +45,15 @@
 
 </br>
 
-   {% include "stats.html" %}
+    {% include "stats.html" %} 
 
 </br>
 
+  {% include "dashboard_filter.html" %} 
+
+
 <div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
-  <table id="poTable" class="row-border hover nowrap" style="width: 100%;">
+  <table id="poTable" class="row-border hover" style="width: 100%;">
   <thead>
     <tr>
       <th>P.O #</th>
@@ -61,19 +64,12 @@
       <th>STATUS</th>
       <th>ACTIONS</th>
       <th></th> <!-- Hidden ID -->
-    </tr>
-    <tr class="filter-row">
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
+    </tr>   
+
   </thead>
   <tbody>
-    {% for po in purchase_orders %}
+    {% for po in page_obj %}
+
     <tr>
       <td>
           {{ po.purchase_order }}
@@ -109,10 +105,10 @@
 
        <td>
           <div class="dropdown">
-            <button class="dropdown-toggle btn btn-light shadow-sm d-flex align-items-center gap-2 px-3 py-2 rounded"
+            <button class="btn btn-light shadow-sm d-flex align-items-center gap-2 px-3 py-2 rounded"
                   type="button" id="dropdownMenu{{ po.id }}"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-             MENU
+             <i data-feather="chevron-down"></i>
           </button>
              <div class="dropdown-menu dropdown-modern shadow rounded" aria-labelledby="dropdownMenu{{ po.id }}">
 
@@ -167,6 +163,8 @@
           </div>
         </td>
 
+
+
       <td>{{ po.id }}</td>
     </tr>
     {% endfor %}
@@ -174,12 +172,54 @@
 </table>
 </div>
 
+{% if page_obj.paginator.count > 0 %}
+  <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
+    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
+  </div>
+{% endif %}
+
+<nav aria-label="Purchase Order pagination">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1{% if request.GET.urlencode %}&{{ request.GET.urlencode|safe|cut:'page='|cut:'&page=' }}{% endif %}">&laquo; First</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode|safe|cut:'page='|cut:'&page=' }}{% endif %}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&laquo; First</span></li>
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode|safe|cut:'page='|cut:'&page=' }}{% endif %}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.urlencode %}&{{ request.GET.urlencode|safe|cut:'page='|cut:'&page=' }}{% endif %}">Last &raquo;</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+      <li class="page-item disabled"><span class="page-link">Last &raquo;</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
 
 {% include 'dashboard_modal.html' %}
 {% include "confirm_page.html" %}
 
 
 <script src="{% static 'js/dashboard.js' %}"></script>
+
 
 
 {% endblock %}

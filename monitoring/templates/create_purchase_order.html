@@ -73,7 +73,11 @@
                   <div class="form-group col-md-4">
                     <label for="{{ form.classification.id_for_label }}">{{ form.classification.label }}</label>
                     {{ form.classification }}
-                    {{ form.classification.errors }}
+                    <div class="invalid-feedback d-block" id="classification-error" style="{% if form.classification.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.classification.errors %}
+                        {{ form.classification.errors.0 }}
+                      {% endif %}
+                    </div>
                   </div>
                   <div class="form-group col-md-8">
                     <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
@@ -191,6 +195,11 @@
       fieldId: 'id_remarks',
       errorId: 'remarks-error',
       fieldName: 'remarks'
+    });
+    attachAjaxValidator({
+      fieldId: 'id_classification',
+      errorId: 'classification-error',
+      fieldName: 'classification'
     });
 
   });

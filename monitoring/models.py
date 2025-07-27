@@ -40,12 +40,6 @@ class PurchaseOrder(models.Model):
         ('Cancelled', 'Cancelled'),
     ]
 
-    CLASSIFICATION_CHOICES= [
-        ('GENSET A', 'GENSET A'),
-        ('GENSET B', 'GENSET B'),
-        ('GENSET C', 'GENSET C'),
-    ]
-
     MANPOWER_TYPE_CHOICES = [
         ('employee', 'Employee Based'),
         ('contractor', 'Contractor Based'),
@@ -71,7 +65,7 @@ class PurchaseOrder(models.Model):
     working_days_total = models.PositiveIntegerField(default=0, editable=False)
 
 
-    classification = models.CharField(max_length=100, choices=CLASSIFICATION_CHOICES)
+    classification = models.CharField(max_length=30)
     description = models.CharField(max_length=150)
     service_report_number = models.CharField(max_length=10, blank=True, null=True)
     date_started = models.DateField(blank=True, null=True)

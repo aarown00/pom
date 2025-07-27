@@ -59,6 +59,97 @@
   font-weight: 600;
 }
 
+/* ========== RESPONSIVE OPTIMIZATION ========== */
+@media (max-width: 1600px) {
+  .card-header.add-card-header h5 {
+    font-size: 1.25rem;
+  }
+
+  .add-button,
+  .dashboard-button {
+    font-size: 0.95rem;
+    padding: 4px 10px;
+  }
+
+  .large-badge {
+    font-size: 0.95rem;
+    padding: 0.55rem 0.9rem;
+  }
+}
+
+@media (max-width: 1400px) {
+  .card-header.add-card-header h5 {
+    font-size: 1.15rem;
+  }
+
+  .add-button,
+  .dashboard-button {
+    font-size: 0.9rem;
+    padding: 4px 9px;
+  }
+
+  .large-badge {
+    font-size: 0.9rem;
+    padding: 0.45rem 0.8rem;
+  }
+}
+
+@media (max-width: 1366px) {
+  .card-header.add-card-header h5 {
+    font-size: 1.05rem;
+  }
+
+  .add-button,
+  .dashboard-button {
+    font-size: 0.85rem;
+    padding: 3px 8px;
+  }
+
+  .large-badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 576px) {
+  .po-header-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+  }
+
+  .po-header-bar h1 {
+    font-size: 1.25rem !important;
+    margin-right: 0 !important;
+  }
+ 
+}
+
+/* Tighten up inputs/selects inside table cells */
+.po-itinenary-table-wrapper td input,
+.po-itinenary-table-wrapper td select,
+.po-itinenary-table-wrapper td textarea {
+  width: 100%;
+  max-width: 100%;
+  font-size: 0.95rem;
+}
+
+/* Error feedback formatting inside table cells */
+.po-itinenary-table-wrapper .invalid-feedback {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  word-wrap: break-word;
+}
+
+/* Scroll fix for very narrow screens */
+@media (max-width: 576px) {
+  .po-itinenary-table-wrapper table {
+    min-width: 600px;
+  }
+}
+
+
 
 
 

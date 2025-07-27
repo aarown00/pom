@@ -15,7 +15,7 @@
   {% csrf_token %}
 
 <div class="sticky-wrapper">
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom po-header-bar">
     
      <div class="d-flex align-items-center">
       <h1 class="h2 mb-0" style="margin-right: 20px;">P.O#: {{ po.purchase_order }}</h1>
@@ -103,7 +103,11 @@
                   <div class="form-group col-md-4">
                     <label for="{{ form.classification.id_for_label }}">{{ form.classification.label }}</label>
                     {{ form.classification }}
-                    {{ form.classification.errors }}
+                    <div class="invalid-feedback d-block" id="classification-error" style="{% if form.classification.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.classification.errors %}
+                        {{ form.classification.errors.0 }}
+                      {% endif %}
+                    </div>
                   </div>
                   <div class="form-group col-md-8">
                     <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
@@ -292,6 +296,12 @@
       errorId: 'remarks-error',
       fieldName: 'remarks',
       instanceId: '{{ form.instance.id|default_if_none:"" }}'
+    });
+
+    attachAjaxValidator({
+      fieldId: 'id_classification',
+      errorId: 'classification-error',
+      fieldName: 'classification'
     });
 
     attachAjaxValidator({

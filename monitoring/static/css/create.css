@@ -16,7 +16,7 @@
 }
 
 .card-header.add-card-header {
-  background: linear-gradient(to right, #62cff4, #2c67f2) !important;
+  background: linear-gradient(90deg, #198754 0%, #14532d 100%); /* Green to dark green */
   color: white;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
@@ -40,11 +40,10 @@ form label {
   display: inline-block;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="date"],
-textarea,
-select {
+/* Main custom styling for all form controls */
+input.form-control,
+select.form-control,
+textarea.form-control {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 12px 14px;
@@ -53,23 +52,24 @@ select {
   background-color: #ffffff;
   box-shadow: none;
   transition: all 0.2s ease;
+  min-height: 43px;
 }
 
-input:hover,
-textarea:hover,
-select:hover {
-  border-color: #3f51b5; /* Softer blue for visual match */
+/* Hover and focus effects */
+input.form-control:hover,
+select.form-control:hover,
+textarea.form-control:hover {
+  border-color: #3f51b5;
   box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
-  outline: none;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
+input.form-control:focus,
+select.form-control:focus,
+textarea.form-control:focus {
   border-color: #1a237e;
   box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
-  outline: none;
 }
+
 
 .add-button {
   background-color: white;
@@ -99,6 +99,84 @@ select:focus {
 .add-po-button:hover {
   background-color: #6c757d;
   color: white;
+}
+
+
+/* ========== RESPONSIVE OPTIMIZATION ========== */
+
+/* For screens 1600px and below */
+@media (max-width: 1600px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .form-control {
+    padding: 10px 12px;
+    font-size: 14px;
+    min-height: 40px;
+  }
+
+  .card-header.add-card-header {
+    padding: 0.8rem 1.2rem;
+  }
+
+  .card-header.add-card-header h5 {
+    font-size: 1.1rem;
+  }
+
+  form label {
+    font-size: 13px;
+  }
+}
+
+/* For screens 1400px and below */
+@media (max-width: 1400px) {
+  .card-body {
+    padding: 1.2rem;
+  }
+
+  .form-control {
+    padding: 9px 11px;
+    font-size: 13.5px;
+    min-height: 38px;
+  }
+
+  .card-header.add-card-header {
+    padding: 0.7rem 1rem;
+  }
+
+  .card-header.add-card-header h5 {
+    font-size: 1rem;
+  }
+
+  form label {
+    font-size: 12.5px;
+  }
+}
+
+/* For screens 1366px and below */
+@media (max-width: 1366px) {
+  .card-body {
+    padding: 1rem;
+  }
+
+  .form-control {
+    padding: 8px 10px;
+    font-size: 13px;
+    min-height: 36px;
+  }
+
+  .card-header.add-card-header {
+    padding: 0.6rem 0.9rem;
+  }
+
+  .card-header.add-card-header h5 {
+    font-size: 0.95rem;
+  }
+
+  form label {
+    font-size: 12px;
+  }
 }
 
 

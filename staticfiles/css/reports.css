@@ -1,45 +1,70 @@
 /* Basic layout and remove default table border */
-table.table.table-bordered {
+#reportsTable {
   border-collapse: collapse;
   width: 100%;
-  table-layout: fixed;
-  border: none;
 }
 
-/* Gradient header row */
-table.table.table-bordered thead tr:first-child {
-  background: linear-gradient(to right, #62cff4, #2c67f2);
+/* Table cells padding */
+#reportsTable th,
+#reportsTable td {
+  padding: 24px; /* More generous padding */
 }
 
-/* Header cells */
-table.table.table-bordered thead tr:first-child th {
+/* Header row background and divider */
+#reportsTable thead tr:first-child {
+  background: #f9fafb;
+  border-bottom: 2px solid #dee2e6; /* subtle divider */
+}
+
+/* Header cells style */
+#reportsTable thead tr:first-child th {
+  color: #212529;           /* dark text */
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-align: left;
   background: transparent;
   border: none;
-  color: white;
-  text-align: center;
-  padding: 12px;
 }
 
-/* Rounded corners */
-table.table.table-bordered thead tr:first-child th:first-child {
+/* Rounded top corners */
+#reportsTable thead tr:first-child th:first-child {
   border-top-left-radius: 12px;
 }
-table.table.table-bordered thead tr:first-child th:last-child {
+#reportsTable thead tr:first-child th:last-child {
   border-top-right-radius: 12px;
 }
 
-/* Body cells: remove vertical borders, keep horizontal lines */
-table.table.table-bordered tbody td {
-  border-top: 1px solid #dee2e6; /* Horizontal line between rows */
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
-  padding: 10px;
-  text-align: center;
+/* Hover effect on rows */
+#reportsTable tbody tr:hover {
+  background-color: #e8f4fd; /* Light blue hover */
 }
 
-table.table.table-bordered tbody tr:hover {
-  background-color: #e0f0ff !important;
+/* Slightly reduce padding on medium laptops (1366x768, 1400x900) */
+@media (max-width: 1400px) {
+  #reportsTable th,
+  #reportsTable td {
+    padding: 18px 12px;
+    font-size: 0.9rem;
+  }
+
+  .status {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+
+}
+
+/* Optimize for slightly larger displays (1600x900 and below) */
+@media (max-width: 1600px) {
+  #reportsTable th,
+  #reportsTable td {
+    padding: 20px 14px;
+  }
+
+  .status {
+    font-size: 0.82rem;
+  }
 }
 
 
@@ -73,4 +98,25 @@ table.table.table-bordered tbody tr:hover {
 .export-button:hover {
   background-color: #04AA6D;
   color: white;
+}
+
+/* Fix pagination wrapping and alignment for small screens */
+@media (max-width: 576px) {
+  nav[aria-label="Report pagination"] .pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  nav[aria-label="Report pagination"] .page-link {
+    width: auto;
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  nav[aria-label="Report pagination"] .page-item {
+    width: 100%;
+    max-width: 250px;
+  }
 }

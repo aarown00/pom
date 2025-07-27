@@ -1,0 +1,129 @@
+<style>
+ .filter-section {
+  background: #f9fafb;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  max-width: 100%;
+  margin: 1rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.filter-header {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.form-select.active-filter {
+  border: 2px solid #0d6efd;
+  background-color: #e9f3ff;
+  color: #0d6efd;
+  font-weight: 500;
+}
+
+.filter-form-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1.5fr 1.5fr 1.5fr 1.5fr 1.5fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.filter-form-grid .grid-item input,
+.filter-form-grid .grid-item select {
+  width: 100%;
+  border-radius: 2rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.875rem;
+  height: 38px;
+  border: 1px solid #ccc;
+}
+
+.filter-header {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.form-select {
+  font-weight: 500 !important; /* Medium boldness */
+}
+
+
+@media (max-width: 768px) {
+  .filter-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+</style>
+
+
+<div class="filter-section">
+  <div class="filter-header">🔍 Search/Filter:</div>
+  <form method="get" class="filter-form-grid">
+    <div class="grid-item">
+      <input type="text" name="search" class="form-control" placeholder="Enter P.O..." autocomplete="off" value="{{ search_query }}">
+    </div>
+
+    <div class="grid-item">
+      <select name="customer" class="form-select {% if selected_customer %}active-filter{% endif %}" onchange="this.form.submit()">
+        <option value="">All Customers</option>
+        {% for name in customer_list %}
+          <option value="{{ name }}" {% if selected_customer == name %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="grid-item">
+      <select name="date_started" class="form-select {% if selected_started %}active-filter{% endif %}" onchange="this.form.submit()">
+        <option value="">All Start Dates</option>
+        <option value="None" {% if selected_started == "None" %}selected{% endif %}>None</option>
+        {% for d in started_list %}
+          {% if d %}
+            <option value="{{ d|date:'Y-m-d' }}" {% if selected_started == d|date:'Y-m-d' %}selected{% endif %}>{{ d|date:'Y-m-d' }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="grid-item">
+      <select name="target_date" class="form-select {% if selected_target %}active-filter{% endif %}" onchange="this.form.submit()">
+        <option value="">All Target Dates</option>
+        {% for d in target_list %}
+          <option value="{{ d|date:'Y-m-d' }}" {% if selected_target == d|date:'Y-m-d' %}selected{% endif %}>{{ d|date:'Y-m-d' }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="grid-item">
+      <select name="completion_date" class="form-select {% if selected_completed %}active-filter{% endif %}" onchange="this.form.submit()">
+        <option value="">All Completion Dates</option>
+        <option value="None" {% if selected_completed == "None" %}selected{% endif %}>None</option>
+        {% for d in completed_list %}
+          {% if d %}
+            <option value="{{ d|date:'Y-m-d' }}" {% if selected_completed == d|date:'Y-m-d' %}selected{% endif %}>{{ d|date:'Y-m-d' }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="grid-item">
+      <select name="status" class="form-select {% if selected_status %}active-filter{% endif %}" onchange="this.form.submit()">
+        <option value="">All Statuses</option>
+        <option value="Pending" {% if selected_status == 'Pending' %}selected{% endif %}>Pending</option>
+        <option value="Ongoing" {% if selected_status == 'Ongoing' %}selected{% endif %}>Ongoing</option>
+        <option value="Completed" {% if selected_status == 'Completed' %}selected{% endif %}>Completed</option>
+        <option value="Delayed" {% if selected_status == 'Delayed' %}selected{% endif %}>Delayed</option>
+        <option value="Cancelled" {% if selected_status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+      </select>
+    </div>
+  </form>
+</div>
+
+
+

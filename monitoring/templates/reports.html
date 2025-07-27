@@ -61,7 +61,8 @@
 
 
 
-  <table class="table table-bordered">
+  <div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
+   <table id="reportsTable" class="row-border hover" style="width: 100%;">
   <thead>
     <tr>
       <th>PURCHASE ORDER</th>
@@ -72,7 +73,6 @@
     </tr>
   </thead>
   <tbody>
-    {% if po_reports %}
       {% for po in po_reports %}
         <tr>
           <td>{{ po.purchase_order }}</td>
@@ -82,17 +82,9 @@
           <td>{{ po.status }}</td>
         </tr>
       {% endfor %}
-    {% elif request.GET.from and request.GET.to %}
-      <tr>
-        <td colspan="4" class="text-center text-muted">No purchase orders found in this date range.</td>
-      </tr>
-    {% else %}
-      <tr>
-        <td colspan="4" class="text-center text-muted">Please select a date range to view and export data.</td>
-      </tr>
-    {% endif %}
   </tbody>
 </table>
+</div>
 
 {% if po_reports.paginator.count > 0 %}
   <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
@@ -169,6 +161,16 @@
 </script>
 
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new DataTable('#reportsTable', {
+      searching: false,
+      ordering: false,
+      paging: false,
+      info: false,
+    });
+  });
+</script>
 
 
 

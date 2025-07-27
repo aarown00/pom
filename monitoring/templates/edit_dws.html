@@ -16,7 +16,7 @@
  {{ formset.management_form }}
 
 <div class="sticky-wrapper">
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom po-header-bar">
     
      <div class="d-flex align-items-center">
       <h1 class="h2 mb-0" style="margin-right: 20px;">P.O#: {{ po.purchase_order }}</h1>
@@ -67,7 +67,7 @@
       <h5 class="mb-0">P.O Itinenary</h5>
     </div>
     <div class="card-body">
-      
+         <div class="table-responsive po-itinenary-table-wrapper">
          <table class="table">
             <thead class>
             <tr>
@@ -107,7 +107,7 @@
 
             </tbody>
         </table>
-
+      </div>
         <button type="submit" class="btn add-button mt-3">Save</button>
         </form>
 

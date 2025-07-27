@@ -50,9 +50,17 @@ def dashboard_view(request, username):
     if request.user.username != username:
         return redirect(f'/{request.user.username}/dashboard/')
 
-    purchase_orders = PurchaseOrder.objects.all().order_by('-id')
+    # Get filter values from GET request
+    selected_status = request.GET.get('status')
+    selected_customer = request.GET.get('customer')
+    selected_started = request.GET.get('date_started')
+    selected_target = request.GET.get('target_date')
+    selected_completed = request.GET.get('completion_date')
+    search_query = request.GET.get('search', '')
 
-    # Count each status
+    queryset = PurchaseOrder.objects.all()
+
+     # Count each status
     status_counts = {
         'pending': PurchaseOrder.objects.filter(status='Pending').count(),
         'ongoing': PurchaseOrder.objects.filter(status='Ongoing').count(),
@@ -63,10 +71,54 @@ def dashboard_view(request, username):
         ]).count(),
     }
 
+    
+    # Apply dropdown filters
+    if selected_status:
+        queryset = queryset.filter(status=selected_status)
+    if selected_customer:
+        queryset = queryset.filter(customer_branch__customer_name=selected_customer)
+    if selected_started == "None":
+        queryset = queryset.filter(date_started__isnull=True)
+    elif selected_started:
+        queryset = queryset.filter(date_started=selected_started)
+    if selected_target:
+        queryset = queryset.filter(target_date=selected_target)
+    if selected_completed == "None":
+        queryset = queryset.filter(completion_date__isnull=True)
+    elif selected_completed:
+        queryset = queryset.filter(completion_date=selected_completed)
+
+    # Apply search filter last (AFTER other filters)
+    if search_query:
+        queryset = queryset.filter(purchase_order__icontains=search_query)    
+
+    # Pagination
+    paginator = Paginator(queryset.order_by('-id'), 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Distinct values for dropdowns
+    customer_list = CustomerDetail.objects.values_list('customer_name', flat=True).distinct()
+    started_list = PurchaseOrder.objects.values_list('date_started', flat=True).distinct()
+    target_list = PurchaseOrder.objects.values_list('target_date', flat=True).distinct()
+    completed_list = PurchaseOrder.objects.values_list('completion_date', flat=True).distinct()
+
     return render(request, 'dashboard.html', {
-        'purchase_orders': purchase_orders,
+        'page_obj': page_obj,
+        'customer_list': customer_list,
+        'started_list': started_list,
+        'target_list': target_list,
+        'completed_list': completed_list,
+        'selected_status': selected_status,
+        'selected_customer': selected_customer,
+        'selected_started': selected_started,
+        'selected_target': selected_target,
+        'selected_completed': selected_completed,
+        'search_query': search_query,  
         'status_counts': status_counts,
     })
+
+
 
 @login_required
 def create_purchase_order(request, username):
