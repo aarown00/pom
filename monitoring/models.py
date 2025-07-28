@@ -6,8 +6,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 class CustomerDetail(models.Model):
-    customer_name = models.CharField(max_length=20)
-    branch_name = models.CharField(max_length=30)
+    customer_name = models.CharField(max_length=50)
+    branch_name = models.CharField(max_length=50)
 
     def __str__(self):
         return f"{self.customer_name} - {self.branch_name}"
@@ -16,6 +16,7 @@ class ManpowerDetail(models.Model):
     CATEGORY_CHOICES = [
         ('Employee', 'Employee'),
         ('Contractor', 'Contractor'),
+        ('Helper', 'Helper')
     ]
 
     name = models.CharField(max_length=20, unique=True)
@@ -41,9 +42,13 @@ class PurchaseOrder(models.Model):
     ]
 
     MANPOWER_TYPE_CHOICES = [
-        ('employee', 'Employee Based'),
-        ('contractor', 'Contractor Based'),
-        ('both', 'Employee + Contractor Based'),
+    ('employee', 'Employee Based'),
+    ('contractor', 'Contractor Based'),
+    ('helper', 'Helper Based'),
+    ('employee_contractor', 'Employee + Contractor Based'),
+    ('employee_helper', 'Employee + Helper Based'),
+    ('contractor_helper', 'Contractor + Helper Based'),
+    ('all', 'Employee + Contractor + Helper Based'),
     ]
 
     manpower_type = models.CharField(
@@ -55,7 +60,7 @@ class PurchaseOrder(models.Model):
 
     id = models.AutoField(primary_key=True)
     date_recorded = models.DateField(auto_now_add=True)
-    purchase_order = models.CharField(max_length=15, unique=True)
+    purchase_order = models.CharField(max_length=20, unique=True)
     purchase_order_received = models.DateField()
     customer_branch = models.ForeignKey(CustomerDetail, on_delete=models.PROTECT)
     total_days = models.PositiveIntegerField(blank=True, null=True)
@@ -63,7 +68,6 @@ class PurchaseOrder(models.Model):
     manpower_total = models.PositiveIntegerField(default=0, editable=False)
     work_hours_total = models.PositiveIntegerField(default=0, editable=False)
     working_days_total = models.PositiveIntegerField(default=0, editable=False)
-
 
     classification = models.CharField(max_length=30)
     description = models.CharField(max_length=150)
@@ -137,7 +141,7 @@ class PurchaseOrder(models.Model):
             manpower_details = ManpowerDetail.objects.filter(dailyworkstatus=log)
 
             total_count = manpower_details.count()
-            valid_count = manpower_details.filter(category__in=["Employee", "Both"]).count()
+            valid_count = manpower_details.filter(category__in=["Employee", "Helper"]).count()
 
             if log.time_total is not None and total_count > 0:
                 manpower_total += total_count
@@ -187,17 +191,25 @@ def update_purchase_order_manpower_type(purchase_order):
     ).distinct()
 
     categories = set(m.category for m in manpower)
-
+      
     if categories == {"Employee"}:
         purchase_order.manpower_type = "employee"
     elif categories == {"Contractor"}:
         purchase_order.manpower_type = "contractor"
+    elif categories == {"Helper"}:
+        purchase_order.manpower_type = "helper"
     elif categories == {"Employee", "Contractor"}:
-        purchase_order.manpower_type = "both"
+        purchase_order.manpower_type = "employee_contractor"
+    elif categories == {"Employee", "Helper"}:
+        purchase_order.manpower_type = "employee_helper"
+    elif categories == {"Contractor", "Helper"}:
+        purchase_order.manpower_type = "contractor_helper"
+    elif categories == {"Employee", "Contractor", "Helper"}:
+        purchase_order.manpower_type = "all"
     else:
-        purchase_order.manpower_type = None
+        purchase_order.manpower_type = None  # fallback
 
-    purchase_order.save(update_fields=["manpower_type"])
+    purchase_order.save(update_fields=["manpower_type"])    
 
 @receiver(m2m_changed, sender=DailyWorkStatus.manpower.through)
 def update_manpower_type_on_m2m_change(sender, instance, action, **kwargs):
