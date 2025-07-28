@@ -15,11 +15,13 @@ from django.views.decorators.http import require_POST
 from openpyxl import Workbook
 from django.utils.dateparse import parse_date
 from django.core.paginator import Paginator
+from django.views.decorators.cache import never_cache
 
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
 
+@never_cache
 def login_view(request):
     if request.user.is_authenticated:
         return redirect(f'/{request.user.username}/dashboard/')

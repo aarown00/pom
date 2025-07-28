@@ -42,7 +42,6 @@ form label {
 
 /* Main custom styling for all form controls */
 input.form-control,
-select.form-control,
 textarea.form-control {
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -52,7 +51,10 @@ textarea.form-control {
   background-color: #ffffff;
   box-shadow: none;
   transition: all 0.2s ease;
-  min-height: 43px;
+}
+
+select.form-control {
+  font-size: 15px;
 }
 
 /* Hover and focus effects */
@@ -134,10 +136,14 @@ textarea.form-control:focus {
   }
 
   input.form-control,
-  select.form-control,
   textarea.form-control {
-    font-size: 14px;
     padding: 10px 12px;
+    font-size: 14px;
+    min-height: 40px;
+  }
+
+  select.form-control {
+    font-size: 14px;
   }
 
   .add-button,
@@ -166,11 +172,15 @@ textarea.form-control:focus {
     font-size: 1.5rem;
   }
 
-  input.form-control,
-  select.form-control,
+ input.form-control,
   textarea.form-control {
+    padding: 10px 12px;
     font-size: 13.5px;
-    padding: 10px 10px;
+    min-height: 40px;
+  }
+
+  select.form-control {
+    font-size: 13.5px;
   }
 
   .add-button,
@@ -201,10 +211,14 @@ textarea.form-control:focus {
   }
 
   input.form-control,
-  select.form-control,
   textarea.form-control {
+    padding: 10px 12px;
     font-size: 13px;
-    padding: 9px 10px;
+    min-height: 40px;
+  }
+
+  select.form-control {
+    font-size: 13px;
   }
 
   label {
