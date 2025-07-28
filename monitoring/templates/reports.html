@@ -33,14 +33,14 @@
 
 </br>
 
-<form method="get" class="form-inline mb-3">
+<form method="get" class="form-inline mb-3" onsubmit="showFilter(); return true;">
   <label>From:</label>
   <input type="date" id="from-date" name="from" class="form-control mx-2" required value="{{ from_date }}">
 
   <label>To:</label>
   <input type="date" id="to-date" name="to" class="form-control mx-2" required value="{{ to_date }}">
 
-  <button type="submit" class="btn btn-sm filter-button"><i data-feather="filter"></i> Filter</button>
+  <button id="FilterBtn" type="submit" class="btn btn-sm filter-button"><i data-feather="filter"></i> Filter</button>
 </form>
 
 
@@ -169,6 +169,38 @@
       paging: false,
       info: false,
     });
+  });
+</script>
+
+<script>
+      function showFilter() {
+        const btn = document.getElementById('FilterBtn');
+        btn.disabled = true;
+        btn.innerHTML = `
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Filtering...
+        `;
+      }
+</script>
+
+<script>
+  document.getElementById('exportBtn').addEventListener('click', function () {
+    const btn = this;
+    const url = btn.getAttribute('data-url');
+
+    // Disable button and show loading
+    btn.disabled = true;
+    btn.innerHTML = `
+      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      Exporting...
+    `;
+
+     // Fallback: reset after 5 seconds
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = `<i data-feather="download"></i> Export`;
+      feather.replace(); // re-render feather icons if using feather icons
+    }, 3000);
   });
 </script>
 

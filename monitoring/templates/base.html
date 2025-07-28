@@ -194,7 +194,17 @@
 
     <script src="{% static 'js/base.js' %}"></script>
 
-  
+    <script>
+      function showLoading() {
+        const btn = document.getElementById('saveBtn');
+        btn.disabled = true;
+        btn.innerHTML = `
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Saving...
+        `;
+      }
+    </script>
 
+    
   </body>
 </html>

@@ -11,7 +11,7 @@
 
 {% include "toast_messages.html" %}
 
-<form method="post">
+<form method="post" onsubmit="showLoading(); return true;">
   {% csrf_token %}
 
 <div class="sticky-wrapper">
@@ -34,7 +34,7 @@
     </div>
 
      <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-      <button type="submit" class="btn add-button">
+      <button id="saveBtn" type="submit" class="btn add-button">
         <i data-feather="save"></i> Save
       </button>
       <a href="{% url 'dashboard' username=request.user.username %}" class="btn dashboard-button" style="margin-left: 8px;">

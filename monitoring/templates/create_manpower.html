@@ -43,7 +43,7 @@
 
     <!-- Card Body -->
     <div class="card-body">
-      <form method="post">
+      <form method="post" onsubmit="showLoading(); return true;">
         {% csrf_token %}
 
         <div class="row">
@@ -75,7 +75,7 @@
 
           <div class="col-lg-4 d-flex flex-wrap flex-lg-nowrap align-items-start mt-1" style="margin-bottom: 1rem;">
           <!-- Save Button -->
-          <button type="submit" class="btn add-button d-flex align-items-center"
+          <button id="saveBtn" type="submit" class="btn add-button d-flex align-items-center"
             style="margin: 0 8px 8px 0;">
             <i data-feather="save" style="margin-right: 5px;"></i> Save
           </button>
