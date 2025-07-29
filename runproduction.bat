@@ -30,28 +30,36 @@ git pull
 
 REM === Collect static files (interactive) ===
 echo [DJANGO] Collecting static files...
-python manage.py collectstatic
+python manage.py collectstatic --noinput
 
 REM === Skip makemigrations in prod (optional) ===
 REM echo [DJANGO] Making migrations...
-REM python manage.py makemigrations
+python manage.py makemigrations
 
 REM === Apply database migrations ===
 echo [DJANGO] Applying database migrations...
 python manage.py migrate
+
+for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /i "IPv4"') do (
+    for /f "tokens=1 delims= " %%b in ("%%a") do (
+        set "MYIP=%%b"
+    )
+)
 
 REM === Final info ===
 echo.
 echo =====================================================
 echo [DONE] The server has been updated and is running!
 echo.
-echo Access it at: 192.168.1.10
+echo You can access it anytime at link: %MYIP%
 echo.
-echo DO NOT close this window unless stopping the server.
-echo Just minimize and continue using the app.
+echo DO NOT close this window unless you want to shutdown or restart server.
+echo Just minimize and continue using the link.
+echo Ignore the warning below. Server is up if you see this message.
 echo =====================================================
 echo.
 
 REM === Start Waitress server ===
 echo [SERVER] Launching production server with Waitress...
 ..\env\Scripts\waitress-serve --host=0.0.0.0 --port=80 mabuhaypowers_pom.wsgi:application
+
