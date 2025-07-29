@@ -40,6 +40,8 @@ REM === Apply database migrations ===
 echo [DJANGO] Applying database migrations...
 python manage.py migrate
 
+cls
+
 for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /i "IPv4"') do (
     for /f "tokens=1 delims= " %%b in ("%%a") do (
         set "MYIP=%%b"
