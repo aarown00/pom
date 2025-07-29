@@ -5,42 +5,53 @@ REM === Unique window title for this CMD ===
 set "TITLE=PO_MONITORING_SERVER"
 
 REM === Check if this CMD window is already running ===
+echo [CHECK] Checking if server is already running...
 tasklist /v | findstr /i "%TITLE%" >nul
 if %ERRORLEVEL%==0 (
-    echo Server is already running. Opening browser...
-    start http://192.168.1.10/
+    echo [INFO] Server is already running. Exiting launcher.
     goto :eof
 )
 
 REM === Set the window title to lock it ===
+echo [INIT] Setting CMD window title...
 title %TITLE%
 
 REM === Activate virtual environment ===
+echo [ENV] Activating virtual environment...
 call ..\env\Scripts\activate.bat
 
-REM === Open browser once ===
-start http://192.168.1.10/
+REM === Git reset ===
+echo [GIT] Resetting local changes...
+git reset --hard
 
+REM === Git pull ===
+echo [GIT] Pulling latest changes from remote...
+git pull
+
+REM === Collect static files (interactive) ===
+echo [DJANGO] Collecting static files...
+python manage.py collectstatic
+
+REM === Skip makemigrations in prod (optional) ===
+REM echo [DJANGO] Making migrations...
+REM python manage.py makemigrations
+
+REM === Apply database migrations ===
+echo [DJANGO] Applying database migrations...
+python manage.py migrate
+
+REM === Final info ===
 echo.
 echo =====================================================
-echo The server is already running!
+echo [DONE] The server has been updated and is running!
 echo.
-echo You can access it anytime at:  192.168.1.10 
+echo Access it at: 192.168.1.10
 echo.
-echo There's no need to open this file multiple times.
-echo As long as this single window is open, the program is accessible at any devices.
-echo.
-echo Just minimize this window and continue using the site.
-echo Do NOT close it unless you want to stop the program.
+echo DO NOT close this window unless stopping the server.
+echo Just minimize and continue using the app.
 echo =====================================================
 echo.
 
-REM === Run Waitress server ===
+REM === Start Waitress server ===
+echo [SERVER] Launching production server with Waitress...
 ..\env\Scripts\waitress-serve --host=0.0.0.0 --port=80 mabuhaypowers_pom.wsgi:application
-
-
-
-
-
-
-
