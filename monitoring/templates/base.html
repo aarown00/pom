@@ -40,7 +40,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i data-feather="user" class="me-2"></i>
-          <span>Welcome, {{ request.user.username }}</span>
+          <span>Welcome, {{ request.user.first_name }}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
           <a class="dropdown-item" href="{% url 'logout' %}">
