@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     paging: false,
     info: false,
     columnDefs: [
-      { targets: 7, visible: false, searchable: false }
+      { targets: 8, visible: false, searchable: false }
     ]
   });
 

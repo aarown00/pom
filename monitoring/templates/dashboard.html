@@ -75,7 +75,8 @@
           {{ po.purchase_order }}
       </td>
 
-      <td>{{ po.customer_branch.customer_name }}</td>   
+      <td>{{ po.customer_branch.customer_name }}</td>
+      <td>{{ po.customer_branch.branch_name }}</td>      
       <td>{{ po.date_started }}</td>
       <td>
        {% if po.target_date_status == "adjusted" %}
