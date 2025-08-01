@@ -1,17 +1,21 @@
 from django import forms
 from .models import ManpowerDetail
-from .mixins import UniqueFieldValidationMixin
+from .mixins import UniqueFieldValidationMixin, LetterCharFieldMixin
 
 
-class ManpowerDetailForm(UniqueFieldValidationMixin, forms.ModelForm):
+class ManpowerDetailForm(UniqueFieldValidationMixin, LetterCharFieldMixin, forms.ModelForm):
     name = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Enter Manpower Name:", "class": "form-control"}), label="MANPOWER NAME:")
     category = forms.ChoiceField(
-    choices=[('', 'Select Category')] + ManpowerDetail.CATEGORY_CHOICES,
-    widget=forms.Select(attrs={"class": "form-control"}),
-    label="CATEGORY"
+    choices=ManpowerDetail.CATEGORY_CHOICES,
+     widget=forms.Select(attrs={
+            "class": "selectpicker form-control",   
+            'title': 'Select Category',
+        }),
+     label="CATEGORY:",
     )
 
     unique_fields = ['name']
+    letter_fields = ['name']
   
     class Meta:
         model = ManpowerDetail
@@ -26,4 +30,16 @@ class ManpowerDetailForm(UniqueFieldValidationMixin, forms.ModelForm):
                 css = field.widget.attrs.get("class", "")
                 if "is-invalid" not in css:
                     field.widget.attrs["class"] = f"{css} is-invalid"
+
+    def clean(self):
+        cleaned = super().clean()
+
+        # Protect category from being changed during edit
+        if self.instance.pk:
+            original = type(self.instance).objects.get(pk=self.instance.pk)
+            if cleaned.get('category') != original.category:
+                self.add_error('category', 'You cannot change the category.')
+
+        return cleaned
+
     

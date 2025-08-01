@@ -7,7 +7,7 @@ from .forms_customer import CustomerDetailForm
 from .forms_manpower import ManpowerDetailForm
 from .forms_dws import DailyWorkStatusFormSet, DailyWorkStatusForm
 from .models import PurchaseOrder, CustomerDetail, ManpowerDetail, DailyWorkStatus
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Q
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
@@ -16,6 +16,7 @@ from openpyxl import Workbook
 from django.utils.dateparse import parse_date
 from django.core.paginator import Paginator
 from django.views.decorators.cache import never_cache
+from django.db import transaction
 
 
 def custom_404_view(request, exception):
@@ -73,7 +74,6 @@ def dashboard_view(request, username):
         ]).count(),
     }
 
-    
     # Apply dropdown filters
     if selected_status:
         queryset = queryset.filter(status=selected_status)
@@ -100,23 +100,29 @@ def dashboard_view(request, username):
     page_obj = paginator.get_page(page_number)
 
     # Distinct values for dropdowns
-    customer_list = CustomerDetail.objects.values_list('customer_name', flat=True).distinct()
+    customer_list = CustomerDetail.objects.order_by('customer_name').values_list('customer_name', flat=True).distinct()
     started_list = PurchaseOrder.objects.values_list('date_started', flat=True).distinct()
     target_list = PurchaseOrder.objects.values_list('target_date', flat=True).distinct()
     completed_list = PurchaseOrder.objects.values_list('completion_date', flat=True).distinct()
 
+    po_numbers_list = PurchaseOrder.objects.values_list('purchase_order', flat=True).distinct()
+
     return render(request, 'dashboard.html', {
         'page_obj': page_obj,
+
         'customer_list': customer_list,
         'started_list': started_list,
         'target_list': target_list,
         'completed_list': completed_list,
+        'po_numbers_list': list(po_numbers_list),
+
         'selected_status': selected_status,
         'selected_customer': selected_customer,
         'selected_started': selected_started,
         'selected_target': selected_target,
         'selected_completed': selected_completed,
         'search_query': search_query,  
+
         'status_counts': status_counts,
     })
 
@@ -133,6 +139,8 @@ def create_purchase_order(request, username):
             form.save()
             messages.success(request, 'Purchase order created successfully!')
             return redirect('dashboard', username=request.user.username)
+        else:
+            messages.error(request, 'Missing or invalid fields!')
     else:
         form = PurchaseOrderForm()
 
@@ -152,6 +160,8 @@ def edit_purchase_order(request, username, pk):
             form.save()
             messages.success(request, 'Purchase order updated successfully!')
             return redirect('edit', username=username, pk=pk)
+        else:
+            messages.error(request, 'Missing or invalid fields!')
     else:
         form = PurchaseOrderForm(instance=po_instance)
 
@@ -193,6 +203,9 @@ def edit_dws(request, username, pk):
             formset.save()
             messages.success(request, 'Itinenary updated successfully!')
             return redirect('itinenary', username=username, pk=pk)
+        else:
+            messages.error(request, 'Missing or invalid fields!')
+        
     else:
         formset = DailyWorkStatusFormSet(instance=purchase_order)
 
@@ -205,19 +218,39 @@ def edit_dws(request, username, pk):
 
 #customer----------------------------------------------------------------------
 
+
 @login_required
 def dashboard_customer_view(request, username):
     if request.user.username != username:
         return redirect(f'/{request.user.username}/dashboard/customer')
 
-    customer_list = CustomerDetail.objects.order_by('customer_name')
+    search = request.GET.get('search', '').strip()
     
-    paginator = Paginator(customer_list, 10)  
+    qs = CustomerDetail.objects.all()
+    
+    if search:
+        search_words = search.split()
+        
+        query_filter = Q()
+        
+        for word in search_words:
+            word_filter = Q(customer_name__icontains=word) | Q(branch_name__icontains=word)
+            query_filter &= word_filter
+            
+        qs = qs.filter(query_filter)
+
+    qs = qs.order_by('customer_name')
+
+    paginator = Paginator(qs, 10)
     page_number = request.GET.get('page')
     customer_details = paginator.get_page(page_number)
 
+    all_customers = CustomerDetail.objects.all().order_by('customer_name')
+
     return render(request, 'dashboard_customer.html', {
         'customer_details': customer_details,
+        'search_query': search,
+        'all_customers': all_customers, 
     })
 
 @login_required
@@ -246,11 +279,48 @@ def create_customer(request, username):
             form.save()
             messages.success(request, 'Customer details created successfully!')
             return redirect('create_customer', username=request.user.username)
+        else:
+            messages.error(request, 'Missing or invalid fields!')
     else:
         form = CustomerDetailForm()
 
     return render(request, 'create_customer.html', {'form': form})
 
+@login_required
+def edit_customer(request, username, pk):
+    if request.user.username != username:
+        return redirect(f'/{request.user.username}/edit/customer')
+
+    customer = get_object_or_404(CustomerDetail, pk=pk)
+    original_name = customer.customer_name  # before any changes
+
+    if request.method == 'POST':
+        form = CustomerDetailForm(request.POST, instance=customer)
+        if form.is_valid():
+            new_customer = form.save(commit=False)
+            new_name = new_customer.customer_name
+
+            with transaction.atomic():
+                # Save the edited instance first
+                new_customer.save()
+
+                # If it was a case-only change (e.g., "KFC" -> "kfc"),
+                # propagate that exact original string to all others that had the same exact casing.
+                if original_name != new_name and original_name.lower() == new_name.lower():
+                    # Update all other records whose customer_name exactly equals the old casing
+                    CustomerDetail.objects.filter(customer_name=original_name).exclude(pk=new_customer.pk).update(customer_name=new_name)
+
+            messages.success(request, 'Customer details updated successfully!')
+            return redirect('edit_customer', username=request.user.username, pk=pk)
+        else:
+            messages.error(request, 'Missing or invalid fields!')
+    else:
+        form = CustomerDetailForm(instance=customer)
+
+    return render(request, 'edit_customer.html', {
+        'form': form,
+        'customer': customer,
+    })
 
 #manpower----------------------------------------------------------------------
 
@@ -259,14 +329,33 @@ def dashboard_manpower_view(request, username):
     if request.user.username != username:
         return redirect(f'/{request.user.username}/dashboard/manpower')
 
-    manpower_list = ManpowerDetail.objects.order_by('name')
-    paginator = Paginator(manpower_list, 10) 
+    search = request.GET.get('search', '').strip()
 
+    qs = ManpowerDetail.objects.all()
+    
+    if search:
+        search_words = search.split()
+        query_filter = Q()
+        
+        for word in search_words:
+            word_filter = Q(name__icontains=word) | Q(category__icontains=word)
+            query_filter &= word_filter
+            
+        qs = qs.filter(query_filter)
+
+    qs = qs.order_by('name')
+
+    paginator = Paginator(qs, 10)
     page_number = request.GET.get('page')
     manpower_details = paginator.get_page(page_number)
+    
+    # Get a separate queryset for the datalist, with all items
+    all_manpower = ManpowerDetail.objects.all().order_by('name')
 
     return render(request, 'dashboard_manpower.html', {
         'manpower_details': manpower_details,
+        'search_query': search,
+        'all_manpower': all_manpower, # Pass all data for the datalist
     })
 
 
@@ -298,12 +387,33 @@ def create_manpower(request, username):
             form.save()
             messages.success(request, 'Manpower details created successfully!')
             return redirect('create_manpower', username=request.user.username)
+        else:
+            messages.error(request, 'Missing or invalid fields!')
     else:
         form = ManpowerDetailForm()
 
     return render(request, 'create_manpower.html', {'form': form})
 
 
+@login_required
+def edit_manpower(request, username, pk):
+    if request.user.username != username:
+        return redirect('edit_manpower', username=request.user.username, pk=pk)
+
+    manpower = get_object_or_404(ManpowerDetail, pk=pk)
+
+    if request.method == 'POST':
+        form = ManpowerDetailForm(request.POST, instance=manpower)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Manpower details updated successfully!')
+            return redirect('edit_manpower', username=request.user.username, pk=pk)
+        else:
+            messages.error(request, 'Missing or invalid fields!')
+    else:
+        form = ManpowerDetailForm(instance=manpower)
+
+    return render(request, 'edit_manpower.html', {'form': form, 'manpower': manpower})
 
 #ajax
 @csrf_exempt
@@ -348,7 +458,6 @@ def ajax_validate_field(request):
             })
         else:
             return JsonResponse({"valid": True})
-        
 
 @require_POST
 def validate_time_total(request):

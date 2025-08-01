@@ -1,17 +1,21 @@
 from django import forms
 from .models import PurchaseOrder
-from .mixins import UniqueFieldValidationMixin
+from .mixins import UniqueFieldValidationMixin, DashCharFieldMixin
 from django.utils.timezone import localdate
 
 
-class PurchaseOrderForm(UniqueFieldValidationMixin, forms.ModelForm):
+class PurchaseOrderForm(UniqueFieldValidationMixin, DashCharFieldMixin, forms.ModelForm):
     purchase_order = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Enter Purchase Order #", "class": "form-control"}), label="PURCHASE ORDER NO:")
     purchase_order_received = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}), label="RECEIVED DATE:")
     customer_branch = forms.ModelChoiceField(
-    queryset=None,
-    widget=forms.Select(attrs={"class": "form-control"}),
-    label="CUSTOMER/ADDRESS:",
-    empty_label="Select Customer"
+     queryset=None, 
+     widget=forms.Select(attrs={
+            "class": "selectpicker form-control",   
+            "data-live-search": "true",
+            'title': 'Select Customer',
+        }),
+     label="CUSTOMER/ADDRESS:",
+     empty_label=None,
     )
     classification = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Enter Classification", "class": "form-control"}), label="CLASSIFICATION:")
     description = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Enter Description", "class": "form-control", "rows": 3}), label="DESCRIPTION/CATEGORY:")
@@ -25,6 +29,7 @@ class PurchaseOrderForm(UniqueFieldValidationMixin, forms.ModelForm):
     remarks = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Enter Remarks", "class": "form-control", "rows": 3}), label="REMARKS:", required=False)
 
     unique_fields = ['purchase_order']
+    dash_fields = ['purchase_order', 'classification', 'coc_number', 'dr_number', 'invoice_number', 'service_report_number']
 
     class Meta:
         model = PurchaseOrder
@@ -33,8 +38,12 @@ class PurchaseOrderForm(UniqueFieldValidationMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Your custom queryset logic
-        self.fields['customer_branch'].queryset = PurchaseOrder._meta.get_field('customer_branch').remote_field.model.objects.all()
+        # Fix queryset: sort by customer_name and branch_name
+        self.fields['customer_branch'].queryset = (
+        PurchaseOrder._meta.get_field('customer_branch')
+        .remote_field.model.objects.all()
+        .order_by('customer_name', 'branch_name')
+        )
 
         # Add 'is-invalid' class to any fields with errors
         for field_name, field in self.fields.items():

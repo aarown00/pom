@@ -67,7 +67,18 @@
   <div class="filter-header">🔍 Search/Filter:</div>
   <form method="get" class="filter-form-grid">
     <div class="grid-item">
-      <input type="text" name="search" class="form-control" placeholder="Enter P.O..." autocomplete="off" value="{{ search_query }}">
+    <input type="text" 
+           name="search" 
+           id="search-input"
+           class="form-control" 
+           placeholder="Enter P.O..." 
+           autocomplete="off" 
+           value="{{ search_query }}"
+           data-list="purchase-orders-list"> <datalist id="purchase-orders-list">
+        {% for po_number in po_numbers_list %}
+            <option value="{{ po_number }}">
+        {% endfor %}
+    </datalist>
     </div>
 
     <div class="grid-item">
@@ -125,5 +136,23 @@
   </form>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const datalistId = searchInput.getAttribute('data-list');
 
+        // Initially, the list attribute is not set
+        // so no suggestions will show on focus.
 
+        searchInput.addEventListener('input', function() {
+            // Check if the input field has any text
+            if (this.value.length > 0) {
+                // If there's text, add the list attribute
+                this.setAttribute('list', datalistId);
+            } else {
+                // If the input is empty, remove the list attribute
+                this.removeAttribute('list');
+            }
+        });
+    });
+</script>

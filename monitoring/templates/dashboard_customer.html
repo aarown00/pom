@@ -24,11 +24,8 @@
 
 {% include "tabs.html" %} </br>
 
-<div class="alert alert-warning" role="alert">
-  View and delete customer details here! Customers used cannot be deleted, please remove first from existing P.O's
-</div>
+{% include "customer_filter.html" %} 
  
-
 
 <div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
   <table id="customerTable" class="row-border hover" style="width: 100%;">
@@ -45,12 +42,25 @@
         <td>{{ customer.customer_name }}</td>
         <td>{{ customer.branch_name }}</td>
         <td>
-        <form method="post" action="{% url 'delete_customer' username=request.user.username pk=customer.pk %}" 
-        style="display:inline;" 
-        onsubmit="return confirmDelete('Are you sure you want to cancel this Customer?\n\n{{ customer.customer_name }}\n{{customer.branch_name}}\n\nWarning: This action is irreversible and cannot be undone.')">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-sm delete-button"><i data-feather="trash-2"></i> Delete</button>
-        </form>
+        <div class="dropdown">
+            <button class="btn btn-light shadow-sm d-flex align-items-center gap-2 px-3 py-2 rounded"
+                  type="button" id="dropdownMenu{{ customer.pk }}"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             <i data-feather="chevron-down"></i>
+          </button>
+             <div class="dropdown-menu dropdown-modern shadow rounded" aria-labelledby="dropdownMenu{{ customer.pk }}">  
+              <a class="dropdown-item" href="{% url 'edit_customer' username=request.user.username pk=customer.pk %}">
+                <i data-feather="edit" class="mr-2"></i> Edit
+              </a>
+
+              <form method="post" action="{% url 'delete_customer' username=request.user.username pk=customer.pk %}" 
+              style="display:inline;" 
+              onsubmit="return confirmDelete('Are you sure you want to cancel this Customer?\n\n{{ customer.customer_name }}\n{{customer.branch_name}}\n\nWarning: This action is irreversible and cannot be undone.')">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item text-danger" style="cursor: pointer;"><i data-feather="trash" class="mr-2"></i> Delete</button>
+              </form>
+            </div>
+          </div>  
         </td>
       </tr>
       {% endfor %}
@@ -72,12 +82,19 @@
 
 <nav aria-label="Customer pagination">
   <ul class="pagination justify-content-center">
+    {% with extra="" %}
+      {% if search_query %}
+        {% with extra="&search="|add:search_query|urlencode %}
+        {% endwith %}
+      {% endif %}
+    {% endwith %}
+
     {% if customer_details.has_previous %}
       <li class="page-item">
-        <a class="page-link" href="?page=1">&laquo; First</a>
+        <a class="page-link" href="?page=1{{ extra }}">&laquo; First</a>
       </li>
       <li class="page-item">
-        <a class="page-link" href="?page={{ customer_details.previous_page_number }}">Previous</a>
+        <a class="page-link" href="?page={{ customer_details.previous_page_number }}{{ extra }}">Previous</a>
       </li>
     {% else %}
       <li class="page-item disabled"><span class="page-link">&laquo; First</span></li>
@@ -92,10 +109,10 @@
 
     {% if customer_details.has_next %}
       <li class="page-item">
-        <a class="page-link" href="?page={{ customer_details.next_page_number }}">Next</a>
+        <a class="page-link" href="?page={{ customer_details.next_page_number }}{{ extra }}">Next</a>
       </li>
       <li class="page-item">
-        <a class="page-link" href="?page={{ customer_details.paginator.num_pages }}">Last &raquo;</a>
+        <a class="page-link" href="?page={{ customer_details.paginator.num_pages }}{{ extra }}">Last &raquo;</a>
       </li>
     {% else %}
       <li class="page-item disabled"><span class="page-link">Next</span></li>
@@ -103,6 +120,7 @@
     {% endif %}
   </ul>
 </nav>
+
 
 
 

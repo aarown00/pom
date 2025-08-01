@@ -4,7 +4,7 @@
 {% block title %}Manpower Details{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/create.css' %}">
+  <link rel="stylesheet" href="{% static 'css/edit_customer_manpower.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -12,20 +12,27 @@
 {% include "toast_messages.html" %}
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Manpower</h1>
+    <h1 class="h2">Manpower: {{manpower.name}} - {{manpower.category}} </h1>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb breadcrumb-sm mb-0">
       <li class="breadcrumb-item">P.O Monitoring System</li>
       <li class="breadcrumb-item active" aria-current="page">Manpower</li>
-      <li class="breadcrumb-item active" aria-current="page">Add Manpower</li>
+      <li class="breadcrumb-item active" aria-current="page">Edit Manpower</li>
       </ol>
     </nav>
 </div>
 
-
-{% include "tabs.html" %} </br>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard_manpower' username=request.user.username %}">Manpowers</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Edit Manpower</a>
+  </li>
+</ul>
+</br>
 <div class="alert alert-warning mb-0" role="alert">
-  Add manpower details here! Click 'Save' to ensure new manpower are added.
+  Edit manpower details here! Click 'Save' to ensure customer details are updated.
 </div>
 
 
@@ -37,7 +44,7 @@
     <div class="card-header add-card-header d-flex justify-content-between align-items-center">
       <h2 class="h5 mb-0">
         <a href="#" class="text-white"><i class="fas fa-arrow-left mr-2"></i></a>
-        Add Manpower 
+        Edit Manpower 
       </h2>
     </div>
 
@@ -45,6 +52,7 @@
     <div class="card-body">
       <form method="post" onsubmit="showLoading(); return true;">
         {% csrf_token %}
+        <input type="hidden" id="manpower_pk" value="{{ manpower.pk }}">
 
         <div class="row">
           <!-- LEFT SIDE -->
@@ -64,12 +72,22 @@
                     </div>
                   </div>
                   <div class="form-group col-md-8">
-                    <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
-                    {{ form.category }}
+                    <label for="id_category">{{ form.category.label }}</label>
+
+                    {# Render the category as disabled manually #}
+                    <select class="selectpicker form-control" id="id_category" disabled>
+                        {% for value, label in form.fields.category.choices %}
+                        <option value="{{ value }}" {% if value == form.initial.category %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+
+                    {# Hidden input to actually submit the value #}
+                    <input type="hidden" name="category" value="{{ form.initial.category }}">
+
                     <div class="invalid-feedback d-block" id="category-error" style="{% if form.category.errors %}display: block;{% else %}display: none;{% endif %}">
-                      {% if form.category.errors %}
+                        {% if form.category.errors %}
                         {{ form.category.errors.0 }}
-                      {% endif %}
+                        {% endif %}
                     </div>
                   </div>
                 </div>
@@ -95,19 +113,28 @@
 
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const manpowerField = document.getElementById('id_name');
-    const errorDiv = document.getElementById('manpower-name-error');
+document.addEventListener('DOMContentLoaded', function () {
+  function attachAjaxValidator({ fieldId, errorId, fieldName, instanceId = null }) {
+    const field = document.getElementById(fieldId);
+    const errorDiv = document.getElementById(errorId);
+    if (!field || !errorDiv) return;
 
     function runAjaxValidation() {
-      const value = manpowerField.value.trim();
+      const value = field.value.trim();
 
-      // Skip AJAX validation if field is empty (let required work on submit)
       if (value === '') {
-        manpowerField.classList.remove('is-invalid');
+        field.classList.remove('is-invalid');
         errorDiv.style.display = 'none';
         errorDiv.textContent = '';
         return;
+      }
+
+      const params = new URLSearchParams();
+      params.append('form', 'manpower');
+      params.append('field', fieldName);
+      params.append('value', value);
+      if (instanceId) {
+        params.append('id', instanceId);
       }
 
       fetch("{% url 'ajax_validate_field' %}", {
@@ -116,25 +143,33 @@
           'X-CSRFToken': '{{ csrf_token }}',
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `form=manpower&field=name&value=${encodeURIComponent(value)}`
+        body: params.toString()
       })
-      .then(response => response.json())
+      .then(r => r.json())
       .then(data => {
         if (data.valid) {
-          manpowerField.classList.remove('is-invalid');
+          field.classList.remove('is-invalid');
           errorDiv.style.display = 'none';
           errorDiv.textContent = '';
         } else {
-          manpowerField.classList.add('is-invalid');
+          field.classList.add('is-invalid');
           errorDiv.style.display = 'block';
           errorDiv.textContent = data.error;
         }
       });
     }
 
-    manpowerField.addEventListener('input', runAjaxValidation);
-    manpowerField.addEventListener('blur', runAjaxValidation);
+    field.addEventListener('input', runAjaxValidation);
+    field.addEventListener('blur', runAjaxValidation);
+  }
+
+  attachAjaxValidator({
+    fieldId: 'id_name',
+    errorId: 'manpower-name-error',
+    fieldName: 'name',
+    instanceId: document.getElementById('manpower_pk')?.value || ''
   });
+});
 </script>
 
 

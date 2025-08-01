@@ -1,0 +1,75 @@
+<style>
+.filter-section {
+  background: #f9fafb;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  max-width: 100%;
+  margin: 1rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.filter-header {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.filter-form {
+  display: block;
+  width: 100%;
+}
+
+.filter-form input[type="text"] {
+  width: 100%;
+  border-radius: 2rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  height: 44px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+</style>
+
+<div class="filter-section">
+  <div class="filter-header">🔍 Search:</div>
+  <form method="get" class="filter-form">
+    <input
+      type="text"
+      name="search"
+      class="form-control"
+      placeholder="Enter Name or Category..."
+      id="search-input"
+      data-list="manpowers"
+      value="{{ search_query }}"
+      aria-label="Search Manpower"
+      autocomplete="off" />
+    <datalist id="manpowers">
+      {% for m in all_manpower %}
+        <option value="{{ m.name }} {{ m.category }}">
+      {% endfor %}
+    </datalist>
+  </form>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const datalistId = searchInput.getAttribute('data-list');
+
+        // Initially, the list attribute is not set
+        // so no suggestions will show on focus.
+
+        searchInput.addEventListener('input', function() {
+            // Check if the input field has any text
+            if (this.value.length > 0) {
+                // If there's text, add the list attribute
+                this.setAttribute('list', datalistId);
+            } else {
+                // If the input is empty, remove the list attribute
+                this.removeAttribute('list');
+            }
+        });
+    });
+</script>

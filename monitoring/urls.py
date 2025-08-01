@@ -14,10 +14,12 @@ urlpatterns = [
     path('<str:username>/create/customer', views.create_customer, name='create_customer'),
     path('<str:username>/dashboard/customer', views.dashboard_customer_view, name='dashboard_customer'), 
     path('<str:username>/delete/customer/<int:pk>', views.delete_customer, name='delete_customer'), 
+    path('<str:username>/edit/customer/<int:pk>', views.edit_customer, name='edit_customer'), 
 
     path('<str:username>/create/manpower', views.create_manpower, name='create_manpower'),  
     path('<str:username>/dashboard/manpower', views.dashboard_manpower_view, name='dashboard_manpower'), 
     path('<str:username>/delete/manpower/<int:pk>', views.delete_manpower, name='delete_manpower'), 
+    path('<str:username>/edit/manpower/<int:pk>', views.edit_manpower, name='edit_manpower'), 
 
     # ajax
     path('ajax/validate-field/', views.ajax_validate_field, name='ajax_validate_field'),

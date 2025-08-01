@@ -58,7 +58,6 @@ echo.
 echo DO NOT close this window unless you want to shutdown or restart server.
 echo Please minimize and continue using the link in browser.
 echo Please make sure internet access is available.
-echo Ignore the warning below. Server is up if you see this message.
 echo =====================================================
 echo.
 echo.

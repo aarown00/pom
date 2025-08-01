@@ -9,6 +9,8 @@
 
 {% block content %}
 
+{% include "toast_messages.html" %}
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Purchase Orders</h1>
     <nav aria-label="breadcrumb">
@@ -24,9 +26,6 @@
 <div class="alert alert-warning mb-0" role="alert">
   Add New P.O here. Click 'Save' to ensure new P.O are recorded.
 </div>
-
-
-
 
 <div class="container-fluid py-4">
   <!-- Main Card -->
@@ -65,7 +64,11 @@
                   <div class="form-group col-md-8">
                     <label for="{{ form.customer_branch.id_for_label }}">{{ form.customer_branch.label }}</label>
                     {{ form.customer_branch }}
-                    {{ form.customer_branch.errors }}
+                     <div class="invalid-feedback d-block" id="customer-branch-error" style="{% if form.customer_branch.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.customer_branch.errors %}
+                        {{ form.customer_branch.errors.0 }}
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
 
@@ -204,8 +207,6 @@
 
   });
 </script>
-
-
 
 
 {% endblock %}

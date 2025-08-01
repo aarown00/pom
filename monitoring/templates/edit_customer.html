@@ -4,7 +4,7 @@
 {% block title %}Customer Details{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/create.css' %}">
+  <link rel="stylesheet" href="{% static 'css/edit_customer_manpower.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -12,20 +12,28 @@
 {% include "toast_messages.html" %}
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Customers</h1>
+    <h1 class="h2">Customer: {{customer.customer_name}} - {{customer.branch_name}} </h1>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb breadcrumb-sm mb-0">
       <li class="breadcrumb-item">P.O Monitoring System</li>
       <li class="breadcrumb-item active" aria-current="page">Customers</li>
-      <li class="breadcrumb-item active" aria-current="page">Add Customer</li>
+      <li class="breadcrumb-item active" aria-current="page">Edit Customer</li>
       </ol>
     </nav>
 </div>
 
-{% include "tabs.html" %} </br>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">Customers</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Edit Customer</a>
+  </li>
+</ul>
+</br>
 
 <div class="alert alert-warning mb-0" role="alert">
-  Add customer details here! Click 'Save' to ensure new customer are recorded.
+  Edit customer details here! Click 'Save' to ensure customer details are updated.
 </div>
 
 
@@ -36,7 +44,7 @@
     <div class="card-header add-card-header d-flex justify-content-between align-items-center">
       <h2 class="h5 mb-0">
         <a href="#" class="text-white"><i class="fas fa-arrow-left mr-2"></i></a>
-        Add Customer 
+        Edit Customer 
       </h2>
     </div>
 

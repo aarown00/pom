@@ -52,8 +52,33 @@ textarea.form-control {
   transition: all 0.2s ease;
 }
 
-select.form-control {
+/* Font and size for dropdown toggle and items */
+.bootstrap-select .dropdown-toggle,
+.bootstrap-select .dropdown-menu .dropdown-item {
   font-size: 15px;
+}
+
+/* Hover */
+.bootstrap-select .dropdown-menu .dropdown-item:hover {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+/* Selected (active) */
+.bootstrap-select .dropdown-menu .dropdown-item.active,
+.bootstrap-select .dropdown-menu .dropdown-item:active {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+/* Focus (just in case) */
+.bootstrap-select .dropdown-menu .dropdown-item:focus {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+.bootstrap-select .dropdown-toggle:focus {
+  outline: none !important;
 }
 
 /* Hover and focus effects */
@@ -114,7 +139,8 @@ textarea.form-control:focus {
     min-height: 40px;
   }
 
-  select.form-control {
+  .bootstrap-select .dropdown-toggle,
+  .bootstrap-select .dropdown-menu .dropdown-item {
     font-size: 14px;
   }
 
@@ -144,7 +170,8 @@ textarea.form-control:focus {
     min-height: 38px;
   }
 
-  select.form-control {
+  .bootstrap-select .dropdown-toggle,
+  .bootstrap-select .dropdown-menu .dropdown-item {
     font-size: 13.5px;
   }
 
@@ -174,7 +201,8 @@ textarea.form-control:focus {
     min-height: 36px;
   }
 
-  select.form-control {
+  .bootstrap-select .dropdown-toggle,
+  .bootstrap-select .dropdown-menu .dropdown-item {
     font-size: 13px;
   }
 
