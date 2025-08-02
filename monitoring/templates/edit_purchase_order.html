@@ -18,7 +18,7 @@
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom po-header-bar">
     
      <div class="d-flex align-items-center">
-      <h1 class="h2 mb-0" style="margin-right: 20px;">P.O#: {{ po.purchase_order }}</h1>
+      <h1 class="h3 mb-0" style="margin-right: 20px;">P.O#: {{ po.purchase_order }}</h1>
 
      {% if po.status == "Pending" %}
       <span class="badge badge-warning large-badge">Status: {{ po.status }}</span>

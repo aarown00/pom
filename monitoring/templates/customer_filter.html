@@ -1,18 +1,21 @@
 <style>
 .filter-section {
-  background: #f9fafb;
-  border-radius: 1rem;
-  padding: 1.5rem;
+  background: #ffffff; /* Changed to a clean white */
+  border-radius: 12px; /* A more subtle, modern radius */
+  padding: 1.5rem 2rem; /* Generous padding for more breathing room */
   max-width: 100%;
-  margin: 1rem auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin: 0rem auto 0rem auto; /* Consistent top/bottom margin for spacing */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* A softer, deeper shadow */
+  border: 1px solid #f0f0f0; /* A very subtle border */
 }
 
 .filter-header {
-  font-size: 1rem;
+  font-size: 1rem; /* Larger for better hierarchy */
   font-weight: 600;
-  color: #333;
-  margin-bottom: 0.5rem;
+  color: #2c3e50; /* A darker, more professional text color */
+  margin-bottom: 1.25rem; /* More space below the header */
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0; /* A subtle separator line */
 }
 
 .filter-form {
@@ -22,12 +25,25 @@
 
 .filter-form input[type="text"] {
   width: 100%;
-  border-radius: 2rem;
+  border-radius: 8px; /* A more subtle, less "pill-like" radius */
   padding: 0.6rem 1rem;
   font-size: 0.9rem;
-  height: 44px;
-  border: 1px solid #ccc;
+  height: 44px; /* Consistent height for all form elements */
+  border: 1px solid #dcdcdc; /* A lighter border color */
+  background-color: #ffffff;
   box-sizing: border-box;
+  transition: all 0.2s ease; /* Add a smooth transition */
+}
+
+.filter-form input[type="text"]:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15); /* Elegant focus glow */
+}
+
+.filter-form input[type="text"]::placeholder {
+  color: #a0a0a0;
+  font-weight: 400;
 }
 </style>
 
