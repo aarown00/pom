@@ -73,7 +73,7 @@
 
     <tr>
       <td>
-          {{ po.purchase_order }}
+          <strong>{{ po.purchase_order }}</strong>
       </td>
 
       <td>{{ po.customer_branch.customer_name }}</td>
@@ -113,51 +113,21 @@
              <i data-feather="chevron-down"></i>
           </button>
              <div class="dropdown-menu dropdown-modern shadow rounded" aria-labelledby="dropdownMenu{{ po.id }}">
-
-              <!-- View Action -->
-              <a href="#" class="dropdown-item"
-                onclick="handleModalClick(this)"
-                data-id="{{ po.id }}"
-                data-date-recorded="{{ po.date_recorded }}"
-                data-po="{{ po.purchase_order }}"
-                data-customer="{{ po.customer_branch.customer_name }}"
-                data-branch="{{ po.customer_branch.branch_name }}"
-                data-date-received="{{ po.purchase_order_received }}"
-                data-target-date="{{ po.target_date }}"
-                data-classification="{{ po.classification }}"
-                data-description="{{ po.description }}"
-                data-service-report-number="{{ po.service_report_number|default:'None' }}"
-                data-manpower-total="{{ po.manpower_total }}"
-                data-manpower-type="{{ po.get_manpower_type_display|default_if_none:'No manpower assigned' }}"
-                data-total-days="{{ po.total_days }}"
-                data-working-days-total="{{ po.working_days_total }}"
-                data-work-hours-total="{{ po.work_hours_total }}"
-                data-date-started="{{ po.date_started|default:'None' }}"
-                data-completion-date="{{ po.completion_date|default:'None' }}"
-                data-coc-number="{{ po.coc_number|default:'None' }}"
-                data-dr-number="{{ po.dr_number|default:'None' }}"
-                data-invoice-number="{{ po.invoice_number|default:'None' }}"
-                data-remarks="{{ po.remarks|default:'None' }}"
-                data-status="{{ po.status }}"
-                data-target-date-delayed="{{ po.target_date_delayed }}"
-                data-target-date-status="{{ po.target_date_status }}">
-
-                <i data-feather="eye" class="mr-2"></i> View
-              </a>
-
+              <a class="dropdown-item" href="{% url 'view' username=request.user.username pk=po.id %}"><i data-feather="eye" class="mr-2"></i> View P.O</a>
+              <a class="dropdown-item" href="{% url 'itinenary_details' username=request.user.username pk=po.id %}"><i data-feather="eye" class="mr-2"></i> View Itinerary</a>
+              
               {% if po.status != "Cancelled" %}
-              <!-- Update -->
-              <a class="dropdown-item" href="{% url 'edit' username=request.user.username pk=po.id %}"><i data-feather="edit-3" class="mr-2"></i> Update</a>
 
-              <!-- Itinenary -->
-              <a class="dropdown-item" href="{% url 'itinenary' username=request.user.username pk=po.id %}"><i data-feather="map" class="mr-2"></i> Itinerary</a>
+              <!-- Update -->
+              <a class="dropdown-item" href="{% url 'edit' username=request.user.username pk=po.id %}"><i data-feather="edit-3" class="mr-2"></i> Update P.O</a>
+              <a class="dropdown-item" href="{% url 'itinenary' username=request.user.username pk=po.id %}"><i data-feather="map" class="mr-2"></i>Update Itinerary</a>
 
               <!-- Cancel -->
               <form method="post" action="{% url 'cancel' username=request.user.username pk=po.pk %}"
                     onsubmit="return confirmDelete('Are you sure you want to cancel this Purchase Order?\n\nP.O: {{ po.purchase_order }}\n\nWarning: This action is irreversible and cannot be undone.');">
                 {% csrf_token %}
                 <input type="hidden" name="status" value="Cancelled">
-                <button type="submit" class="dropdown-item text-danger" style="cursor: pointer;"><i data-feather="x-circle" class="mr-2"></i> Cancel</button>
+                <button type="submit" class="dropdown-item text-danger" style="cursor: pointer;"><i data-feather="x-circle" class="mr-2"></i> Cancel P.O</button>
               </form>
               {% endif %}
 
@@ -216,7 +186,6 @@
 
 
 
-{% include 'dashboard_modal.html' %}
 {% include "confirm_page.html" %}
 
 

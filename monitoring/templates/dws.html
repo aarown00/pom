@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Itinenary Details{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/dws.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="sticky-wrapper">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom po-header-bar">
+    
+     <div class="d-flex align-items-center">
+      <h1 class="h3 mb-0" style="margin-right: 20px;">P.O#: {{ po.purchase_order }}</h1>
+
+    {% if po.status == "Pending" %}
+      <span class="badge badge-warning large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Ongoing" %}
+      <span class="badge badge-primary large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Completed" %}
+      <span class="badge badge-success large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Cancelled" %}
+      <span class="badge badge-dark large-badge">Status: {{ po.status }}</span>
+    {% else %}
+      <span class="badge badge-danger large-badge">Status: {{ po.status }}</span>
+    {% endif %}
+    </div>
+
+  
+  </div>
+</div>
+
+<div style="height: 1rem;"></div>
+
+{% include "tabs_po.html" %}
+</br>
+
+<div class="alert alert-warning" role="alert">
+  View itinenary details here!
+</div>
+
+
+<div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
+  <table id="dailyWorkStatusTable" class="row-border hover" style="width: 100%;">
+    <thead>
+      <tr>
+        <th>Visit No.</th>
+        <th>Date</th>
+        <th>Manpower Assigned</th>
+        <th>Total Hours</th>
+        <th>Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for status in page_obj %}
+        <tr>
+          <td><strong>Visit {{ forloop.counter }}</strong></td> 
+          <td>{{ status.date}}</td>
+          <td>
+            {% for man in status.manpower.all %}
+              {{ man.name }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+              No manpower assigned
+            {% endfor %}
+          </td>
+          <td>
+            {% if status.time_total is not None %}
+              {{ status.time_total }} hrs
+            {% else %}
+              None
+            {% endif %}
+          </td>
+          <td>{{ status.itinenary_remarks }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if page_obj.paginator.count > 0 %}
+  <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
+    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
+  </div>
+{% endif %}
+
+<nav aria-label="Daily Work Status pagination">
+  <ul class="pagination justify-content-center">
+
+    {# "First" and "Previous" buttons #}
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="{% url 'itinenary_details' username=username pk=po.pk %}?page=1">&laquo; First</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="{% url 'itinenary_details' username=username pk=po.pk %}?page={{ page_obj.previous_page_number }}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&laquo; First</span></li>
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    {# Current page number #}
+    <li class="page-item active">
+      <span class="page-link">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+    </li>
+
+    {# "Next" and "Last" buttons #}
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="{% url 'itinenary_details' username=username pk=po.pk %}?page={{ page_obj.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="{% url 'itinenary_details' username=username pk=po.pk %}?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+      <li class="page-item disabled"><span class="page-link">Last &raquo;</span></li>
+    {% endif %}
+    
+  </ul>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new DataTable('#dailyWorkStatusTable', {
+      searching: false,
+      ordering: false,
+      paging: false,
+      info: false,
+    });
+  });
+</script>
+
+
+
+
+{% endblock %}

@@ -37,9 +37,6 @@
       <button id="saveBtn1" type="submit" class="btn add-button">
         <i data-feather="save"></i> Save
       </button>
-      <a href="{% url 'dashboard' username=request.user.username %}" class="btn dashboard-button" style="margin-left: 8px;">
-        <i data-feather="corner-up-left"></i> Back to Dashboard
-      </a>
     </div>
 
   </div>
@@ -49,14 +46,7 @@
 
 <div style="height: 1rem;"></div>
 
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link active" href="#">Update P.O</a>
-  </li>
-</ul>
+{% include "tabs_po.html" %}
 </br>
 <div class="alert alert-warning mb-0" role="alert">
   Update P.O Details here. Click 'Save' to ensure your latest changes are recorded.

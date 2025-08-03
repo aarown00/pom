@@ -1,0 +1,140 @@
+#dailyWorkStatusTable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#dailyWorkStatusTable th,
+#dailyWorkStatusTable td {
+  padding: 24px; /* More generous padding */
+}
+
+/* Apply gradient to the header row itself */
+#dailyWorkStatusTable thead tr:first-child {
+  background: #f9fafb;
+  border-bottom: 2px solid #dee2e6; /* subtle divider */
+}
+
+/* Make the <th> cells transparent and remove borders */
+#dailyWorkStatusTable thead tr:first-child th {
+  color: #212529;           /* dark text */
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
+/* Round only the first and last cells */
+#dailyWorkStatusTable thead tr:first-child th:first-child {
+  border-top-left-radius: 12px;
+}
+
+#dailyWorkStatusTable thead tr:first-child th:last-child {
+  border-top-right-radius: 12px;
+}
+
+/* Light blue row hover */
+#dailyWorkStatusTable tbody tr:hover {
+  background-color: #e8f4fd; /* Light blue hover */
+}
+
+.dashboard-button {
+  background-color: white;
+  color: #1a73e8;
+  border: 2px solid #1a73e8;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
+}
+
+.dashboard-button:hover {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.sticky-wrapper {
+  position: sticky;
+  top: 48px; /* Match navbar height */
+  z-index: 1000;
+  background-color: white;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.large-badge {
+  font-size: 1rem; /* Larger text */
+  padding: 0.6rem 1rem; /* More spacing */
+  border-radius: 0.25rem; /* Rounder badge */
+  font-weight: 600;
+}
+
+/* ========== RESPONSIVE OPTIMIZATION ========== */
+@media (max-width: 1600px) {
+  #dailyWorkStatusTable th,
+  #dailyWorkStatusTable td {
+    padding: 20px 14px;
+  }
+
+  .dashboard-button {
+    font-size: 0.95rem;
+    padding: 4px 10px;
+  }
+
+  .large-badge {
+    font-size: 0.95rem;
+    padding: 0.55rem 0.9rem;
+  }
+}
+
+@media (max-width: 1400px) {
+  #dailyWorkStatusTable th,
+  #dailyWorkStatusTable td {
+    padding: 18px 12px;
+    font-size: 0.9rem;
+  }
+
+  .dashboard-button {
+    font-size: 0.9rem;
+    padding: 4px 9px;
+  }
+
+  .large-badge {
+    font-size: 0.9rem;
+    padding: 0.45rem 0.8rem;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 576px) {
+  .po-header-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+  }
+
+  .po-header-bar h1 {
+    font-size: 1.25rem !important;
+    margin-right: 0 !important;
+  }
+ 
+}
+
+/* Fix pagination wrapping and alignment for small screens */
+@media (max-width: 576px) {
+  nav[aria-label="Daily Work Status pagination"] .pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  nav[aria-label="Daily Work Status pagination"] .page-link {
+    width: auto;
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  nav[aria-label="Daily Work Status pagination"] .page-item {
+    width: 100%;
+    max-width: 250px;
+  }
+}

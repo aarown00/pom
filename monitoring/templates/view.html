@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}P.O Details{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/view.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="sticky-wrapper">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 border-bottom po-header-bar">
+    
+     <div class="d-flex align-items-center">
+      <h1 class="h3 mb-0" style="margin-right: 20px;">P.O#: {{ po.purchase_order }}</h1>
+
+     {% if po.status == "Pending" %}
+      <span class="badge badge-warning large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Ongoing" %}
+      <span class="badge badge-primary large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Completed" %}
+      <span class="badge badge-success large-badge">Status: {{ po.status }}</span>
+    {% elif po.status == "Cancelled" %}
+      <span class="badge badge-dark large-badge">Status: {{ po.status }}</span>
+    {% else %}
+      <span class="badge badge-danger large-badge">Status: {{ po.status }}</span>
+    {% endif %}
+    </div>
+
+
+  </div>
+</div>
+
+<div style="height: 1rem;"></div>
+
+{% include "tabs_po.html" %}
+
+
+<div class="container-fluid py-4">
+  <div class="px-4">
+
+    <!-- ✅ Sticky Header (promoted from modal header) -->
+    <div
+      class="po-header bg-white shadow-sm d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4"
+      style="top: 0; z-index: 1050; font-size: 1.25rem; padding: 1rem; gap: 1.5rem;"
+    >
+      <!-- Left Side: P.O. Info -->
+      <div
+        class="d-flex flex-column flex-md-row align-items-start align-items-md-center"
+        style="gap: 1.5rem; flex-wrap: wrap;"
+      >
+        <strong style="white-space: nowrap; flex-shrink: 0;">
+          P.O #: <span id="po-number">{{ po.purchase_order }}</span>
+        </strong>
+
+        <strong style="white-space: nowrap; flex-shrink: 0;">
+          <span id="po-status-label">Status:</span>
+          <span id="po-status"
+              class="{% if po.status == 'Delayed' %}text-danger
+                    {% elif po.status == 'Completed' %}text-success
+                    {% elif po.status == 'Cancelled' %}fw-bold
+                    {% elif po.status == 'Ongoing' %}text-primary
+                    {% elif po.status == 'Pending' %}text-warning
+                    {% endif %}">
+          {% if po.status == 'Delayed' %}
+            {% with po.target_date_delayed as d %}
+              Delayed{% if d > 0 %} - {{ d }} day{{ d|pluralize }}{% endif %}
+            {% endwith %}
+          {% else %}
+            {{ po.status }}
+          {% endif %}
+        </span>
+        </strong>
+
+      </div>
+
+      <!-- Right Side: PO ID + Date + Back Button -->
+      <div
+        class="d-flex flex-column flex-md-row align-items-start align-items-md-center mt-3 mt-md-0"
+        style="gap: 1.5rem; flex-wrap: wrap;"
+      >
+        <strong style="white-space: nowrap; flex-shrink: 0;">
+          No. <span id="po-id">{{ po.id }}</span>
+        </strong>
+
+        <strong style="white-space: nowrap; flex-shrink: 0;">
+          Recorded Date: <span id="po-date-recorded">{{ po.date_recorded }}</span>
+        </strong>
+
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="row gx-3 mt-2">
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-header">P.O DETAILS</div>
+          <div class="card-body">
+            <ul class="list-unstyled mb-0 responsive-info-list">
+              <li class="row mb-2">
+                <div class="col-4 label-cell"><strong>Customer:</strong></div>
+                <div class="col-8" id="po-customer">{{ po.customer_branch.customer_name }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-4 label-cell"><strong>Branch:</strong></div>
+                <div class="col-8" id="po-branch">{{ po.customer_branch.branch_name }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-4 label-cell"><strong>Received Date:</strong></div>
+                <div class="col-8" id="po-date-received">{{ po.purchase_order_received }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-4 label-cell"><strong>Target Date:</strong></div>
+                <div class="col-8" id="po-target-date">
+                  {{ po.target_date }}
+                  {% if po.target_date_status == "adjusted" %}
+                    <span class="text-primary">- ({{ po.get_target_date_status_display }})</span>
+                  {% endif %}
+                </div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-4 label-cell"><strong>Description:</strong></div>
+                <div class="col-8" id="po-description">{{ po.description }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-4 label-cell"><strong>Classification:</strong></div>
+                <div class="col-8" id="po-classification">{{ po.classification }}</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-header">MONITORING</div>
+          <div class="card-body">
+            <ul class="list-unstyled mb-0 responsive-info-list">
+              <li class="row mb-2">
+                <div class="col-5 label-cell"><strong>Started Date:</strong></div>
+                <div class="col-7" id="po-date-started">{{ po.date_started }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-5 label-cell"><strong>Completion Date:</strong></div>
+                <div class="col-7" id="po-completion-date">{{ po.completion_date }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-5 label-cell"><strong>COC No:</strong></div>
+                <div class="col-7" id="po-coc-number">{{ po.coc_number|default:"None" }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-5 label-cell"><strong>DR No:</strong></div>
+                <div class="col-7" id="po-dr-number">{{ po.dr_number|default:"None"  }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-5 label-cell"><strong>Service Report No:</strong></div>
+                <div class="col-7" id="po-service-report-number">{{ po.service_report_number|default:"None"  }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-5 label-cell"><strong>Invoice No:</strong></div>
+                <div class="col-7" id="po-invoice-number">{{ po.invoice_number|default:"None"  }}</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <div class="card itemscard mb-4">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-bordered mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th class="text-center">Manpower<br>Type</th>
+                <th class="text-center">Total Days<br><small class="text-muted">(Completion - Started Days)</small></th>
+                <th class="text-center">Actual Working Days<br><small class="text-muted">(No. of Visit Days)</small></th>
+                <th class="text-center">Total<br>Manpower Accumulated</th>
+                <th class="text-center">Total<br>Work Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center"><span id="po-manpower-type">{{ po.get_manpower_type_display|default:"No manpower assigned"  }}</span></td>
+                <td class="text-center"><span id="po-total-days">{{ po.total_days }}</span></td>
+                <td class="text-center"><span id="po-working-days-total">{{ po.working_days_total }}</span></td>
+                <td class="text-center"><span id="po-manpower-total">{{ po.manpower_total }}</span></td>
+                <td class="text-center"><span id="po-work-hours-total">{{ po.work_hours_total }}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Remarks -->
+    <div class="row gx-3 mt-3">
+      <div class="col-md-12">
+        <div class="card h-100">
+          <div class="card-header">REMARKS</div>
+          <div class="card-body">
+            <span id="po-remarks">{{ po.remarks|default:"None"  }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- end .px-4 -->
+</div> <!-- end .container-fluid -->
+
+{% endblock %}
+
+
+

@@ -106,12 +106,34 @@ body {
  */
 
 .nav-tabs .nav-link {
-  color: #555 !important; /* Inactive tabs: gray */
+  position: relative;
+  color: #555;
+  padding: 0.5rem 1rem;
+  transition: color .25s ease;
+}
+
+.nav-tabs .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: #28c76f;
+  transform: scaleX(0);
+  transform-origin: center; /* or use left for left-to-right */
+  transition: transform .35s ease;
 }
 
 .nav-tabs .nav-link.active {
-  color: #0d6efd !important; /* Active tab: Bootstrap primary blue */
+   color: #28c76f !important;
+  font-weight: 600;
 }
+
+.nav-tabs .nav-link.active::after {
+  transform: scaleX(1);
+}
+
 
 /* ========== RESPONSIVE OPTIMIZATION ========== */
 

@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash, get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import PurchaseOrderForm
@@ -45,6 +47,29 @@ def logout_user(request):
     logout(request)
     messages.success(request, "You have been logged out.")
     return redirect('login')
+
+User = get_user_model()
+
+@login_required
+def change_password(request, username):
+    if request.user.username != username:
+        return redirect(f'/{request.user.username}/dashboard/')
+
+    user = get_object_or_404(User, username=username)
+
+    if request.method == "POST":
+        form = PasswordChangeForm(user, request.POST)
+        if form.is_valid():
+            user = form.save() 
+            update_session_auth_hash(request, user)  
+            messages.success(request, "Your password was successfully updated.")
+            return redirect("dashboard", username=username)
+        else:
+            messages.error(request, 'Missing or invalid fields!')
+    else:
+        form = PasswordChangeForm(user)
+
+    return render(request, "change_password.html", {"form": form, "username": username})
 
 #purchase order---------------------------------------------------
 
@@ -127,6 +152,15 @@ def dashboard_view(request, username):
     })
 
 
+@login_required
+def view_purchase_order(request, username, pk):
+    if request.user.username != username:
+        return redirect(f'/{request.user.username}/dashboard/')
+
+    po = get_object_or_404(PurchaseOrder, pk=pk)
+
+    return render(request, 'view.html', {'po': po})
+
 
 @login_required
 def create_purchase_order(request, username):
@@ -173,9 +207,9 @@ def edit_purchase_order(request, username, pk):
 @login_required
 def cancel_purchase_order(request, username, pk):
 
-    if not request.user.is_superuser:
+    if not request.user.groups.filter(name="po_admin").exists():
         messages.error(request, "You do not have permission to cancel orders!")
-        return redirect('dashboard', username=username)
+        return redirect("dashboard", username=username)
     
     po = get_object_or_404(PurchaseOrder, pk=pk)
 
@@ -188,6 +222,7 @@ def cancel_purchase_order(request, username, pk):
 
     return redirect('dashboard', username=username)
 
+#itinenary----------------------------------------------------------------------
 
 @login_required
 def edit_dws(request, username, pk):
@@ -214,6 +249,27 @@ def edit_dws(request, username, pk):
         'po': purchase_order,
     })
 
+
+@login_required
+def dws(request, username, pk):
+    
+    if request.user.username != username: 
+        return redirect('dashboard', username=request.user.username)
+        
+    po = get_object_or_404(PurchaseOrder, pk=pk)
+    daily_work_statuses_list = po.daily_work_statuses.all().prefetch_related('manpower').order_by('id')
+
+    paginator = Paginator(daily_work_statuses_list, 5) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'po': po,
+        'page_obj': page_obj, 
+        'username': username,
+    }
+
+    return render(request, 'dws.html', context)
 
 
 #customer----------------------------------------------------------------------

@@ -1,0 +1,21 @@
+<div class="nav-tabs-container overflow-auto mb-3">
+<ul class="nav nav-tabs flex-nowrap">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'view' request.user.username po.pk %}">View P.O</a>
+  </li>
+   <li class="nav-item">
+    <a class="nav-link" href="{% url 'itinenary_details' request.user.username po.pk %}">View Itinenary</a>
+  </li>
+  {% if po.status != "Cancelled" %}
+   <li class="nav-item">
+    <a class="nav-link" href="{% url 'edit' request.user.username po.pk %}">Update P.O</a>
+  </li>
+   <li class="nav-item">
+    <a class="nav-link" href="{% url 'itinenary' request.user.username po.pk %}">Update Itinenary</a>
+  </li>
+  {% endif %}
+</ul>
+</div>

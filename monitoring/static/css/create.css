@@ -109,20 +109,6 @@ textarea.form-control:focus {
   color: white;
 }
 
-.add-po-button {
-  background-color: white;
-  color: #6c757d;
-  border: 2px solid #6c757d;
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-weight: bold;
-  transition-duration: 0.4s;
-}
-
-.add-po-button:hover {
-  background-color: #6c757d;
-  color: white;
-}
 
 /* ========== RESPONSIVE OPTIMIZATION ========== */
 

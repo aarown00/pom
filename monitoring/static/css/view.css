@@ -1,23 +1,35 @@
-
-.modal-content {
-  border-radius: 10px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-  animation: fadeInUp 0.3s ease-out;
+.dashboard-button {
+  background-color: white;
+  color: #1a73e8;
+  border: 2px solid #1a73e8;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 0.4s;
 }
 
-.modal-header {
+.dashboard-button:hover {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.sticky-wrapper {
+  position: sticky;
+  top: 48px; /* Match navbar height */
+  z-index: 1000;
+  background-color: white;
   border-bottom: 1px solid #dee2e6;
-  background: #f8f9fa;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
 }
 
-.modal-footer {
-  border-top: 1px solid #dee2e6;
-  background: #f8f9fa;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+.large-badge {
+  font-size: 1rem; /* Larger text */
+  padding: 0.6rem 1rem; /* More spacing */
+  border-radius: 0.25rem; /* Rounder badge */
+  font-weight: 600;
 }
+
+
+
 
 .pageTitle {
   margin-bottom: 0.5rem;

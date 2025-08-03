@@ -75,7 +75,7 @@
   <tbody>
       {% for po in po_reports %}
         <tr>
-          <td>{{ po.purchase_order }}</td>
+          <td><strong>{{ po.purchase_order }}</strong></td>
           <td>{{ po.customer_branch.customer_name }}</td>
           <td>{{ po.date_started }}</td>
           <td>{{ po.completion_date }}</td>

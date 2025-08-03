@@ -150,7 +150,6 @@
           </div>
 
 
-
           <!-- ACCOUNT SECTION: pinned to bottom -->
           <div class="mt-auto px-3">
             <hr>
@@ -158,6 +157,20 @@
               <span>Account</span>
             </h6>
             <ul class="nav flex-column mb-3">
+              <li class="nav-item">
+                {% if request.user.is_superuser %}
+                  <a class="nav-link" href="{% url 'admin:index' %}">
+                    <span data-feather="shield"></span>
+                    Admin Site
+                  </a>
+                {% endif %}
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'change_password' username=request.user.username %}">
+                  <span data-feather="lock"></span>
+                  Change Password
+                </a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">
                   <span data-feather="log-out"></span>
