@@ -18,7 +18,7 @@ title %TITLE%
 
 REM === Activate virtual environment ===
 echo [ENV] Activating virtual environment...
-call ..\env\Scripts\activate.bat
+call ..\env_admin\Scripts\activate.bat
 
 REM === Git reset ===
 echo [GIT] Resetting local changes...
