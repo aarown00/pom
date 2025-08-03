@@ -64,5 +64,5 @@ echo.
 
 REM === Start Waitress server ===
 echo [SERVER] Launching production server with Waitress...
-..\env\Scripts\waitress-serve --host=0.0.0.0 --port=80 mabuhaypowers_pom.wsgi:application
+waitress-serve --host=0.0.0.0 --port=80 mabuhaypowers_pom.wsgi:application
 
