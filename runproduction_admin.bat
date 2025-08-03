@@ -16,6 +16,8 @@ REM === Set the window title to lock it ===
 echo [INIT] Setting CMD window title...
 title %TITLE%
 
+call pg_backup.bat
+
 REM === Activate virtual environment ===
 echo [ENV] Activating virtual environment...
 call ..\env_admin\Scripts\activate.bat
