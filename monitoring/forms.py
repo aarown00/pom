@@ -1,10 +1,10 @@
 from django import forms
 from .models import PurchaseOrder
-from .mixins import UniqueFieldValidationMixin, DashCharFieldMixin
+from .mixins import UniqueFieldValidationMixin, DashCharFieldMixin, SingleSpaceValidationMixin
 from django.utils.timezone import localdate
 
 
-class PurchaseOrderForm(UniqueFieldValidationMixin, DashCharFieldMixin, forms.ModelForm):
+class PurchaseOrderForm(UniqueFieldValidationMixin, DashCharFieldMixin, SingleSpaceValidationMixin, forms.ModelForm):
     purchase_order = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Enter Purchase Order #", "class": "form-control"}), label="PURCHASE ORDER NO:")
     purchase_order_received = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}), label="RECEIVED DATE:")
     customer_branch = forms.ModelChoiceField(
@@ -30,6 +30,7 @@ class PurchaseOrderForm(UniqueFieldValidationMixin, DashCharFieldMixin, forms.Mo
 
     unique_fields = ['purchase_order']
     dash_fields = ['purchase_order', 'classification', 'coc_number', 'dr_number', 'invoice_number', 'service_report_number']
+    single_space_fields = ['purchase_order', 'classification', 'description', 'remarks', 'coc_number', 'dr_number', 'invoice_number', 'service_report_number']
 
     class Meta:
         model = PurchaseOrder

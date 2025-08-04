@@ -1,9 +1,9 @@
 from django import forms
 from .models import ManpowerDetail
-from .mixins import UniqueFieldValidationMixin, LetterCharFieldMixin
+from .mixins import UniqueFieldValidationMixin, LetterCharFieldMixin, SingleSpaceValidationMixin
 
 
-class ManpowerDetailForm(UniqueFieldValidationMixin, LetterCharFieldMixin, forms.ModelForm):
+class ManpowerDetailForm(UniqueFieldValidationMixin, LetterCharFieldMixin, SingleSpaceValidationMixin, forms.ModelForm):
     name = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Enter Manpower Name:", "class": "form-control"}), label="MANPOWER NAME:")
     category = forms.ChoiceField(
     choices=ManpowerDetail.CATEGORY_CHOICES,
@@ -16,6 +16,7 @@ class ManpowerDetailForm(UniqueFieldValidationMixin, LetterCharFieldMixin, forms
 
     unique_fields = ['name']
     letter_fields = ['name']
+    single_space_fields = ['name']
   
     class Meta:
         model = ManpowerDetail

@@ -166,4 +166,19 @@ class LetterCharFieldMixin:
                     field_name,
                     f'Only letters are allowed in this field.'
                 )
-        return cleaned_data    
+        return cleaned_data   
+    
+class SingleSpaceValidationMixin:
+    def clean(self):
+        cleaned_data = super().clean()
+        for field_name in getattr(self, 'single_space_fields', []):
+            value = cleaned_data.get(field_name)
+            if not value:
+                continue
+
+            if value.strip() != value or '  ' in value:
+                self.add_error(
+                    field_name,
+                    'Single space between is only allowed.'
+                )
+        return cleaned_data
