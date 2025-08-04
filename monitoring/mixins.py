@@ -152,7 +152,7 @@ class DashCharFieldMixin:
     
 class LetterCharFieldMixin:
     
-    allowed_pattern = re.compile(r'^[A-Za-z]+$')
+    allowed_pattern = re.compile(r'^[A-Za-z ]+$')
 
     def clean(self):
         cleaned_data = super().clean()
