@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'monitoring.apps.MonitoringConfig',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

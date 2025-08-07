@@ -11,10 +11,14 @@ class DailyWorkStatusInline(admin.TabularInline):  # or admin.StackedInline for 
 class PurchaseOrderAdmin(admin.ModelAdmin):
     list_display = (
     'id',
+    'date_recorded',
     'purchase_order',
+    'amount',
     'status',
     )
     readonly_fields = (
+        'target_date_delayed',
+        'total_days',
         'manpower_total',
         'work_hours_total',
         'working_days_total',

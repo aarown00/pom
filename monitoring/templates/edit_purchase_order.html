@@ -109,6 +109,22 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="{{ form.amount.id_for_label }}">{{ form.amount.label }}</label>
+                    {{ form.amount }}
+                    <div class="invalid-feedback d-block" id="amount-error" style="{% if form.amount.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.amount.errors %}
+                        {{ form.amount.errors.0 }}
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group col-md-8">
+  
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -223,7 +239,12 @@
       if (!field || !errorDiv) return;
 
       function runAjaxValidation() {
-        const value = field.value.trim();
+        let value = field.value.trim();
+
+        // Strip ₱ and commas if amount field
+        if (fieldName === 'amount') {
+          value = value.replace(/[₱,]/g, '');
+        }
 
         if (value === '') {
           field.classList.remove('is-invalid');
@@ -295,6 +316,12 @@
     });
 
     attachAjaxValidator({
+      fieldId: 'id_amount',
+      errorId: 'amount-error',
+      fieldName: 'amount'
+    });
+
+    attachAjaxValidator({
       fieldId: 'id_coc_number',
       errorId: 'coc-number-error',
       fieldName: 'coc_number',
@@ -327,6 +354,35 @@
 </script>
 
 <script>
+  const input = document.getElementById("id_amount");
+
+  function formatPeso(value) {
+    let num = value.replace(/[₱,]/g, '');
+    if (num === "" || isNaN(num)) return "";
+    num = parseFloat(num);
+    return '₱' + num.toLocaleString('en-PH', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  // 🔥 Remove formatting on focus (user can type cleanly)
+  input.addEventListener("focus", function () {
+    this.value = this.value.replace(/[₱,]/g, '');
+  });
+
+  // ✅ Format on blur (after typing is done)
+  input.addEventListener("blur", function () {
+    this.value = formatPeso(this.value);
+  });
+
+  // 🧼 Remove formatting before form submission
+  document.querySelector("form").addEventListener("submit", function () {
+    input.value = input.value.replace(/[₱,]/g, '');
+  });
+</script>
+
+<script>
   function showLoading1() {
     const btn = document.getElementById('saveBtn1');
     btn.disabled = true;
@@ -342,6 +398,7 @@
     }, 2000);
   }
 </script>
+
 
 
 

@@ -71,6 +71,15 @@ class PurchaseOrder(models.Model):
 
     classification = models.CharField(max_length=30)
     description = models.CharField(max_length=150)
+    amount = models.DecimalField(
+    max_digits=10,         
+    decimal_places=2,
+    validators=[
+        MinValueValidator(0),
+        MaxValueValidator(99999999.99)
+    ]
+    )
+
     service_report_number = models.CharField(max_length=10, blank=True, null=True)
     date_started = models.DateField(blank=True, null=True)
     target_date = models.DateField()

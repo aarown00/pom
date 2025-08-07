@@ -1,0 +1,45 @@
+<!-- Banner always shown -->
+<div id="update-banner" class="alert alert-info alert-dismissible fade show mb-4" role="alert">
+  <strong id="banner-title"></strong><br>
+  - "Amount" is now included and required for adding P.O<br>
+  - Adding manpower names can now use space.<br>
+  <small class="text-muted d-block mt-2">Click the × in the top right corner to dismiss this notification.</small>
+  <button type="button" class="close" aria-label="Close" onclick="dismissBanner()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<script>
+  const BANNER_VERSION = 'v1.01';
+  const storageKey = `update_banner_${BANNER_VERSION}_dismissed`;
+  const banner = document.getElementById('update-banner');
+  const bannerTitle = document.getElementById('banner-title');
+
+  if (bannerTitle) {
+    bannerTitle.textContent = `🚀 What's New in ${BANNER_VERSION}:`;
+  }
+
+  if (localStorage.getItem(storageKey) === 'true') {
+    banner.style.display = 'none';
+  }
+
+  function dismissBanner() {
+    localStorage.setItem(storageKey, 'true');
+    banner.style.display = 'none';
+  }
+</script>
+
+{% if request.user.is_superuser %}
+  <div class="mb-3">
+    <button onclick="resetBanner()" class="btn btn-sm btn-warning">
+      🔄 Reset Banner (Dev)
+    </button>
+  </div>
+
+  <script>
+    function resetBanner() {
+      localStorage.removeItem(storageKey);
+      location.reload();
+    }
+  </script>
+{% endif %}

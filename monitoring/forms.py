@@ -18,7 +18,21 @@ class PurchaseOrderForm(UniqueFieldValidationMixin, DashCharFieldMixin, SingleSp
      empty_label=None,
     )
     classification = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Enter Classification", "class": "form-control"}), label="CLASSIFICATION:")
-    description = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Enter Description", "class": "form-control", "rows": 3}), label="DESCRIPTION/CATEGORY:")
+    amount = forms.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        min_value=0,
+        max_value=99999999.99,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '₱0.00',
+            'id': 'id_amount',
+            'autocomplete': 'off',
+            'inputmode': 'decimal'
+        }),
+        label='AMOUNT IN PHP:'
+    )
+    description = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Enter Description", "class": "form-control", "rows": 2}), label="DESCRIPTION/CATEGORY:")
     service_report_number= forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Service Report No.", "class": "form-control"}), label="SR NO:", required=False)
     date_started = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}), label="STARTED DATE:", required=False)
     target_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}), label="TARGET DATE:")
@@ -34,7 +48,7 @@ class PurchaseOrderForm(UniqueFieldValidationMixin, DashCharFieldMixin, SingleSp
 
     class Meta:
         model = PurchaseOrder
-        fields = ['purchase_order', 'purchase_order_received', 'customer_branch', 'classification', 'description', 'service_report_number', 'date_started', 'target_date', 'completion_date', 'coc_number', 'dr_number', 'invoice_number', 'remarks']
+        fields = ['purchase_order', 'purchase_order_received', 'customer_branch', 'classification', 'amount', 'description', 'service_report_number', 'date_started', 'target_date', 'completion_date', 'coc_number', 'dr_number', 'invoice_number', 'remarks']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

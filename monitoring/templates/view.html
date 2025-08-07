@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% load static %}
 
 {% block title %}P.O Details{% endblock %}
@@ -93,8 +94,8 @@
 
     <!-- Body -->
     <div class="row gx-3 mt-2">
-      <div class="col-md-6 mb-3">
-        <div class="card">
+      <div class="col-md-6 mb-3 d-flex">
+        <div class="card w-100">
           <div class="card-header">P.O DETAILS</div>
           <div class="card-body">
             <ul class="list-unstyled mb-0 responsive-info-list">
@@ -127,13 +128,19 @@
                 <div class="col-4 label-cell"><strong>Classification:</strong></div>
                 <div class="col-8" id="po-classification">{{ po.classification }}</div>
               </li>
+              <li class="row mb-2">
+              <div class="col-4 label-cell"><strong>Amount:</strong></div>
+              <div class="col-8" id="po-amount">
+                ₱{{ po.amount|floatformat:2|intcomma }}
+              </div>
+            </li>
             </ul>
           </div>
         </div>
       </div>
 
-      <div class="col-md-6 mb-3">
-        <div class="card">
+      <div class="col-md-6 mb-3 d-flex">
+        <div class="card w-100">
           <div class="card-header">MONITORING</div>
           <div class="card-body">
             <ul class="list-unstyled mb-0 responsive-info-list">
