@@ -277,5 +277,15 @@
   }
 }
 
+@media print {
+    .tabs-section,
+    .print-button-container,
+    .po-info-left,
+    .po-info-right,
+    .po-header {
+      display: none !important;
+    }
+  }
+
 
 

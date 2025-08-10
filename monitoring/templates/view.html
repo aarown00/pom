@@ -29,14 +29,19 @@
     {% endif %}
     </div>
 
+    <div class="print-button-container d-flex align-items-center gap-2 mt-2 mt-md-0">
+      <button id="saveBtn2" onclick="showLoading2(); window.print();" class="btn btn-primary">
+        <i data-feather="printer"></i> Print</button>
+    </div>
 
   </div>
 </div>
 
 <div style="height: 1rem;"></div>
 
+<div class="tabs-section">
 {% include "tabs_po.html" %}
-
+</div>
 
 <div class="container-fluid py-4">
   <div class="px-4">
@@ -48,7 +53,7 @@
     >
       <!-- Left Side: P.O. Info -->
       <div
-        class="d-flex flex-column flex-md-row align-items-start align-items-md-center"
+        class="d-flex flex-column flex-md-row align-items-start align-items-md-center po-info-left"
         style="gap: 1.5rem; flex-wrap: wrap;"
       >
         <strong style="white-space: nowrap; flex-shrink: 0;">
@@ -78,7 +83,7 @@
 
       <!-- Right Side: PO ID + Date + Back Button -->
       <div
-        class="d-flex flex-column flex-md-row align-items-start align-items-md-center mt-3 mt-md-0"
+        class="d-flex flex-column flex-md-row align-items-start align-items-md-center mt-3 mt-md-0 po-info-right"
         style="gap: 1.5rem; flex-wrap: wrap;"
       >
         <strong style="white-space: nowrap; flex-shrink: 0;">
@@ -145,28 +150,28 @@
           <div class="card-body">
             <ul class="list-unstyled mb-0 responsive-info-list">
               <li class="row mb-2">
-                <div class="col-5 label-cell"><strong>Started Date:</strong></div>
-                <div class="col-7" id="po-date-started">{{ po.date_started }}</div>
+                <div class="col-4 label-cell"><strong>Started Date:</strong></div>
+                <div class="col-8" id="po-date-started">{{ po.date_started }}</div>
               </li>
               <li class="row mb-2">
-                <div class="col-5 label-cell"><strong>Completion Date:</strong></div>
-                <div class="col-7" id="po-completion-date">{{ po.completion_date }}</div>
+                <div class="col-4 label-cell"><strong>Completion Date:</strong></div>
+                <div class="col-8" id="po-completion-date">{{ po.completion_date }}</div>
               </li>
               <li class="row mb-2">
-                <div class="col-5 label-cell"><strong>COC No:</strong></div>
-                <div class="col-7" id="po-coc-number">{{ po.coc_number|default:"None" }}</div>
+                <div class="col-4 label-cell"><strong>COC No:</strong></div>
+                <div class="col-8" id="po-coc-number">{{ po.coc_number|default:"None" }}</div>
               </li>
               <li class="row mb-2">
-                <div class="col-5 label-cell"><strong>DR No:</strong></div>
-                <div class="col-7" id="po-dr-number">{{ po.dr_number|default:"None"  }}</div>
+                <div class="col-4 label-cell"><strong>DR No:</strong></div>
+                <div class="col-8" id="po-dr-number">{{ po.dr_number|default:"None"  }}</div>
               </li>
               <li class="row mb-2">
-                <div class="col-5 label-cell"><strong>Service Report No:</strong></div>
-                <div class="col-7" id="po-service-report-number">{{ po.service_report_number|default:"None"  }}</div>
+                <div class="col-4 label-cell"><strong>Service Report No:</strong></div>
+                <div class="col-8" id="po-service-report-number">{{ po.service_report_number|default:"None"  }}</div>
               </li>
               <li class="row mb-2">
-                <div class="col-5 label-cell"><strong>Invoice No:</strong></div>
-                <div class="col-7" id="po-invoice-number">{{ po.invoice_number|default:"None"  }}</div>
+                <div class="col-4 label-cell"><strong>Invoice No:</strong></div>
+                <div class="col-8" id="po-invoice-number">{{ po.invoice_number|default:"None"  }}</div>
               </li>
             </ul>
           </div>
@@ -256,6 +261,23 @@
 
   </div> <!-- end .px-4 -->
 </div> <!-- end .container-fluid -->
+
+<script>
+  function showLoading2() {
+    const btn = document.getElementById('saveBtn2');
+    btn.disabled = true;
+    btn.innerHTML = `
+      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      Printing...
+    `;
+
+    // Automatically reset after 3 seconds (3000 ms)
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = 'Print'; // Original text of your button
+    }, 2000);
+  }
+</script>
 
 {% endblock %}
 

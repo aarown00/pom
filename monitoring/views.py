@@ -279,25 +279,29 @@ def edit_dws(request, username, pk):
 
 @login_required
 def dws(request, username, pk):
-    
     if request.user.username != username: 
         return redirect('dashboard', username=request.user.username)
         
     po = get_object_or_404(PurchaseOrder, pk=pk)
     daily_work_statuses_list = po.daily_work_statuses.all().prefetch_related('manpower').order_by('id')
 
-    paginator = Paginator(daily_work_statuses_list, 5) 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    print_mode = request.GET.get('print') == 'all'
+    if print_mode:
+        # Send all items without pagination
+        page_obj = daily_work_statuses_list
+    else:
+        paginator = Paginator(daily_work_statuses_list, 5) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
     
     context = {
         'po': po,
-        'page_obj': page_obj, 
+        'page_obj': page_obj,  # will be QuerySet or Page object depending on print_mode
+        'print_mode': print_mode,
         'username': username,
     }
 
     return render(request, 'dws.html', context)
-
 
 #customer----------------------------------------------------------------------
 

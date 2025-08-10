@@ -138,3 +138,13 @@
     max-width: 250px;
   }
 }
+
+@media print {
+    .tabs-section,
+    .print-button-container,
+    .banner,
+    .pagination-wrapper
+     {
+      display: none !important;
+    }
+  }
