@@ -144,6 +144,16 @@
   .text-muted {
     font-size: 0.85rem;
   }
+
+  .dashboard-button {
+    font-size: 0.95rem;
+    padding: 4px 10px;
+  }
+
+  .large-badge {
+    font-size: 0.95rem;
+    padding: 0.55rem 0.9rem;
+  }
 }
 
 /* ========== RESPONSIVE OPTIMIZATION FOR 1400px ========== */
@@ -176,6 +186,16 @@
   .text-muted {
     font-size: 0.82rem;
   }
+
+  .dashboard-button {
+    font-size: 0.9rem;
+    padding: 4px 9px;
+  }
+
+  .large-badge {
+    font-size: 0.9rem;
+    padding: 0.45rem 0.8rem;
+  }
 }
 
 /* ========== RESPONSIVE OPTIMIZATION FOR 1366px ========== */
@@ -207,6 +227,16 @@
 
   .text-muted {
     font-size: 0.8rem;
+  }
+
+  .dashboard-button {
+    font-size: 0.85rem;
+    padding: 3px 8px;
+  }
+
+  .large-badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
   }
 }
 
@@ -242,6 +272,17 @@
   .po-header strong {
     font-weight: 500;
     white-space: normal !important;
+  }
+
+  .po-header-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+  }
+
+  .po-header-bar h1 {
+    font-size: 1.25rem !important;
+    margin-right: 0 !important;
   }
 }
 

@@ -73,7 +73,7 @@
   #dailyWorkStatusTable td {
     padding: 20px 14px;
   }
-
+  
   .dashboard-button {
     font-size: 0.95rem;
     padding: 4px 10px;
@@ -91,7 +91,7 @@
     padding: 18px 12px;
     font-size: 0.9rem;
   }
-
+  
   .dashboard-button {
     font-size: 0.9rem;
     padding: 4px 9px;
@@ -100,6 +100,20 @@
   .large-badge {
     font-size: 0.9rem;
     padding: 0.45rem 0.8rem;
+  }
+}
+
+/* 1366px and below - Most common laptop size */
+@media (max-width: 1366px) {
+  
+  .dashboard-button {
+    font-size: 0.85rem;
+    padding: 3px 8px;
+  }
+
+  .large-badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
   }
 }
 

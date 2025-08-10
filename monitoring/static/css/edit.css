@@ -120,22 +120,6 @@ textarea.form-control:focus {
   color: white;
 }
 
-.dashboard-button {
-  background-color: white;
-  color: #1a73e8;
-  border: 2px solid #1a73e8;
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-weight: bold;
-  transition-duration: 0.4s;
-}
-
-.dashboard-button:hover {
-  background-color: #1a73e8;
-  color: white;
-}
-
-
 
 .sticky-wrapper {
   position: sticky;
