@@ -111,6 +111,10 @@
     document.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', function (e) {
         if (isFormDirty) {
+          // Ignore if href is # or empty or javascript:void(0)
+          if (!this.href || this.getAttribute('href') === '#' || this.getAttribute('href').startsWith('javascript:')) {
+            return;
+          }
           e.preventDefault();
           nextUrl = this.href;
           document.getElementById("unsavedModal").style.display = "grid";
