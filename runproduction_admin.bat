@@ -22,10 +22,6 @@ REM === Activate virtual environment ===
 echo [ENV] Activating virtual environment...
 call ..\env_admin\Scripts\activate.bat
 
-REM === Installing and updating dependencies ===
-echo [PYTHON] Installing and updating dependencies...
-pip install -r requirements.txt
-
 REM === Git reset ===
 echo [GIT] Resetting local changes...
 REM git reset --hard
@@ -33,6 +29,10 @@ REM git reset --hard
 REM === Git pull ===
 echo [GIT] Pulling latest changes from remote...
 REM git pull
+
+REM === Installing and updating dependencies ===
+echo [PYTHON] Installing and updating dependencies...
+pip install -r requirements.txt
 
 REM === Collect static files (interactive) ===
 echo [DJANGO] Collecting static files...
