@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.utils.timezone import localdate
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
+from simple_history.models import HistoricalRecords
 
 class CustomerDetail(models.Model):
     customer_name = models.CharField(max_length=50)
@@ -95,6 +96,14 @@ class PurchaseOrder(models.Model):
     invoice_number = models.CharField(max_length=10, blank=True, null=True)
     remarks = models.CharField(max_length=150, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, blank=True, null=True, default='Pending')
+
+    history = HistoricalRecords(excluded_fields=['manpower_type', 'date_recorded', 'purchase_order', 'purchase_order_received', 'customer_branch', 
+                                                 'total_days', 'manpower_total', 'work_hours_total', 'working_days_total',
+                                                 'classification', 'description', 'amount', 'service_report_number',
+                                                 'target_date_status', 'target_date_delayed', 'coc_number',
+                                                 'dr_number', 'invoice_number', 'remarks', 'status',
+                                                 ]) 
+
 
 
     def save(self, *args, **kwargs):

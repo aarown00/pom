@@ -101,28 +101,32 @@ body {
   }
 }
 
-/* Base nav-tabs look */
 .nav-tabs .nav-link {
   color: #555;
   border: none;
   background: transparent;
-  transition: color 0.25s ease, background-color 0.25s ease;
+  position: relative; /* for ::after positioning */
+  border-radius: 0;
+  transition: color 0.25s ease;
 }
 
-/* Hover effect for tabs */
+/* Hover effect for tabs (no underline on hover) */
 .nav-tabs .nav-link:hover {
-  background-color: rgba(0, 128, 0, 0.05);
+  background-color: transparent;
   color: #28a745;
+  border-bottom-color: transparent; /* no underline on hover */
 }
 
-/* Active tab styling */
+/* Active tab styling with animated underline */
 .nav-tabs .nav-link.active {
-  color: white !important;
-  background-color: #28a745 !important; /* Bootstrap green */
-  border-radius: 0.25rem 0.25rem 0 0;
+  color: #28a745 !important;
+  background-color: transparent !important;
+  border-bottom: 3px solid #28a745 !important;
+  border-radius: 0;
+  transition: border-bottom-color 0.3s ease;
 }
 
-/* Dropdown menu styling (optional tweak) */
+/* Dropdown menu styling */
 .nav-tabs .dropdown-menu {
   margin-top: 0;
   border-radius: 0 0 0.25rem 0.25rem;
@@ -130,22 +134,27 @@ body {
 
 /* Highlight dropdown parent if a child is active */
 .nav-tabs .nav-item.dropdown.active > .nav-link {
-  color: white !important;
-  background-color: #28a745 !important;
+  color: #28a745 !important;
+  background-color: transparent !important;
+  border-bottom: 3px solid #28a745 !important;
+  border-radius: 0;
+  transition: border-bottom-color 0.3s ease;
 }
 
-/* Active dropdown item = light green */
+/* Active dropdown item styling */
 .dropdown-item.active,
 .dropdown-item.active:hover,
 .dropdown-item.active:focus {
-  background-color: #d4edda !important; /* Bootstrap's alert-success light green */
-  color: #155724 !important; /* Dark green text */
+  background-color: #d4edda !important;
+  color: #155724 !important;
 }
 
-/* Remove Bootstrap's blue highlight on dropdown item hover/focus */
+/* Remove Bootstrap's blue highlight on dropdown item focus */
 .dropdown-item:focus {
-  background-color: transparent !important;
+  background-color: #d4edda !important;
+  color: #155724 !important;
 }
+
 
 /* Media query for small devices (e.g., screens smaller than 768px) */
 @media (max-width: 767.98px) {

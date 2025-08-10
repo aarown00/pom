@@ -159,7 +159,34 @@ def view_purchase_order(request, username, pk):
 
     po = get_object_or_404(PurchaseOrder, pk=pk)
 
-    return render(request, 'view.html', {'po': po})
+    changes = []
+
+    records = po.history.all().order_by('-history_date')
+
+    for i in range(len(records) - 1):
+        current = records[i]
+        previous = records[i + 1]
+
+        diff = {}
+        for field in ['date_started', 'target_date', 'completion_date']:
+            old_value = getattr(previous, field)
+            new_value = getattr(current, field)
+            if old_value != new_value:
+                diff[field] = (old_value, new_value)
+
+        if diff:
+            changes.append({
+                'user': current.history_user,
+                'date': current.history_date,
+                'diff': diff,
+            })
+
+    context = {
+        'po': po,
+        'changes': changes,
+    }
+
+    return render(request, 'view.html', context)
 
 
 @login_required
@@ -621,3 +648,5 @@ def export_po_to_excel(request, username):
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     wb.save(response)
     return response
+
+#logs

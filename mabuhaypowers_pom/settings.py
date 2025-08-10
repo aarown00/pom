@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'monitoring.apps.MonitoringConfig',
     'django.contrib.humanize',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'monitoring.middleware.DisableCachingOnAuthPages',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 STATICFILES_STORAGE = 'whitenoise.Storage.CompressedManifestStaticFilesStorage'

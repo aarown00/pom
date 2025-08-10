@@ -212,7 +212,47 @@
           </div>
         </div>
       </div>
+    </div></br>
+
+    <div class="card itemscard mb-4">
+    <div class="card-header">LOGS</div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-bordered mb-0">
+          <thead class="thead-light">
+            <tr>
+              <th class="text-center">Date</th>
+              <th class="text-center">User</th>
+              <th class="text-center">Field</th>
+              <th class="text-center">Old Value</th>
+              <th class="text-center">New Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if changes %}
+              {% for change in changes %}
+                {% for field, values in change.diff.items %}
+                  <tr>
+                    <td class="text-center">{{ change.date|date:"M d, Y - h:i A" }}</td>
+                    <td class="text-center">{{ change.user.username|default:"System" }}</td>
+                    <td class="text-center">{{ field|title }}</td>
+                    <td class="text-center">{{ values.0|default:"—" }}</td>
+                    <td class="text-center">{{ values.1|default:"—" }}</td>
+                  </tr>
+                {% endfor %}
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="6" class="text-center">No changes detected in this P.O</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
+
+
 
   </div> <!-- end .px-4 -->
 </div> <!-- end .container-fluid -->
