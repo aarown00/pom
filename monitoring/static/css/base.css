@@ -101,38 +101,79 @@ body {
   }
 }
 
-/*
- * Navbar
- */
-
+/* Base nav-tabs look */
 .nav-tabs .nav-link {
-  position: relative;
   color: #555;
-  padding: 0.5rem 1rem;
-  transition: color .25s ease;
+  border: none;
+  background: transparent;
+  transition: color 0.25s ease, background-color 0.25s ease;
 }
 
-.nav-tabs .nav-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  background: #28c76f;
-  transform: scaleX(0);
-  transform-origin: center; /* or use left for left-to-right */
-  transition: transform .35s ease;
+/* Hover effect for tabs */
+.nav-tabs .nav-link:hover {
+  background-color: rgba(0, 128, 0, 0.05);
+  color: #28a745;
 }
 
+/* Active tab styling */
 .nav-tabs .nav-link.active {
-   color: #28c76f !important;
-  font-weight: 600;
+  color: white !important;
+  background-color: #28a745 !important; /* Bootstrap green */
+  border-radius: 0.25rem 0.25rem 0 0;
 }
 
-.nav-tabs .nav-link.active::after {
-  transform: scaleX(1);
+/* Dropdown menu styling (optional tweak) */
+.nav-tabs .dropdown-menu {
+  margin-top: 0;
+  border-radius: 0 0 0.25rem 0.25rem;
 }
+
+/* Highlight dropdown parent if a child is active */
+.nav-tabs .nav-item.dropdown.active > .nav-link {
+  color: white !important;
+  background-color: #28a745 !important;
+}
+
+/* Active dropdown item = light green */
+.dropdown-item.active,
+.dropdown-item.active:hover,
+.dropdown-item.active:focus {
+  background-color: #d4edda !important; /* Bootstrap's alert-success light green */
+  color: #155724 !important; /* Dark green text */
+}
+
+/* Remove Bootstrap's blue highlight on dropdown item hover/focus */
+.dropdown-item:focus {
+  background-color: transparent !important;
+}
+
+/* Media query for small devices (e.g., screens smaller than 768px) */
+@media (max-width: 767.98px) {
+  /* This targets the main navigation container */
+  .nav-tabs {
+    flex-direction: column;
+    /* Optional: To make the tabs fill the full width */
+    align-items: stretch;
+  }
+
+  /* Adjust the tab links to be full width */
+  .nav-tabs .nav-item {
+    width: 100%;
+    margin-bottom: 0.5rem; /* Add some spacing between stacked tabs */
+  }
+
+  /* Reset the border radius for stacked tabs */
+  .nav-tabs .nav-link {
+    border-radius: 0.25rem !important;
+  }
+  
+  /* Make the active tab have a full border radius on small screens */
+  .nav-tabs .nav-link.active {
+    border-radius: 0.25rem !important;
+  }
+}
+
+
 
 
 /* ========== RESPONSIVE OPTIMIZATION ========== */

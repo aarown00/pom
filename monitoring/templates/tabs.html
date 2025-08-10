@@ -1,25 +1,72 @@
-<div class="nav-tabs-container overflow-auto mb-3">
+<!-- Nav tabs -->
+<div class="nav-tabs-scroll-wrapper"> 
+<div class="nav-tabs-container mb-3">
   <ul class="nav nav-tabs flex-nowrap">
+
+    <!-- Dashboard -->
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
+      <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+         href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
     </li>
+
+    <!-- Add P.O -->
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">Customers</a>
+      <a class="nav-link {% if request.resolver_match.url_name == 'create' %}active{% endif %}"
+         href="{% url 'create' username=request.user.username %}">Add P.O</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'dashboard_manpower' username=request.user.username %}">Manpowers</a>
+
+    <!-- Customers dropdown -->
+    <li class="nav-item dropdown {% if request.resolver_match.url_name == 'dashboard_customer' or request.resolver_match.url_name == 'create_customer' %}active{% endif %}">
+      <a class="nav-link dropdown-toggle"
+         href="#"
+         id="customersDropdown"
+         data-toggle="dropdown"
+         aria-haspopup="true"
+         aria-expanded="false">
+        Customers
+      </a>
+      <div class="dropdown-menu" aria-labelledby="customersDropdown">
+        <a class="dropdown-item {% if request.resolver_match.url_name == 'dashboard_customer' %}active{% endif %}"
+           href="{% url 'dashboard_customer' username=request.user.username %}">Manage Customers</a>
+        <a class="dropdown-item {% if request.resolver_match.url_name == 'create_customer' %}active{% endif %}"
+           href="{% url 'create_customer' username=request.user.username %}">Add Customer</a>
+      </div>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'create' username=request.user.username %}">Add P.O</a>
+
+    <!-- Manpowers dropdown -->
+    <li class="nav-item dropdown {% if request.resolver_match.url_name == 'dashboard_manpower' or request.resolver_match.url_name == 'create_manpower' %}active{% endif %}">
+      <a class="nav-link dropdown-toggle"
+         href="#"
+         id="manpowersDropdown"
+         data-toggle="dropdown"
+         aria-haspopup="true"
+         aria-expanded="false">
+        Manpowers
+      </a>
+      <div class="dropdown-menu" aria-labelledby="manpowersDropdown">
+        <a class="dropdown-item {% if request.resolver_match.url_name == 'dashboard_manpower' %}active{% endif %}"
+           href="{% url 'dashboard_manpower' username=request.user.username %}">Manage Manpower</a>
+        <a class="dropdown-item {% if request.resolver_match.url_name == 'create_manpower' %}active{% endif %}"
+           href="{% url 'create_manpower' username=request.user.username %}">Add Manpower</a>
+      </div>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'create_customer' username=request.user.username %}">Add Customer</a>
+
+    <!-- Activity dropdown -->
+    <li class="nav-item dropdown {% if request.resolver_match.url_name == 'reports' or request.resolver_match.url_name == 'logs' %}active{% endif %}">
+      <a class="nav-link dropdown-toggle"
+         href="#"
+         id="activityDropdown"
+         data-toggle="dropdown"
+         aria-haspopup="true"
+         aria-expanded="false">
+        Activity
+      </a>
+      <div class="dropdown-menu" aria-labelledby="activityDropdown">
+        <a class="dropdown-item {% if request.resolver_match.url_name == 'reports' %}active{% endif %}"
+           href="{% url 'reports' username=request.user.username %}">Reports</a>
+      </div>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'create_manpower' username=request.user.username %}">Add Manpower</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'reports' username=request.user.username %}">Reports</a>
-    </li>
+
   </ul>
+</div>
 </div>
