@@ -216,6 +216,24 @@
                       {% endif %}
                     </div>
                   </div>
+                  <div class="form-group col-md-6">
+                    <label for="{{ form.pms_number.id_for_label }}">{{ form.pms_number.label }}</label>
+                    {{ form.pms_number }}
+                    <div class="invalid-feedback d-block" id="pms-number-error" style="{% if form.pms_number.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.pms_number.errors %}
+                        {{ form.pms_number.errors.0 }}
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="{{ form.pic_status.id_for_label }}">{{ form.pic_status.label }}</label>
+                    {{ form.pic_status }}
+                    <div class="invalid-feedback d-block" id="pic-status-error" style="{% if form.pic_status.errors %}display: block;{% else %}display: none;{% endif %}">
+                      {% if form.pic_status.errors %}
+                        {{ form.pic_status.errors.0 }}
+                      {% endif %}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -346,6 +364,13 @@
       fieldId: 'id_invoice_number',
       errorId: 'invoice-number-error',
       fieldName: 'invoice_number',
+      instanceId: '{{ form.instance.id|default_if_none:"" }}'
+    });
+
+    attachAjaxValidator({
+      fieldId: 'id_pms_number',
+      errorId: 'pms-number-error',
+      fieldName: 'pms_number',
       instanceId: '{{ form.instance.id|default_if_none:"" }}'
     });
 

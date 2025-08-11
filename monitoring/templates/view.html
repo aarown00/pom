@@ -173,6 +173,14 @@
                 <div class="col-4 label-cell"><strong>Invoice No:</strong></div>
                 <div class="col-8" id="po-invoice-number">{{ po.invoice_number|default:"None"  }}</div>
               </li>
+              <li class="row mb-2">
+                <div class="col-4 label-cell"><strong>PMS No:</strong></div>
+                <div class="col-8" id="pms-number">{{ po.pms_number|default:"None"  }}</div>
+              </li>
+              <li class="row mb-2">
+                <div class="col-4 label-cell"><strong>Picture:</strong></div>
+                <div class="col-8" id="pic-status">{{ po.get_pic_status_display|default:"Not Updated Yet"  }}</div>
+              </li>
             </ul>
           </div>
         </div>
@@ -248,7 +256,7 @@
               {% endfor %}
             {% else %}
               <tr>
-                <td colspan="6" class="text-center">No changes detected in this P.O</td>
+                <td colspan="6" class="text-center">No changes detected in Started, Target and Completion in this P.O</td>
               </tr>
             {% endif %}
           </tbody>

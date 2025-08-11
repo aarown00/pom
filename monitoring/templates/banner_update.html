@@ -1,19 +1,31 @@
-<!-- Banner always shown -->
-<div id="update-banner" class="alert alert-info alert-dismissible fade show mb-4" role="alert">
-  <strong id="banner-title"></strong><br>
-  - "Amount" is now included and required for adding P.O<br>
-  - Adding manpower names can now use space.<br>
-  - Tracking Logs for started, target and completion dates are now available in View P.O under Remarks.<br>
-  - Print now available for View P.O & Itinenary Details.<br>
-  <small class="text-muted d-block mt-2">Click the × in the top right corner to dismiss this notification.</small>
-  <button type="button" class="close" aria-label="Close" onclick="dismissBanner()">
+<script>
+  const BANNER_VERSION = 'v1.1';
+  const storageKey = `update_banner_${BANNER_VERSION}_dismissed`;
+</script>
+
+<div id="update-banner" 
+     class="alert alert-info alert-dismissible fade show mb-4 p-3" 
+     role="alert" style="font-size: 1.1rem; line-height: 1.6;">
+  
+  <strong style="font-size: 1.3rem;">📢 Updates v1.1:</strong>
+  <ul style="margin-top: 0.5rem; padding-left: 1.2rem;">
+    <li><b>Amount</b> — now required when adding P.O</li>
+    <li><b>PMS Number</b> & <b>Picture Status</b> — now in Update P.O</li>
+    <li>Manpower names can include spaces</li>
+    <li>Tracking logs for changes in start, target & completion dates in <b>View P.O</b></li>
+    <li>Print now available for View P.O & Itinerary Details</li>
+  </ul>
+
+  <div style="margin-top: 1rem; font-size: 1rem; color: #555;">
+    🛈 Click the <b>×</b> in the top right corner to close this message.
+  </div>
+
+  <button type="button" class="close" aria-label="Close" onclick="dismissBanner()" style="font-size: 2rem;">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 
 <script>
-  const BANNER_VERSION = 'v1.01';
-  const storageKey = `update_banner_${BANNER_VERSION}_dismissed`;
   const banner = document.getElementById('update-banner');
   const bannerTitle = document.getElementById('banner-title');
 
@@ -45,3 +57,4 @@
     }
   </script>
 {% endif %}
+

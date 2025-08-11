@@ -42,6 +42,11 @@ class PurchaseOrder(models.Model):
         ('Cancelled', 'Cancelled'),
     ]
 
+    PIC_STATUS_CHOICES = [
+        ('w/pic', 'With Picture'),
+        ('w/o pic', 'Without Picture'),
+    ]
+
     MANPOWER_TYPE_CHOICES = [
     ('employee', 'Employee Based'),
     ('contractor', 'Contractor Based'),
@@ -94,14 +99,16 @@ class PurchaseOrder(models.Model):
     coc_number = models.CharField(max_length=10, blank=True, null=True)
     dr_number = models.CharField(max_length=10, blank=True, null=True)
     invoice_number = models.CharField(max_length=10, blank=True, null=True)
+    pms_number = models.CharField(max_length=10, blank=True, null=True)
     remarks = models.CharField(max_length=150, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, blank=True, null=True, default='Pending')
+    pic_status = models.CharField(max_length=10, choices=PIC_STATUS_CHOICES, blank=True, null=True)
 
     history = HistoricalRecords(excluded_fields=['manpower_type', 'date_recorded', 'purchase_order', 'purchase_order_received', 'customer_branch', 
                                                  'total_days', 'manpower_total', 'work_hours_total', 'working_days_total',
                                                  'classification', 'description', 'amount', 'service_report_number',
                                                  'target_date_status', 'target_date_delayed', 'coc_number',
-                                                 'dr_number', 'invoice_number', 'remarks', 'status',
+                                                 'dr_number', 'invoice_number', 'pms_number', 'pic_status', 'remarks', 'status',
                                                  ]) 
 
 

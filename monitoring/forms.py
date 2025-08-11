@@ -33,22 +33,33 @@ class PurchaseOrderForm(UniqueFieldValidationMixin, DashCharFieldMixin, SingleSp
         label='AMOUNT IN PHP:'
     )
     description = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Enter Description", "class": "form-control", "rows": 2}), label="DESCRIPTION/CATEGORY:")
-    service_report_number= forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Service Report No.", "class": "form-control"}), label="SR NO:", required=False)
+    service_report_number= forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter SR No.", "class": "form-control"}), label="SR NO:", required=False)
     date_started = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}), label="STARTED DATE:", required=False)
     target_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}), label="TARGET DATE:")
     completion_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control", "max": localdate().isoformat()}), label="COMPLETION DATE:", required=False)
     coc_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter COC No.", "class": "form-control"}), label="COC NO:", required=False)
     dr_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter DR No.", "class": "form-control"}), label="DR NO.", required=False)
-    invoice_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Invoice No.", "class": "form-control"}), label="INV NO.", required=False)
+    invoice_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter INV No.", "class": "form-control"}), label="INV NO.", required=False)
+    pms_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter PMS No.", "class": "form-control"}), label="PMS NO.", required=False)
     remarks = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Enter Remarks", "class": "form-control", "rows": 3}), label="REMARKS:", required=False)
+    pic_status = forms.ChoiceField(
+        choices=PurchaseOrder.PIC_STATUS_CHOICES,
+        widget=forms.Select(attrs={
+            "class": "selectpicker form-control",
+            'title': 'Select',
+        }),
+        label="PICTURE:",
+        required=False,
+    )
 
     unique_fields = ['purchase_order']
-    dash_fields = ['purchase_order', 'classification', 'coc_number', 'dr_number', 'invoice_number', 'service_report_number']
-    single_space_fields = ['purchase_order', 'classification', 'description', 'remarks', 'coc_number', 'dr_number', 'invoice_number', 'service_report_number']
+    dash_fields = ['purchase_order', 'classification', 'coc_number', 'dr_number', 'invoice_number', 'service_report_number', 'pms_number']
+    single_space_fields = ['purchase_order', 'classification', 'description', 'remarks', 'coc_number', 'dr_number', 'invoice_number', 'service_report_number', 'pms_number']
 
     class Meta:
         model = PurchaseOrder
-        fields = ['purchase_order', 'purchase_order_received', 'customer_branch', 'classification', 'amount', 'description', 'service_report_number', 'date_started', 'target_date', 'completion_date', 'coc_number', 'dr_number', 'invoice_number', 'remarks']
+        fields = ['purchase_order', 'purchase_order_received', 'customer_branch', 'classification', 'amount', 'description', 'service_report_number', 'date_started', 'target_date', 'completion_date',
+                   'coc_number', 'dr_number', 'invoice_number', 'pms_number', 'remarks', 'pic_status']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
