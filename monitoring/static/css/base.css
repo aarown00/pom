@@ -84,7 +84,25 @@ body {
 
 
 .navbar-brand {
-  font-size: 1rem; /* Or try 14px */
+  font-size: 1.1rem;
+}
+
+.navbar .dropdown-menu {
+  min-width: 180px;
+  transform: translateX(-30%); /* adjust left shift */
+}
+
+.navbar .dropdown-item i {
+  stroke-width: 1.5;
+}
+
+/* On small screens, reset position so it doesn't overflow */
+@media (max-width: 576px) {
+  .navbar-nav .dropdown-menu {
+    transform: translateX(0);
+    right: 0 !important;
+    left: auto !important;
+  }
 }
 
 /*
