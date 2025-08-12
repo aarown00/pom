@@ -22,8 +22,6 @@ REM === Activate virtual environment ===
 echo [ENV] Activating virtual environment...
 call ..\env\Scripts\activate.bat
 
-cd \"%~dp0\"
-
 REM === Installing and updating dependencies ===
 echo [PYTHON] Installing and updating dependencies...
 pip install -r requirements.txt
@@ -39,10 +37,6 @@ REM git pull
 REM === Collect static files (interactive) ===
 echo [DJANGO] Collecting static files...
 REM python manage.py collectstatic --noinput
-
-REM === Skip makemigrations in prod (optional) ===
-REM echo [DJANGO] Making migrations...
-REM python manage.py makemigrations
 
 REM === Apply database migrations ===
 echo [DJANGO] Applying database migrations...

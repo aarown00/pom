@@ -10,7 +10,10 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
+from monitoring.apps import start_status_update_thread
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mabuhaypowers_pom.settings')
 
 application = get_wsgi_application()
+
+start_status_update_thread()

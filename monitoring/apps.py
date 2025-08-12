@@ -1,5 +1,7 @@
 import threading
 import time
+import sys
+import os
 from django.apps import AppConfig
 from django.core.cache import cache
 from django.utils.timezone import localdate
@@ -42,9 +44,20 @@ def delayed_status_update():
     except Exception as e:
         print(f"Unexpected error: {e}")
 
+def start_status_update_thread():
+    threading.Thread(target=delayed_status_update, daemon=True).start()
+
 class MonitoringConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'monitoring'
 
     def ready(self):
-        threading.Thread(target=delayed_status_update).start()
+        # Skip in common management commands
+        if any(cmd in sys.argv for cmd in [
+            'makemigrations', 'migrate', 'collectstatic', 'shell', 'createsuperuser'
+        ]):
+            return
+
+        # In dev: skip the auto-reloader's child process
+        if os.environ.get('RUN_MAIN') == 'true' or 'runserver' in sys.argv:
+            threading.Thread(target=delayed_status_update).start()
