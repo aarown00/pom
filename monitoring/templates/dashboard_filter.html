@@ -1,94 +1,124 @@
 <style>
- /* A more refined and elegant style for the filter section */
-
+/* Filter Section Container */
 .filter-section {
   background: #ffffff;
   border-radius: 12px;
   padding: 1.5rem 2rem;
   margin: 1rem auto 0rem auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* A softer, deeper shadow for a floating effect */
-  border: 1px solid #f0f0f0; /* A very subtle border to frame the component */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f0f0;
+
+  display: flex;                /* make container flex */
+  justify-content: center;      /* center the whole form */
 }
 
+/* Optional section header style */
 .filter-header {
   font-size: 1rem;
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 1.25rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #f0f0f0; /* A subtle separator line */
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .filter-form-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 1rem; /* More generous space between filters */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* flexible columns */
+  gap: 1rem;
   align-items: center;
+  max-width: 1100px;
+  width: 100%;
 }
 
+
+/* Label + input alignment */
+.grid-item {
+  display: flex;
+  flex-direction: column;  /* label above input */
+  align-items: flex-start; /* left align contents */
+}
+
+.grid-item label {
+  font-weight: 600;      /* makes it bold but not too heavy */
+  font-size: 0.9rem;     /* slightly smaller than normal text */
+  color: #2c3e50;        /* dark, readable color */
+  margin-bottom: 0.4rem; /* space between label and input */
+  text-transform: uppercase; /* optional: makes it look structured */
+  letter-spacing: 0.5px; /* optional: adds modern spacing */
+}
+
+
+/* Input & select base styling */
 .filter-form-grid .grid-item input,
 .filter-form-grid .grid-item select {
   width: 100%;
-  border-radius: 8px; /* Slightly softer corners for a modern feel */
+  border-radius: 8px;
   padding: 0.6rem 1rem;
   font-size: 0.9rem;
-  height: 44px; /* A standard, professional height */
+  height: 44px;
   border: 1px solid #dcdcdc;
   background-color: #ffffff;
   transition: all 0.2s ease;
 }
 
+/* Focus styling */
 .filter-form-grid .grid-item input:focus,
 .filter-form-grid .grid-item select:focus {
   outline: none;
   border-color: #0d6efd;
-  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15); /* A cleaner, more defined focus glow */
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
 }
 
-.filter-section .form-select.active-filter {
-  /* A very light blue background with a dark blue text */
+/* Active filter styling (for select & date inputs) */
+.filter-section .form-select.active-filter,
+.filter-section input[type="date"].active-filter {
   border: 2px solid #0d6efd;
   background-color: #e9f3ff;
   color: #0d6efd;
   font-weight: 600;
 }
 
+/* Responsive breakpoints */
 @media (max-width: 992px) {
   .filter-form-grid {
-    grid-template-columns: repeat(2, 1fr); /* Two columns on tablets */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 576px) {
   .filter-form-grid {
-    grid-template-columns: 1fr; /* Stack on mobile */
+    grid-template-columns: 1fr;
     gap: 0.75rem;
   }
 }
-
 </style>
 
-
 <div class="filter-section">
-  <div class="filter-header">🔍 Search/Filter:</div>
   <form method="get" class="filter-form-grid">
+
     <div class="grid-item">
-    <input type="text" 
-           name="search" 
-           id="search-input"
-           class="form-control" 
-           placeholder="Enter P.O..." 
-           autocomplete="off" 
-           value="{{ search_query }}"
-           data-list="purchase-orders-list"> <datalist id="purchase-orders-list">
+      <label for="search-input"><span class="icon">&#128269;</span> Search P.O:</label>
+      <input type="text" 
+             name="search" 
+             id="search-input"
+             class="form-control" 
+             placeholder="Enter P.O..." 
+             autocomplete="off" 
+             value="{{ search_query }}"
+             data-list="purchase-orders-list"> 
+      <datalist id="purchase-orders-list">
         {% for po_number in po_numbers_list %}
             <option value="{{ po_number }}">
         {% endfor %}
-    </datalist>
+      </datalist>
     </div>
 
     <div class="grid-item">
-      <select name="customer" class="form-select {% if selected_customer %}active-filter{% endif %}" onchange="this.form.submit()">
+      <label for="customer">Filter Customer</label>
+      <select name="customer" id="customer"
+              class="form-select {% if selected_customer %}active-filter{% endif %}" 
+              onchange="this.form.submit()">
         <option value="">All Customers</option>
         {% for name in customer_list %}
           <option value="{{ name }}" {% if selected_customer == name %}selected{% endif %}>{{ name }}</option>
@@ -97,40 +127,30 @@
     </div>
 
     <div class="grid-item">
-      <select name="date_started" class="form-select {% if selected_started %}active-filter{% endif %}" onchange="this.form.submit()">
-        <option value="">All Start Dates</option>
-        <option value="None" {% if selected_started == "None" %}selected{% endif %}>None</option>
-        {% for d in started_list %}
-          {% if d %}
-            <option value="{{ d|date:'Y-m-d' }}" {% if selected_started == d|date:'Y-m-d' %}selected{% endif %}>{{ d|date:'Y-m-d' }}</option>
-          {% endif %}
-        {% endfor %}
-      </select>
+      <label for="date_started">Filter Started Date</label>
+      <input type="date" 
+             name="date_started" 
+             id="date_started"
+             class="form-control {% if selected_started %}active-filter{% endif %}"
+             value="{{ selected_started|default:'' }}"
+             onchange="this.form.submit()">
     </div>
 
     <div class="grid-item">
-      <select name="target_date" class="form-select {% if selected_target %}active-filter{% endif %}" onchange="this.form.submit()">
-        <option value="">All Target Dates</option>
-        {% for d in target_list %}
-          <option value="{{ d|date:'Y-m-d' }}" {% if selected_target == d|date:'Y-m-d' %}selected{% endif %}>{{ d|date:'Y-m-d' }}</option>
-        {% endfor %}
-      </select>
+      <label for="target_date">Filter Target Date</label>
+      <input type="date" 
+            name="target_date" 
+            id="target_date"
+            class="form-control {% if selected_target %}active-filter{% endif %}"
+            value="{{ selected_target|default:'' }}"
+            onchange="this.form.submit()">
     </div>
 
     <div class="grid-item">
-      <select name="completion_date" class="form-select {% if selected_completed %}active-filter{% endif %}" onchange="this.form.submit()">
-        <option value="">All Completion Dates</option>
-        <option value="None" {% if selected_completed == "None" %}selected{% endif %}>None</option>
-        {% for d in completed_list %}
-          {% if d %}
-            <option value="{{ d|date:'Y-m-d' }}" {% if selected_completed == d|date:'Y-m-d' %}selected{% endif %}>{{ d|date:'Y-m-d' }}</option>
-          {% endif %}
-        {% endfor %}
-      </select>
-    </div>
-
-    <div class="grid-item">
-      <select name="status" class="form-select {% if selected_status %}active-filter{% endif %}" onchange="this.form.submit()">
+      <label for="status">Filter Status</label>
+      <select name="status" id="status"
+              class="form-select {% if selected_status %}active-filter{% endif %}" 
+              onchange="this.form.submit()">
         <option value="">All Statuses</option>
         <option value="Pending" {% if selected_status == 'Pending' %}selected{% endif %}>Pending</option>
         <option value="Ongoing" {% if selected_status == 'Ongoing' %}selected{% endif %}>Ongoing</option>
@@ -139,8 +159,10 @@
         <option value="Cancelled" {% if selected_status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
       </select>
     </div>
+
   </form>
 </div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
