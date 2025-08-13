@@ -40,8 +40,6 @@
   </button>
 </div> {% endcomment %}
 
-  {% include "banner_update.html" %}
-
   {% include "tabs.html" %}
 
 </br>
@@ -80,13 +78,14 @@
       <td>{{ po.customer_branch.customer_name }}</td>
       <td>{{ po.customer_branch.branch_name }}</td> 
       <td>₱{{ po.amount|floatformat:2|intcomma }}</td>     
-      <td>{{ po.date_started }}</td>
+      <td>{{ po.date_started|date:"n/j/y" }}</td>
+
       <td>
        {% if po.target_date_status == "adjusted" %}
-        <span class="text-primary">{{ po.target_date }}</span>
+        <span class="text-primary">{{ po.target_date|date:"n/j/y" }}</span>
    
       {% else %}
-        {{ po.target_date }}
+        {{ po.target_date|date:"n/j/y" }}
       {% endif %}
       </td>
 
