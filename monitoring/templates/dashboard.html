@@ -78,7 +78,14 @@
       <td>{{ po.customer_branch.customer_name }}</td>
       <td>{{ po.customer_branch.branch_name }}</td> 
       <td>₱{{ po.amount|floatformat:2|intcomma }}</td>     
-      <td>{{ po.date_started|date:"n/j/y" }}</td>
+      <td>
+        {% if po.date_started %}
+          {{ po.date_started|date:"n/j/y" }}
+        {% else %}
+          ---
+        {% endif %}
+      </td>
+
 
       <td>
        {% if po.target_date_status == "adjusted" %}

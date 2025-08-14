@@ -1,97 +1,133 @@
 <style>
 /* Filter Section Container */
 .filter-section {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 1.5rem 2rem;
-  margin: 1rem auto 0rem auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f0f0f0;
-
-  display: flex;                /* make container flex */
-  justify-content: center;      /* center the whole form */
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin: 1rem auto 0rem auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
 }
 
 /* Optional section header style */
 .filter-header {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 1.25rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #f0f0f0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .filter-form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* flexible columns */
-  gap: 1rem;
-  align-items: center;
-  max-width: 1100px;
-  width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    align-items: start; /* instead of center */
+    width: 100%;
 }
 
-
-/* Label + input alignment */
 .grid-item {
-  display: flex;
-  flex-direction: column;  /* label above input */
-  align-items: flex-start; /* left align contents */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* always start from top */
 }
 
 .grid-item label {
-  font-weight: 600;      /* makes it bold but not too heavy */
-  font-size: 0.9rem;     /* slightly smaller than normal text */
-  color: #2c3e50;        /* dark, readable color */
-  margin-bottom: 0.4rem; /* space between label and input */
-  text-transform: uppercase; /* optional: makes it look structured */
-  letter-spacing: 0.5px; /* optional: adds modern spacing */
+    font-weight: 600; 
+    font-size: 0.9rem;
+    color: #2c3e50;
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
-
 
 /* Input & select base styling */
 .filter-form-grid .grid-item input,
 .filter-form-grid .grid-item select {
-  width: 100%;
-  border-radius: 8px;
-  padding: 0.6rem 1rem;
-  font-size: 0.9rem;
-  height: 44px;
-  border: 1px solid #dcdcdc;
-  background-color: #ffffff;
-  transition: all 0.2s ease;
+    width: 100%;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    height: 44px;
+    border: 1px solid #dcdcdc;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
 }
 
 /* Focus styling */
 .filter-form-grid .grid-item input:focus,
 .filter-form-grid .grid-item select:focus {
-  outline: none;
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
 }
 
 /* Active filter styling (for select & date inputs) */
 .filter-section .form-select.active-filter,
 .filter-section input[type="date"].active-filter {
-  border: 2px solid #0d6efd;
-  background-color: #e9f3ff;
-  color: #0d6efd;
-  font-weight: 600;
+    border: 2px solid #0d6efd;
+    background-color: #e9f3ff;
+    color: #0d6efd;
+    font-weight: 600;
 }
 
 /* Responsive breakpoints */
 @media (max-width: 992px) {
-  .filter-form-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+    .filter-form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 576px) {
-  .filter-form-grid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
+    .filter-form-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
 }
+
+/* New styling for the "None" checkbox and its label */
+.none-filter-option {
+    display: flex;
+    align-items: center; /* Vertically aligns the checkbox and label */
+    margin-top: 0.5rem; /* Adds space between the date input and the checkbox */
+    gap: 8px; /* Space between the checkbox and the label text */
+}
+
+/* Style for the "None" checkbox */
+.none-filter-option input[type="checkbox"] {
+    width: 16px; /* Explicitly set the width */
+    height: 16px; /* Explicitly set the height */
+    margin: 0; /* Remove any default margins */
+}
+
+/* Style for the "None" label text */
+.none-filter-option label {
+    font-size: 0.9rem;
+    font-weight: 400; /* Regular weight for a less prominent look */
+    color: #2c3e50;
+    margin: 0; /* Remove any default margins */
+    text-transform: none; /* Ensure the text is not uppercase */
+    letter-spacing: normal; /* Reset letter spacing */
+}
+
+input:disabled {
+    cursor: not-allowed; /* shows circle-slash */
+    background-color: #f8f9fa; /* light gray so it's clear it's disabled */
+    opacity: 0.7; /* make it look inactive */
+}
+
+/* Remove extra space caused by margins of last child elements */
+.filter-section > *:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Also target form elements inside (like your filter-form-grid) */
+.filter-section > *:last-child > *:last-child {
+    margin-bottom: 0 !important;
+}
+
+
 </style>
 
 <div class="filter-section">
@@ -127,14 +163,25 @@
     </div>
 
     <div class="grid-item">
-      <label for="date_started">Filter Started Date</label>
-      <input type="date" 
-             name="date_started" 
-             id="date_started"
-             class="form-control {% if selected_started %}active-filter{% endif %}"
-             value="{{ selected_started|default:'' }}"
-             onchange="this.form.submit()">
+        <label for="date_started">Filter Started Date</label>
+        <input type="date" 
+              name="date_started" 
+              id="date_started"
+              class="form-control {% if selected_started %}active-filter{% endif %}"
+              value="{{ selected_started|default:'' }}"
+              onchange="this.form.submit()">
+        
+        <div class="none-filter-option">
+            <input type="checkbox"
+                  name="date_none"
+                  id="date_none"
+                  value="1"
+                  {% if date_none %}checked{% endif %}
+                  onchange="this.form.submit()">
+            <label for="date_none">Filter by None</label>
+        </div>
     </div>
+
 
     <div class="grid-item">
       <label for="target_date">Filter Target Date</label>
@@ -183,4 +230,26 @@
             }
         });
     });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const datePicker = document.getElementById('date_started');
+    const noneCheckbox = document.getElementById('date_none');
+
+    function toggleFields() {
+        // Disable the checkbox if date has a value
+        noneCheckbox.disabled = datePicker.value !== '';
+
+        // Disable the datepicker if checkbox is checked
+        datePicker.disabled = noneCheckbox.checked;
+    }
+
+    // Initial check when the page loads
+    toggleFields();
+
+    // Listen for changes
+    datePicker.addEventListener('input', toggleFields);
+    noneCheckbox.addEventListener('change', toggleFields);
+});
 </script>

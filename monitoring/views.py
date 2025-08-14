@@ -104,10 +104,13 @@ def dashboard_view(request, username):
         queryset = queryset.filter(status=selected_status)
     if selected_customer:
         queryset = queryset.filter(customer_branch__customer_name=selected_customer)
-    if selected_started == "None":
+    
+    date_none_checked = request.GET.get('date_none')
+    if date_none_checked:
         queryset = queryset.filter(date_started__isnull=True)
     elif selected_started:
         queryset = queryset.filter(date_started=selected_started)
+
     if selected_target:
         queryset = queryset.filter(target_date=selected_target)
     if selected_completed == "None":
@@ -144,6 +147,7 @@ def dashboard_view(request, username):
         'selected_status': selected_status,
         'selected_customer': selected_customer,
         'selected_started': selected_started,
+        'date_none': date_none_checked,
         'selected_target': selected_target,
         'selected_completed': selected_completed,
         'search_query': search_query,  
