@@ -1,4 +1,5 @@
 <!-- stats.html -->
+ {% load humanize %}
 <div class="container-fluid px-4">
   <div class="mb-3">
     <h4 class="fw-semibold">Dashboard</h4>
@@ -8,35 +9,40 @@
     <div class="col-12 col-md">
       <div class="stat-bar bg-pending">
         <div class="stat-value">{{ status_counts.pending }}</div>
-        <div class="stat-label">Pending</div>
+        <div class="stat-label">Total Pending</div>
+        <div class="stat-label">₱{{ status_totals.pending|floatformat:2|intcomma }}</div>
       </div>
     </div>
 
     <div class="col-12 col-md">
       <div class="stat-bar bg-ongoing">
         <div class="stat-value">{{ status_counts.ongoing }}</div>
-        <div class="stat-label">Ongoing</div>
+        <div class="stat-label">Total Ongoing</div>
+        <div class="stat-label">₱{{ status_totals.ongoing|floatformat:2|intcomma }}</div>
       </div>
     </div>
 
     <div class="col-12 col-md">
       <div class="stat-bar bg-completed">
         <div class="stat-value">{{ status_counts.completed }}</div>
-        <div class="stat-label">Completed</div>
+        <div class="stat-label">Total Completed</div>
+        <div class="stat-label">₱{{ status_totals.completed|floatformat:2|intcomma }}</div>
       </div>
     </div>
 
     <div class="col-12 col-md">
       <div class="stat-bar bg-delayed">
         <div class="stat-value">{{ status_counts.delayed }}</div>
-        <div class="stat-label">Delayed</div>
+        <div class="stat-label">Total Delayed</div>
+        <div class="stat-label">₱{{ status_totals.delayed|floatformat:2|intcomma }}</div>
       </div>
     </div>
 
     <div class="col-12 col-md">
       <div class="stat-bar bg-cancelled">
         <div class="stat-value">{{ status_counts.cancelled }}</div>
-        <div class="stat-label">Cancelled</div>
+        <div class="stat-label">Total Cancelled</div>
+        <div class="stat-label">₱{{ status_totals.cancelled|floatformat:2|intcomma }}</div>
       </div>
     </div>
   </div>

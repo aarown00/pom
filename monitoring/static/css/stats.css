@@ -1,8 +1,8 @@
 .stat-bar {
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;       /* more padding for breathing space */
+  border-radius: 0.75rem;     /* slightly more rounded */
   background: linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05));
-  height: 60px;
+  height: 90px;               /* taller bar */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,21 +10,21 @@
 }
 
 .stat-value {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 0;
-  line-height: 1;
+  font-size: 1.5rem;          /* larger number */
+  font-weight: 800;
+  margin-bottom: 0.25rem;     /* space between number and label */
+  line-height: 1.2;
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 1rem;            /* larger label */
   text-transform: uppercase;
-  letter-spacing: 0.4px;
-  opacity: 0.9;
-  line-height: 1;
+  letter-spacing: 0.6px;
+  opacity: 0.95;
+  line-height: 1.2;
 }
 
-
+/* Status colors - keep your gradients */
 .bg-pending {
   background: linear-gradient(to right, #F9B56B, #E59431) !important;
 }

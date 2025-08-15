@@ -9,7 +9,7 @@ from .forms_customer import CustomerDetailForm
 from .forms_manpower import ManpowerDetailForm
 from .forms_dws import DailyWorkStatusFormSet, DailyWorkStatusForm
 from .models import PurchaseOrder, CustomerDetail, ManpowerDetail, DailyWorkStatus
-from django.db.models import ProtectedError, Q
+from django.db.models import ProtectedError, Q, Sum
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
@@ -99,6 +99,16 @@ def dashboard_view(request, username):
         ]).count(),
     }
 
+    status_totals = {
+        'pending': PurchaseOrder.objects.filter(status='Pending').aggregate(total=Sum('amount'))['total'] or 0,
+        'ongoing': PurchaseOrder.objects.filter(status='Ongoing').aggregate(total=Sum('amount'))['total'] or 0,
+        'completed': PurchaseOrder.objects.filter(status='Completed').aggregate(total=Sum('amount'))['total'] or 0,
+        'cancelled': PurchaseOrder.objects.filter(status='Cancelled').aggregate(total=Sum('amount'))['total'] or 0,
+        'delayed': PurchaseOrder.objects.exclude(status__in=[
+            'Pending', 'Ongoing', 'Completed', 'Cancelled'
+        ]).aggregate(total=Sum('amount'))['total'] or 0,
+    }
+
     # Apply dropdown filters
     if selected_status:
         queryset = queryset.filter(status=selected_status)
@@ -155,6 +165,7 @@ def dashboard_view(request, username):
         'search_query': search_query,  
 
         'status_counts': status_counts,
+        'status_totals': status_totals,
     })
 
 
