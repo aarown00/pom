@@ -24,7 +24,21 @@
 
 {% include "tabs.html" %} </br>
 
-{% include "manpower_filter.html" %} 
+{% include "manpower_filter.html" %} </br>
+
+{% if manpower_details.paginator.count > 0 %}
+  <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
+    Showing {{ manpower_details.start_index }} to {{ manpower_details.end_index }} 
+    of {% if selected_manpower or search_query %}filtered entries{% else %}{{ manpower_details.paginator.count }} entries{% endif %}
+    (Page {{ manpower_details.number }} of {{ manpower_details.paginator.num_pages }})
+
+    {% if selected_manpower or search_query %}
+      <a href="{% url 'dashboard_manpower' username=request.user.username %}" class="ms-2" style="text-decoration: underline;">Reset Filters</a>
+    {% endif %}
+  </div>
+{% endif %}
+
+
 
   <div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
   <table id="manpowerTable" class="row-border hover" style="width: 100%;">
@@ -65,12 +79,6 @@
     </tbody>
   </table>
 </div>
-
-{% if manpower_details.paginator.count > 0 %}
-  <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
-    Showing {{ manpower_details.start_index }} to {{ manpower_details.end_index }} of {{ manpower_details.paginator.count }} entries
-  </div>
-{% endif %}
 
 <nav aria-label="Manpower pagination">
   <ul class="pagination justify-content-center">

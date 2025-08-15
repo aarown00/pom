@@ -50,6 +50,21 @@
 
   {% include "dashboard_filter.html" %} 
 
+</br>  
+
+{% if page_obj.paginator.count > 0 %}
+  <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
+    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} 
+    of {% if selected_status or selected_customer or selected_started or date_none or selected_target or selected_completed or search_query %}filtered entries{% else %}{{ page_obj.paginator.count }} entries{% endif %}
+    (Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }})
+
+    {% if selected_status or selected_customer or selected_started or date_none or selected_target or selected_completed or search_query %}
+      <a href="{% url 'dashboard' username=request.user.username %}" class="ms-2" style="text-decoration: underline;">Reset Filters</a>
+    {% endif %}
+  </div>
+{% endif %}
+
+
 
 <div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
   <table id="poTable" class="row-border hover" style="width: 100%;">
@@ -149,12 +164,6 @@
   </tbody>
 </table>
 </div>
-
-{% if page_obj.paginator.count > 0 %}
-  <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
-    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
-  </div>
-{% endif %}
 
 <nav aria-label="Purchase Order pagination">
   <ul class="pagination justify-content-center">

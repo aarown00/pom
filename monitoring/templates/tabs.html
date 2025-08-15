@@ -6,7 +6,7 @@
     <!-- Dashboard -->
     <li class="nav-item">
       <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
-         href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
+         href="{% if request.session.last_dashboard_url %}{{ request.session.last_dashboard_url }}{% else %}{% url 'dashboard' username=request.user.username %}{% endif %}">Dashboard</a>
     </li>
 
     <!-- Add P.O -->
@@ -27,7 +27,7 @@
       </a>
       <div class="dropdown-menu" aria-labelledby="customersDropdown">
         <a class="dropdown-item {% if request.resolver_match.url_name == 'dashboard_customer' %}active{% endif %}"
-           href="{% url 'dashboard_customer' username=request.user.username %}">Manage Customers</a>
+           href="{% if request.session.last_dashboard_customer_url %}{{ request.session.last_dashboard_customer_url }}{% else %}{% url 'dashboard_customer' username=request.user.username %}{% endif %}">Manage Customer</a>
         <a class="dropdown-item {% if request.resolver_match.url_name == 'create_customer' %}active{% endif %}"
            href="{% url 'create_customer' username=request.user.username %}">Add Customer</a>
       </div>
@@ -45,7 +45,7 @@
       </a>
       <div class="dropdown-menu" aria-labelledby="manpowersDropdown">
         <a class="dropdown-item {% if request.resolver_match.url_name == 'dashboard_manpower' %}active{% endif %}"
-           href="{% url 'dashboard_manpower' username=request.user.username %}">Manage Manpower</a>
+           href="{% if request.session.last_dashboard_manpower_url %}{{ request.session.last_dashboard_manpower_url }}{% else %}{% url 'dashboard_manpower' username=request.user.username %}{% endif %}">Manage Manpower</a>
         <a class="dropdown-item {% if request.resolver_match.url_name == 'create_manpower' %}active{% endif %}"
            href="{% url 'create_manpower' username=request.user.username %}">Add Manpower</a>
       </div>

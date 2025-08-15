@@ -78,13 +78,16 @@
               <span>Home</span>
             </h6>
             <ul class="nav flex-column mb-2">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">
-                  <span data-feather="clipboard"></span>
-                  Dashboard
-                </a>
-              </li>
+                <li class="nav-item">
+                    {% url 'dashboard' username=request.user.username as dashboard_url %}
+                    <a class="nav-link {% if request.session.last_dashboard_url and request.get_full_path == request.session.last_dashboard_url %}active{% endif %}"
+                      href="{{ request.session.last_dashboard_url|default:dashboard_url }}">
+                      <span data-feather="clipboard"></span>
+                        Dashboard
+                    </a>
+                </li>
             </ul>
+
 
             <hr>
 
@@ -96,15 +99,19 @@
               <li class="nav-item">
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">
-                  <span data-feather="users"></span>
-                  Customers
+               {% url 'dashboard_customer' username=request.user.username as dashboard_customer_url %}
+                <a class="nav-link {% if request.session.last_dashboard_customer_url and request.get_full_path == request.session.last_dashboard_customer_url %}active{% endif %}"
+                  href="{{ request.session.last_dashboard_customer_url|default:dashboard_customer_url }}">
+                    <span data-feather="users"></span>
+                    Customers
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'dashboard_manpower' username=request.user.username %}">
-                  <span data-feather="user-check"></span>
-                  Manpower
+                {% url 'dashboard_manpower' username=request.user.username as dashboard_manpower_url %}
+                <a class="nav-link {% if request.session.last_dashboard_manpower_url and request.get_full_path == request.session.last_dashboard_manpower_url %}active{% endif %}"
+                  href="{{ request.session.last_dashboard_manpower_url|default:dashboard_manpower_url }}">
+                    <span data-feather="user-check"></span>
+                    Manpowers
                 </a>
               </li>
             </ul>

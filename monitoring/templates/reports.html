@@ -52,9 +52,22 @@
       <i data-feather="download"></i> Export
     </button>
 
-    <div class="text-muted">
-      Showing recorded purchase orders from <strong>{{ request.GET.from }}</strong> to <strong>{{ request.GET.to }}</strong>
-    </div>
+   <div class="text-muted">
+  {% if request.GET.from or request.GET.to %}
+    Showing {{ po_reports.start_index }} to {{ po_reports.end_index }} of filtered entries
+  {% else %}
+    Showing {{ po_reports.start_index }} to {{ po_reports.end_index }} of {{ po_reports.paginator.count }} entries
+  {% endif %}
+
+  {% if po_reports.paginator %}
+    (Page {{ po_reports.number }} of {{ po_reports.paginator.num_pages }})
+  {% endif %}
+
+  {% if request.GET.from or request.GET.to %}
+    <a href="{% url 'reports' username=request.user.username %}" class="ms-2" style="text-decoration: underline;">Reset Filters</a>
+  {% endif %}
+</div>
+
   </div>
 {% endif %}
 
@@ -85,12 +98,6 @@
   </tbody>
 </table>
 </div>
-
-{% if po_reports.paginator.count > 0 %}
-  <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
-    Showing {{ po_reports.start_index }} to {{ po_reports.end_index }} of {{ po_reports.paginator.count }} entries
-  </div>
-{% endif %}
 
 <nav aria-label="Report pagination">
   <ul class="pagination justify-content-center">

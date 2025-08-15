@@ -24,7 +24,10 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard_customer' username=request.user.username %}">Customers</a>
+    <a class="nav-link"
+      href="{% if request.session.last_dashboard_customer_url %}{{ request.session.last_dashboard_customer_url }}{% else %}{% url 'dashboard_customer' username=request.user.username %}{% endif %}">
+        Manage Customers
+    </a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="#">Edit Customer</a>

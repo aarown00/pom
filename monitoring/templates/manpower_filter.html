@@ -35,6 +35,16 @@
   transition: all 0.2s ease; /* Add a smooth transition */
 }
 
+/* Active filter styling (for select & date inputs) */
+.filter-section .form-select.active-filter,
+.filter-section input[type="date"].active-filter,
+.filter-section input[type="text"].active-filter {
+    border: 2px solid #0d6efd !important;
+    background-color: #e9f3ff !important;
+    color: #0d6efd !important;
+    font-weight: 600;
+}
+
 .filter-form input[type="text"]:focus {
   outline: none;
   border-color: #0d6efd;
@@ -88,4 +98,21 @@
             }
         });
     });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+
+    function toggleActive() {
+        if (searchInput.value.trim() !== '') {
+            searchInput.classList.add('active-filter');
+        } else {
+            searchInput.classList.remove('active-filter');
+        }
+    }
+
+    toggleActive();
+    searchInput.addEventListener('input', toggleActive);
+});
 </script>

@@ -50,12 +50,15 @@ for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /i "IPv4"') do (
     )
 )
 
+for /f %%h in ('hostname') do set MYHOST=%%h
+
 REM === Final info ===
 echo.
 echo =====================================================
 echo [DONE] The server has been updated and is running!
 echo.
-echo You can access it anytime at link: %MYIP%
+echo You can access it anytime at IP link:       %MYIP%
+echo You can access it anytime at Hostname link: %MYHOST%.local
 echo.
 echo DO NOT close this window unless you want to shutdown or restart server.
 echo Please minimize and continue using the link in browser.

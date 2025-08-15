@@ -1,7 +1,7 @@
 <div class="nav-tabs-container overflow-auto mb-3">
 <ul class="nav nav-tabs flex-nowrap">
   <li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard' username=request.user.username %}">Dashboard</a>
+    <a class="nav-link" href="{% if request.session.last_dashboard_url %}{{ request.session.last_dashboard_url }}{% else %}{% url 'dashboard' username=request.user.username %}{% endif %}">Dashboard</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'view' request.user.username po.pk %}">View P.O</a>

@@ -25,6 +25,23 @@
 {% include "tabs.html" %} </br>
 
 {% include "customer_filter.html" %} 
+
+</br>  
+
+{% if customer_details.paginator.count > 0 %}
+  <div class="text-muted mb-2">
+    Showing {{ customer_details.start_index }} to {{ customer_details.end_index }} 
+    of {% if selected_customer or search_query %}filtered entries{% else %}{{ customer_details.paginator.count }} entries{% endif %}
+    (Page {{ customer_details.number }} of {{ customer_details.paginator.num_pages }})
+
+    {% if selected_customer or search_query %}
+      <a href="{% url 'dashboard_customer' username=request.user.username %}" class="ms-2" style="text-decoration: underline;">Reset Filters</a>
+    {% endif %}
+  </div>
+{% endif %}
+
+
+
  
 
 <div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
@@ -68,17 +85,6 @@
   </table>
 </div>
 
-{% if customer_details.paginator.count > 0 %}
-  <div class="text-muted mb-2">
-    Showing 
-    {{ customer_details.start_index }} 
-    to 
-    {{ customer_details.end_index }} 
-    of 
-    {{ customer_details.paginator.count }} 
-    entries
-  </div>
-{% endif %}
 
 <nav aria-label="Customer pagination">
   <ul class="pagination justify-content-center">

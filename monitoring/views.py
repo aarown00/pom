@@ -126,7 +126,7 @@ def dashboard_view(request, username):
     paginator = Paginator(queryset.order_by('-id'), 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
+    
     # Distinct values for dropdowns
     customer_list = CustomerDetail.objects.order_by('customer_name').values_list('customer_name', flat=True).distinct()
     started_list = PurchaseOrder.objects.values_list('date_started', flat=True).distinct()
@@ -134,6 +134,8 @@ def dashboard_view(request, username):
     completed_list = PurchaseOrder.objects.values_list('completion_date', flat=True).distinct()
 
     po_numbers_list = PurchaseOrder.objects.values_list('purchase_order', flat=True).distinct()
+
+    request.session['last_dashboard_url'] = request.get_full_path()
 
     return render(request, 'dashboard.html', {
         'page_obj': page_obj,
@@ -240,7 +242,11 @@ def cancel_purchase_order(request, username, pk):
 
     if not request.user.groups.filter(name="po_admin").exists():
         messages.error(request, "You do not have permission to cancel orders!")
-        return redirect("dashboard", username=username)
+        last_url = request.session.get('last_dashboard_url')
+        if last_url:
+            return redirect(last_url)
+        
+        return redirect('dashboard', username=username)
     
     po = get_object_or_404(PurchaseOrder, pk=pk)
 
@@ -250,6 +256,10 @@ def cancel_purchase_order(request, username, pk):
         messages.success(request, "Purchase Order has been cancelled.")
     else:
         messages.error(request, "Purchase Order already cancelled.")
+
+    last_url = request.session.get('last_dashboard_url')
+    if last_url:
+        return redirect(last_url)
 
     return redirect('dashboard', username=username)
 
@@ -337,6 +347,7 @@ def dashboard_customer_view(request, username):
     customer_details = paginator.get_page(page_number)
 
     all_customers = CustomerDetail.objects.all().order_by('customer_name')
+    request.session['last_dashboard_customer_url'] = request.get_full_path()
 
     return render(request, 'dashboard_customer.html', {
         'customer_details': customer_details,
@@ -356,6 +367,10 @@ def delete_customer(request, username, pk):
             messages.success(request, "Customer deleted successfully.")
         except ProtectedError:
             messages.error(request, "Cannot delete this customer because it is still in use in existing P.O's!")
+     
+    last_url = request.session.get('last_dashboard_customer_url')
+    if last_url:
+        return redirect(last_url)        
 
     return redirect('dashboard_customer', username=username)
 
@@ -442,6 +457,7 @@ def dashboard_manpower_view(request, username):
     
     # Get a separate queryset for the datalist, with all items
     all_manpower = ManpowerDetail.objects.all().order_by('name')
+    request.session['last_dashboard_manpower_url'] = request.get_full_path()
 
     return render(request, 'dashboard_manpower.html', {
         'manpower_details': manpower_details,
@@ -462,6 +478,10 @@ def delete_manpower(request, username, pk):
         messages.success(request, "Manpower deleted successfully.")
     except ValidationError as e:
         messages.error(request, e.message)
+
+    last_url = request.session.get('last_dashboard_manpower_url')
+    if last_url:
+        return redirect(last_url)
 
     return redirect('dashboard_manpower', username=username)
 
