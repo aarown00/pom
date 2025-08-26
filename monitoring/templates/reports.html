@@ -35,43 +35,98 @@
 
 <form method="get" class="form-inline mb-3" onsubmit="showFilter(); return true;">
   <label>From:</label>
-  <input type="date" id="from-date" name="from" class="form-control mx-2" required value="{{ from_date }}">
+  <input type="date" id="from-date" name="from" class="form-control mx-2" required 
+       value="{{ from_date|default_if_none:'' }}">
 
   <label>To:</label>
-  <input type="date" id="to-date" name="to" class="form-control mx-2" required value="{{ to_date }}">
+  <input type="date" id="to-date" name="to" class="form-control mx-2" required 
+       value="{{ to_date|default_if_none:'' }}">
+
+  <label>Status:</label>
+  <select id="status" name="status" class="form-control mx-2">
+  <option value="all" {% if status == "all" or not status %}selected{% endif %}>All</option>
+  <option value="Pending" {% if status == "Pending" %}selected{% endif %}>Pending</option>
+  <option value="Ongoing" {% if status == "Ongoing" %}selected{% endif %}>Ongoing</option>
+  <option value="Completed" {% if status == "Completed" %}selected{% endif %}>Completed</option>
+  <option value="Cancelled" {% if status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+  <option value="Delayed" {% if status == "Delayed" %}selected{% endif %}>Delayed</option>
+  </select>
+
 
   <button id="FilterBtn" type="submit" class="btn btn-sm filter-button"><i data-feather="filter"></i> Filter</button>
 </form>
 
-
-
-{% if po_reports %}
-  <div class="mb-3">
-    <button type="button" id="exportBtn" class="btn export-button mb-2"
-            data-url="{% url 'export_po_to_excel' username %}?from={{ request.GET.from }}&to={{ request.GET.to }}">
-      <i data-feather="download"></i> Export
-    </button>
-
-   <div class="text-muted">
-  {% if request.GET.from or request.GET.to %}
-    Showing {{ po_reports.start_index }} to {{ po_reports.end_index }} of filtered entries
-  {% else %}
-    Showing {{ po_reports.start_index }} to {{ po_reports.end_index }} of {{ po_reports.paginator.count }} entries
-  {% endif %}
-
-  {% if po_reports.paginator %}
+<div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
+  {% if po_reports.paginator.count > 0 %}
+    Showing {{ po_reports.start_index }} to {{ po_reports.end_index }}
+    of 
+    {% if request.GET.status and request.GET.status != 'all' or from_date or to_date %}
+      filtered entries
+    {% else %}
+      {{ po_reports.paginator.count }} entries
+    {% endif %}
     (Page {{ po_reports.number }} of {{ po_reports.paginator.num_pages }})
-  {% endif %}
 
-  {% if request.GET.from or request.GET.to %}
-    <a href="{% url 'reports' username=request.user.username %}" class="ms-2" style="text-decoration: underline;">Reset Filters</a>
+    {% if request.GET.status and request.GET.status != 'all' or from_date or to_date %}
+      <a href="{% url 'reports' username=request.user.username %}" class="ms-2" style="text-decoration: underline;">Reset Filters</a>
+    {% endif %}
+  {% else %}
+    {% if request.GET.status and request.GET.status != 'all' or from_date or to_date %}
+      No entries match your filters.
+      <a href="{% url 'reports' username=request.user.username %}" class="ms-2" style="text-decoration: underline;">Reset Filters</a>
+    {% else %}
+      Please select filters.
+    {% endif %}
   {% endif %}
 </div>
 
+</br>
+{% if po_reports %}
+
+<div class="mb-3">
+  <label for="fields" class="form-label">Filter Export Columns:</label>
+
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+    <div class="flex-grow-1" style="max-width: 250px;">
+      <select id="fields" name="fields" 
+              class="selectpicker form-select"
+              multiple 
+              data-live-search="true"
+              data-actions-box="true"
+              data-selected-text-format="count > 1"
+              title="Choose fields">
+        <option value="purchase_order">Purchase Order</option>
+        <option value="customer">Customer</option>
+        <option value="branch_name">Branch/Address</option>
+        <option value="classification">Classification</option>
+        <option value="description">Description</option>
+        <option value="manpower_type">Manpower Type</option>
+        <option value="manpower_total">Total Manpower</option>
+        <option value="total_days">Total Days</option>
+        <option value="working_days_total">Working Days</option>
+        <option value="work_hours_total">Total Working Hours</option>
+        <option value="date_recorded">Recorded Date</option>
+        <option value="purchase_order_received">Received Date</option>
+        <option value="date_started">Started Date</option>
+        <option value="target_date">Target Date</option>
+        <option value="completion_date">Completion Date</option>
+        <option value="coc_number">COC No.</option>
+        <option value="dr_number">DR No.</option>
+        <option value="service_report_number">Service Report No.</option>
+        <option value="invoice_number">Inv No.</option>
+        <option value="remarks">Remarks</option>
+        <option value="status">Status</option>
+      </select>
+    </div>
+
+    <button type="button" id="exportBtn" class="btn export-button">
+      <i data-feather="download"></i> Export
+    </button>
   </div>
+</div>
+
+
 {% endif %}
-
-
 
 
   <div id="customScrollWrapper" style="overflow-x: auto; width: 100%;">
@@ -103,10 +158,10 @@
   <ul class="pagination justify-content-center">
     {% if po_reports.has_previous %}
       <li class="page-item">
-        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&page=1">&laquo; First</a>
+        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&status={{ status }}&page=1">&laquo; First</a>
       </li>
       <li class="page-item">
-        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&page={{ po_reports.previous_page_number }}">Previous</a>
+        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&status={{ status }}&page={{ po_reports.previous_page_number }}">Previous</a>
       </li>
     {% else %}
       <li class="page-item disabled"><span class="page-link">&laquo; First</span></li>
@@ -121,10 +176,10 @@
 
     {% if po_reports.has_next %}
       <li class="page-item">
-        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&page={{ po_reports.next_page_number }}">Next</a>
+        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&status={{ status }}&page={{ po_reports.next_page_number }}">Next</a>
       </li>
       <li class="page-item">
-        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&page={{ po_reports.paginator.num_pages }}">Last &raquo;</a>
+        <a class="page-link" href="?from={{ from_date }}&to={{ to_date }}&status={{ status }}&page={{ po_reports.paginator.num_pages }}">Last &raquo;</a>
       </li>
     {% else %}
       <li class="page-item disabled"><span class="page-link">Next</span></li>
@@ -132,6 +187,7 @@
     {% endif %}
   </ul>
 </nav>
+
 
 
 
@@ -162,11 +218,25 @@
 
 <script>
   document.getElementById('exportBtn').addEventListener('click', function () {
-    const exportUrl = this.getAttribute('data-url');
-    window.location.href = exportUrl;
+    // Start with the current filter values instead of relying only on data-url
+    let fromDate = document.getElementById('from-date').value;
+    let toDate = document.getElementById('to-date').value;
+    let status = document.getElementById('status').value;
+
+    let baseUrl = "{% url 'export_po_to_excel' username %}?from=" + encodeURIComponent(fromDate) +
+                  "&to=" + encodeURIComponent(toDate) +
+                  "&status=" + encodeURIComponent(status);
+
+    // Add selected fields from bootstrap-select
+    let selectedFields = $('#fields').val();
+    if (selectedFields && selectedFields.length > 0) {
+      baseUrl += '&' + selectedFields.map(f => 'fields=' + encodeURIComponent(f)).join('&');
+    }
+
+    // Redirect to generated URL
+    window.location.href = baseUrl;
   });
 </script>
-
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -189,28 +259,6 @@
         `;
       }
 </script>
-
-<script>
-  document.getElementById('exportBtn').addEventListener('click', function () {
-    const btn = this;
-    const url = btn.getAttribute('data-url');
-
-    // Disable button and show loading
-    btn.disabled = true;
-    btn.innerHTML = `
-      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-      Exporting...
-    `;
-
-     // Fallback: reset after 5 seconds
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.innerHTML = `<i data-feather="download"></i> Export`;
-      feather.replace(); // re-render feather icons if using feather icons
-    }, 3000);
-  });
-</script>
-
 
 
 

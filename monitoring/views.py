@@ -599,6 +599,7 @@ def reports(request, username):
 
     from_date_str = request.GET.get('from')
     to_date_str = request.GET.get('to')
+    status = request.GET.get('status')
 
     from_date = parse_date(from_date_str) if from_date_str else None
     to_date = parse_date(to_date_str) if to_date_str else None
@@ -609,6 +610,9 @@ def reports(request, username):
             date_recorded__range=(from_date, to_date)
         ).order_by('date_recorded')
 
+        if status and status != "all":   # <-- apply status filter
+            po_queryset = po_queryset.filter(status=status)
+
     paginator = Paginator(po_queryset, 10) 
     page_number = request.GET.get('page')
     po_reports = paginator.get_page(page_number)
@@ -618,74 +622,69 @@ def reports(request, username):
         'po_reports': po_reports,
         'from_date': from_date_str,
         'to_date': to_date_str,
+        'status': status, 
     })
 
+#export
+FIELD_MAP = {
+    "purchase_order": ("Purchase Order", lambda po: po.purchase_order),
+    "customer": ("Customer", lambda po: po.customer_branch.customer_name),
+    "branch_name": ("Branch/Address", lambda po: po.customer_branch.branch_name),
+    "classification": ("Classification", lambda po: po.classification),
+    "description": ("Description", lambda po: po.description),
+    "manpower_type": ("Manpower Type", lambda po: po.manpower_type if po.manpower_type else "No manpower"),
+    "manpower_total": ("Total Manpower", lambda po: po.manpower_total),
+    "total_days": ("Total Days", lambda po: po.total_days),
+    "working_days_total": ("Working Days", lambda po: po.working_days_total),
+    "work_hours_total": ("Total Working Hours", lambda po: po.work_hours_total),
+    "date_recorded": ("Recorded Date", lambda po: po.date_recorded.strftime("%Y-%m-%d")),
+    "purchase_order_received": ("Received Date", lambda po: po.purchase_order_received.strftime("%Y-%m-%d")),
+    "date_started": ("Started Date", lambda po: po.date_started.strftime("%Y-%m-%d") if po.date_started else "None"),
+    "target_date": ("Target Date", lambda po: po.target_date.strftime("%Y-%m-%d")),
+    "completion_date": ("Completion Date", lambda po: po.completion_date.strftime("%Y-%m-%d") if po.completion_date else "None"),
+    "coc_number": ("COC No.", lambda po: po.coc_number or "None"),
+    "dr_number": ("DR No.", lambda po: po.dr_number or "None"),
+    "service_report_number": ("Service Report No.", lambda po: po.service_report_number or "None"),
+    "invoice_number": ("Inv No.", lambda po: po.invoice_number or "None"),
+    "remarks": ("Remarks", lambda po: po.remarks or "None"),
+    "status": ("Status", lambda po: po.status),
+}
 
 @login_required
 def export_po_to_excel(request, username):
-    # Parse the from and to dates from GET parameters
     from_date = parse_date(request.GET.get('from'))
     to_date = parse_date(request.GET.get('to'))
+    selected_fields = request.GET.getlist('fields')
 
-    # Format for filename
-    from_date_str = from_date.strftime('%Y.%m.%d') if from_date else 'start'
-    to_date_str = to_date.strftime('%Y.%m.%d') if to_date else 'end'
+    selected_fields = [f for f in request.GET.getlist('fields') if f in FIELD_MAP]
 
-    filename = f"Purchase Order Report - {from_date_str} to {to_date_str}.xlsx"
 
-    # Filter based on date range
+    if not selected_fields:
+        # fallback to default fields if none selected
+        selected_fields = ["purchase_order", "customer", "date_started", "completion_date", "status"]
+
+    filename = f"Purchase Order Report - {from_date.strftime('%Y.%m.%d') if from_date else 'start'} to {to_date.strftime('%Y.%m.%d') if to_date else 'end'}.xlsx"
+
     queryset = PurchaseOrder.objects.filter(date_recorded__range=(from_date, to_date))
 
-    # Create Excel file
+    status = request.GET.get('status')
+    if status and status != "all":   # allow "all" or empty to skip filtering
+        queryset = queryset.filter(status=status)
+
     wb = Workbook()
     ws = wb.active
     ws.title = "Purchase Orders"
 
-    headers = [
-        "Purchase Order", "Customer", "Branch/Address", "Classification", "Description", "Manpower Type",
-        "Total Manpower", "Total Days", "Working Days", "Total Working Hours",
-        "Recorded Date", "Received Date", "Started Date", "Target Date", "Completion Date",
-        "COC No.", "DR No.", "Service Report No.", "Inv No.",
-        "Remarks", "Status",
-
-        
-    ]
+    # Write headers
+    headers = [FIELD_MAP[f][0] for f in selected_fields]
     ws.append(headers)
 
+    # Write data rows
     for po in queryset:
-        ws.append([
-            po.purchase_order,
-            po.customer_branch.customer_name,
-            po.customer_branch.branch_name,
-            po.classification,
-            po.description,
-            po.manpower_type if po.manpower_type else 'No manpower',
+        ws.append([FIELD_MAP[f][1](po) for f in selected_fields])
 
-            po.manpower_total,
-            po.total_days,
-            po.working_days_total,
-            po.work_hours_total,
-
-            po.date_recorded.strftime('%Y-%m-%d'),
-            po.purchase_order_received.strftime('%Y-%m-%d'),
-            po.date_started.strftime('%Y-%m-%d') if po.date_started else 'None',
-            po.target_date.strftime('%Y-%m-%d'),
-            po.completion_date.strftime('%Y-%m-%d') if po.completion_date else 'None',
-
-            po.coc_number if po.coc_number else 'None',
-            po.dr_number if po.dr_number else 'None',
-            po.service_report_number if po.service_report_number else 'None',
-            po.invoice_number if po.invoice_number else 'None',
-
-            po.remarks if po.completion_date else 'None',
-            po.status,
-        ])
-
-    response = HttpResponse(
-        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     wb.save(response)
     return response
 
-#logs

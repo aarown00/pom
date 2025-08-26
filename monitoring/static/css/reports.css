@@ -93,12 +93,16 @@
   font-weight: bold;
   transition-duration: 0.4s;
   min-width: 90px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1051; /* higher than bootstrap-select dropdown */
 }
 
 .export-button:hover {
   background-color: #04AA6D;
   color: white;
 }
+
 
 /* Fix pagination wrapping and alignment for small screens */
 @media (max-width: 576px) {
