@@ -654,23 +654,40 @@ FIELD_MAP = {
 def export_po_to_excel(request, username):
     from_date = parse_date(request.GET.get('from'))
     to_date = parse_date(request.GET.get('to'))
-    selected_fields = request.GET.getlist('fields')
 
+    # Get user-selected fields that exist in FIELD_MAP
     selected_fields = [f for f in request.GET.getlist('fields') if f in FIELD_MAP]
 
+    # Fields that must always be included
+    required_fields = {"purchase_order", "customer", "date_started", "completion_date", "status"}
 
     if not selected_fields:
-        # fallback to default fields if none selected
+        # fallback if user didn't select anything
         selected_fields = ["purchase_order", "customer", "date_started", "completion_date", "status"]
 
-    filename = f"Purchase Order Report - {from_date.strftime('%Y.%m.%d') if from_date else 'start'} to {to_date.strftime('%Y.%m.%d') if to_date else 'end'}.xlsx"
+    # Ensure required fields are always present
+    for field in required_fields:
+        if field not in selected_fields:
+            selected_fields.append(field)
 
+    # 🔑 Reorder fields to follow FIELD_MAP definition
+    selected_fields = [f for f in FIELD_MAP.keys() if f in selected_fields]
+
+    # Filename formatting
+    filename = (
+        f"Purchase Order Report - "
+        f"{from_date.strftime('%Y.%m.%d') if from_date else 'start'} "
+        f"to {to_date.strftime('%Y.%m.%d') if to_date else 'end'}.xlsx"
+    )
+
+    # Queryset filtering
     queryset = PurchaseOrder.objects.filter(date_recorded__range=(from_date, to_date))
 
     status = request.GET.get('status')
     if status and status != "all":   # allow "all" or empty to skip filtering
         queryset = queryset.filter(status=status)
 
+    # Create Excel workbook
     wb = Workbook()
     ws = wb.active
     ws.title = "Purchase Orders"
@@ -683,7 +700,10 @@ def export_po_to_excel(request, username):
     for po in queryset:
         ws.append([FIELD_MAP[f][1](po) for f in selected_fields])
 
-    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    # Return response
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     wb.save(response)
     return response
