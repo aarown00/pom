@@ -19,6 +19,7 @@ from django.utils.dateparse import parse_date
 from django.core.paginator import Paginator
 from django.views.decorators.cache import never_cache
 from django.db import transaction
+from datetime import datetime
 
 
 def custom_404_view(request, exception):
@@ -632,6 +633,7 @@ FIELD_MAP = {
     "branch_name": ("Branch/Address", lambda po: po.customer_branch.branch_name),
     "classification": ("Classification", lambda po: po.classification),
     "description": ("Description", lambda po: po.description),
+    "amount": ("Amount", lambda po: po.amount),
     "manpower_type": ("Manpower Type", lambda po: po.manpower_type if po.manpower_type else "No manpower"),
     "manpower_total": ("Total Manpower", lambda po: po.manpower_total),
     "total_days": ("Total Days", lambda po: po.total_days),
@@ -675,9 +677,10 @@ def export_po_to_excel(request, username):
 
     # Filename formatting
     filename = (
-        f"Purchase Order Report - "
+        f"P.O Sys Report - "
         f"{from_date.strftime('%Y.%m.%d') if from_date else 'start'} "
-        f"to {to_date.strftime('%Y.%m.%d') if to_date else 'end'}.xlsx"
+        f"to {to_date.strftime('%Y.%m.%d') if to_date else 'end'} "
+        f"- {datetime.now().strftime('%H%M%S')}.xlsx"
     )
 
     # Queryset filtering
