@@ -661,11 +661,11 @@ def export_po_to_excel(request, username):
     selected_fields = [f for f in request.GET.getlist('fields') if f in FIELD_MAP]
 
     # Fields that must always be included
-    required_fields = {"purchase_order", "customer", "date_started", "completion_date", "status"}
+    required_fields = {"date_recorded", "purchase_order", "customer", "date_started", "completion_date", "status"}
 
     if not selected_fields:
         # fallback if user didn't select anything
-        selected_fields = ["purchase_order", "customer", "date_started", "completion_date", "status"]
+        selected_fields = ["date_recorded", "purchase_order", "customer", "date_started", "completion_date", "status"]
 
     # Ensure required fields are always present
     for field in required_fields:

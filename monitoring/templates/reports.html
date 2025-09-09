@@ -35,15 +35,18 @@
 
 <form method="get" class="form-inline mb-3" onsubmit="showFilter(); return true;">
   <label>From:</label>
-  <input type="date" id="from-date" name="from" class="form-control mx-2" required 
-       value="{{ from_date|default_if_none:'' }}">
+  <input type="date" id="from-date" name="from" class="form-control mx-2 {% if from_date %}active-filter{% endif %}"
+       required value="{{ from_date|default_if_none:'' }}"
+       onchange="handleDateChange()">
 
   <label>To:</label>
-  <input type="date" id="to-date" name="to" class="form-control mx-2" required 
-       value="{{ to_date|default_if_none:'' }}">
+  <input type="date" id="to-date" name="to" class="form-control mx-2 {% if to_date %}active-filter{% endif %}"
+       required value="{{ to_date|default_if_none:'' }}"
+       onchange="handleDateChange()">
 
   <label>Status:</label>
-  <select id="status" name="status" class="form-control mx-2">
+  <select id="status" name="status" class="form-select mx-2 {% if status and status != 'all' %}active-filter{% endif %}"
+            onchange="this.form.submit()">
   <option value="all" {% if status == "all" or not status %}selected{% endif %}>All</option>
   <option value="Pending" {% if status == "Pending" %}selected{% endif %}>Pending</option>
   <option value="Ongoing" {% if status == "Ongoing" %}selected{% endif %}>Ongoing</option>
@@ -53,7 +56,7 @@
   </select>
 
 
-  <button id="FilterBtn" type="submit" class="btn btn-sm filter-button"><i data-feather="filter"></i> Filter</button>
+  {% comment %} <button id="FilterBtn" type="submit" class="btn btn-sm filter-button"><i data-feather="filter"></i> Filter</button> {% endcomment %}
 </form>
 
 <div class="dataTables_info text-muted mb-2" role="status" aria-live="polite">
@@ -107,7 +110,7 @@
         <option value="total_days">Total Days</option>
         <option value="working_days_total">Working Days</option>
         <option value="work_hours_total">Total Working Hours</option>
-        <option value="date_recorded">Recorded Date</option>
+        {% comment %} <option value="date_recorded">Recorded Date</option> {% endcomment %}
         <option value="purchase_order_received">Received Date</option>
         {% comment %} <option value="date_started" selected disabled>Started Date</option> {% endcomment %}
         <option value="target_date">Target Date</option>
@@ -137,6 +140,7 @@
     <tr>
       <th>PURCHASE ORDER</th>
       <th>CUSTOMER</th>
+      <th>RECORDED DATE</th>
       <th>STARTED DATE</th>
       <th>COMPLETION DATE</th>
       <th>STATUS</th>
@@ -147,6 +151,7 @@
         <tr>
           <td><strong>{{ po.purchase_order }}</strong></td>
           <td>{{ po.customer_branch.customer_name }}</td>
+          <td>{{ po.date_recorded }}</td>
           <td>{{ po.date_started }}</td>
           <td>{{ po.completion_date }}</td>
           <td>{{ po.status }}</td>
@@ -192,6 +197,38 @@
 
 
 
+<script>
+function handleDateChange() {
+    const fromInput = document.getElementById("from-date");
+    const toInput = document.getElementById("to-date");
+
+    // Adjust allowed ranges
+    if (fromInput.value) {
+        toInput.min = fromInput.value;
+    } else {
+        toInput.removeAttribute("min");
+    }
+
+    if (toInput.value) {
+        fromInput.max = toInput.value;
+    } else {
+        fromInput.removeAttribute("max");
+    }
+
+    // Auto-correct invalid ranges
+    if (fromInput.value && toInput.value) {
+        if (fromInput.value > toInput.value) {
+            // If From is later than To, snap To forward
+            toInput.value = fromInput.value;
+        }
+    }
+
+    // Auto-submit only if both are filled
+    if (fromInput.value && toInput.value) {
+        fromInput.form.submit();
+    }
+}
+</script>
 
 
 
