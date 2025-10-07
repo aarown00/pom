@@ -196,7 +196,7 @@ class DailyWorkStatus(models.Model):
     null=True,
     validators=[
         MinValueValidator(0),
-        MaxValueValidator(12)
+        MaxValueValidator(24)
     ]
     )
     itinenary_remarks = models.CharField(max_length=160, blank=True, null=True)
