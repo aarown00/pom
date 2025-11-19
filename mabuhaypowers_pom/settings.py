@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-8^h_ap8lvjlmxrd8gc=0b6(x!)$*ie-jd#0-l1tkbly@@iuady
 DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ['https://mabuhayops.onrender.com',
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com',
                         'https://*.ngrok-free.app',
                         ]
 
@@ -85,17 +85,17 @@ WSGI_APPLICATION = 'mabuhaypowers_pom.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'mabuhaypowers_pom',
-            'USER': 'aaronmart',
-            'PASSWORD': 'pass123',
-            'HOST': 'localhost',
-            'PORT': '5432',
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'mabuhaypowers_pom',
+#             'USER': 'aaronmart',
+#             'PASSWORD': 'pass123',
+#             'HOST': 'localhost',
+#             'PORT': '5432',
 
-         }
-     }
+#          }
+#      }
 
 # DATABASES = {
 #        'default': dj_database_url.config(
@@ -103,9 +103,9 @@ DATABASES = {
 #        )
 #    }
 
-# DATABASES = {
-#           'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
-#       }
+DATABASES = {
+          'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+      }
 
 # DATABASES = {
 #        'default': dj_database_url.config(
