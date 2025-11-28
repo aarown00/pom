@@ -21,6 +21,9 @@ def delayed_status_update():
         pos = PurchaseOrder.objects.exclude(status='Cancelled')
         for po in pos:
             original_status = po.status
+            original_target_delay = po.target_date_delayed
+
+            po.target_date_delayed = 0
 
             if po.completion_date:
                 po.status = 'Completed'
@@ -32,9 +35,10 @@ def delayed_status_update():
             else:
                 po.status = 'Pending'
 
-            if po.status != original_status:
-                po.save()
-                print(f"Updated PO {po.id}: {original_status} → {po.status}")
+            if (po.status != original_status or 
+                po.target_date_delayed != original_target_delay):
+                
+                po.save(update_fields=['status', 'target_date_delayed'])
 
         cache.set('status_updated_on', today)
         print("Finished updating status.")
