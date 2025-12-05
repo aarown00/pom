@@ -27,11 +27,8 @@ SECRET_KEY = 'django-insecure-8^h_ap8lvjlmxrd8gc=0b6(x!)$*ie-jd#0-l1tkbly@@iuady
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com',
-                        'https://*.ngrok-free.app',
-                        ]
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mabuhaysys.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://mabuhaysys.up.railway.app']
 
 # Application definition
 
@@ -99,7 +96,7 @@ WSGI_APPLICATION = 'mabuhaypowers_pom.wsgi.application'
 
 # DATABASES = {
 #        'default': dj_database_url.config(
-#            default="postgresql://mabuhaypom_user:Rk5UUixEn1asq4abxBKFdMiS5oRyxK5K@dpg-d1tu2vqdbo4c73e0pvgg-a.singapore-postgres.render.com/mabuhaypom"
+#            default=""
 #        )
 #    }
 
@@ -107,11 +104,6 @@ DATABASES = {
           'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
       }
 
-# DATABASES = {
-#        'default': dj_database_url.config(
-#            default="postgresql://test_pom_user:lL8A2ymwCj8k76o4etpxgwgRHMYOLkt6@dpg-d23au53e5dus73af6520-a.singapore-postgres.render.com/test_pom"
-#        )
-#    }
 
 
 
