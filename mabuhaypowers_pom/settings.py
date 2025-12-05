@@ -27,8 +27,8 @@ SECRET_KEY = 'django-insecure-8^h_ap8lvjlmxrd8gc=0b6(x!)$*ie-jd#0-l1tkbly@@iuady
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mabuhaysys.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['https://mabuhaysys.up.railway.app']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mabuhaysys.up.railway.app', 'mabuhaysys.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://mabuhaysys.up.railway.app', 'https://mabuhaysys.onrender.com']
 
 # Application definition
 
