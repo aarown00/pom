@@ -20,12 +20,12 @@ A full-stack Django web application built to provide an efficient system for tra
 
 Before you begin, ensure you have the following installed:
 
--Python 3.10 or higher (Required for Django 5.x compatibility)
--pip (Python package installer)
--virtualenv (recommended for isolated environments)
--Git
--PostgreSQL 12 or higher
--pgAdmin (optional, for database management)
+-Python 3.10 or higher (Required for Django 5.x compatibility).
+-pip (Python package installer).
+-virtualenv (recommended for isolated environments).
+-Git.
+-PostgreSQL 12 or higher.
+-pgAdmin (optional, for database management).
 
 ## Installation
 
