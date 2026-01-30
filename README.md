@@ -63,7 +63,6 @@ pip install -r requirements.txt
 For local development using PostgreSQL, update the `DATABASES` setting in  
 `mabuhaypowers_pom/settings.py` as shown below:
 
-    python
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -80,7 +79,7 @@ DATABASES = {
 python manage.py migrate
 ```
 
-### 6. Create a superuser (optional)
+### 6. Create a superuser 
 ```bash
 python manage.py createsuperuser
 ```
@@ -95,7 +94,7 @@ python manage.py collectstatic --noinput
 python manage.py runserver
 ```
 
-### 9. Run the production server
+### 9. OR Run the production server
 ```bash
 waitress-serve --host=0.0.0.0 --port=80 mabuhaypowers_pom.wsgi:application
 ```
